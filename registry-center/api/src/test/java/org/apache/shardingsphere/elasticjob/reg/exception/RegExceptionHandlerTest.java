@@ -23,19 +23,19 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RegExceptionHandlerTest {
-    
+
     @Test
     @Disabled
-    // TODO throw InterruptedException will cause zookeeper TestingServer break. Ignore first, fix it later.
+        // TODO throw InterruptedException will cause zookeeper TestingServer break. Ignore first, fix it later.
     void assertHandleExceptionWithInterruptedException() {
         RegExceptionHandler.handleException(new InterruptedException());
     }
-    
+
     @Test
     void assertHandleExceptionWithNull() {
         RegExceptionHandler.handleException(null);
     }
-    
+
     @Test
     void assertHandleExceptionWithOtherException() {
         assertThrows(RegException.class, () -> RegExceptionHandler.handleException(new RuntimeException()));

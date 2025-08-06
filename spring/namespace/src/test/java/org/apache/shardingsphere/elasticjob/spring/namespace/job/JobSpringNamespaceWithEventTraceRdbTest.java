@@ -21,7 +21,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 @ContextConfiguration(locations = "classpath:META-INF/job/withEventTraceRdb.xml")
 class JobSpringNamespaceWithEventTraceRdbTest extends AbstractJobSpringIntegrateTest {
-    
+
     JobSpringNamespaceWithEventTraceRdbTest() {
         super("simpleElasticJob_namespace_event_trace_rdb", "dataflowElasticJob_namespace_event_trace_rdb");
     }

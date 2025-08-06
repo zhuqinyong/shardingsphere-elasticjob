@@ -20,8 +20,8 @@ package org.apache.shardingsphere.elasticjob.test.natived.commons.repository;
 import lombok.Getter;
 
 public final class FooRepositoryFactory {
-    
+
     @Getter
     private static final FooRepository FOO_REPOSITORY = new FooRepository();
-    
+
 }

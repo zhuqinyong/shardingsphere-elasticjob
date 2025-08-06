@@ -21,7 +21,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 @ContextConfiguration(locations = "classpath:META-INF/scanner/jobScannerContext.xml")
 public final class JobScannerTest extends AbstractJobSpringIntegrateTest {
-    
+
     public JobScannerTest() {
         super("simpleJob");
     }

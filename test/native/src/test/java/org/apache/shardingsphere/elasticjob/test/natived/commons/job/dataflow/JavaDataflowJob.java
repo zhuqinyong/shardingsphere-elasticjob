@@ -17,8 +17,8 @@
 
 package org.apache.shardingsphere.elasticjob.test.natived.commons.job.dataflow;
 
-import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
 import org.apache.shardingsphere.elasticjob.dataflow.job.DataflowJob;
+import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
 import org.apache.shardingsphere.elasticjob.test.natived.commons.entity.Foo;
 import org.apache.shardingsphere.elasticjob.test.natived.commons.repository.FooRepository;
 import org.apache.shardingsphere.elasticjob.test.natived.commons.repository.FooRepositoryFactory;
@@ -28,9 +28,9 @@ import java.util.Date;
 import java.util.List;
 
 public class JavaDataflowJob implements DataflowJob<Foo> {
-    
+
     private final FooRepository fooRepository = FooRepositoryFactory.getFOO_REPOSITORY();
-    
+
     @Override
     public List<Foo> fetchData(final ShardingContext shardingContext) {
         System.out.printf(
@@ -41,7 +41,7 @@ public class JavaDataflowJob implements DataflowJob<Foo> {
                 "DATAFLOW FETCH");
         return fooRepository.findUnfinishedData(shardingContext.getShardingParameter(), 10);
     }
-    
+
     @Override
     public void processData(final ShardingContext shardingContext, final List<Foo> data) {
         System.out.printf(

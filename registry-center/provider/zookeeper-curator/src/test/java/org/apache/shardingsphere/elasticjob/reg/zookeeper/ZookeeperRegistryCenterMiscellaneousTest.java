@@ -29,13 +29,13 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class ZookeeperRegistryCenterMiscellaneousTest {
-    
+
     private static final EmbedTestingServer EMBED_TESTING_SERVER = new EmbedTestingServer();
-    
+
     private static ZookeeperConfiguration zookeeperConfiguration;
-    
+
     private static ZookeeperRegistryCenter zkRegCenter;
-    
+
     @BeforeAll
     static void setUp() {
         EMBED_TESTING_SERVER.start();
@@ -45,23 +45,23 @@ class ZookeeperRegistryCenterMiscellaneousTest {
         zkRegCenter.init();
         zkRegCenter.addCacheData("/test");
     }
-    
+
     @AfterAll
     static void tearDown() {
         zkRegCenter.close();
     }
-    
+
     @Test
     void assertGetRawClient() {
         assertThat(zkRegCenter.getRawClient(), instanceOf(CuratorFramework.class));
         assertThat(((CuratorFramework) zkRegCenter.getRawClient()).getNamespace(), is(ZookeeperRegistryCenterMiscellaneousTest.class.getName()));
     }
-    
+
     @Test
     void assertGetRawCache() {
         assertThat(zkRegCenter.getRawCache("/test"), instanceOf(CuratorCache.class));
     }
-    
+
     @Test
     void assertGetZkConfig() {
         ZookeeperRegistryCenter zkRegCenter = new ZookeeperRegistryCenter(zookeeperConfiguration);

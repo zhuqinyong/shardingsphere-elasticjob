@@ -23,34 +23,34 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class JobNodePathTest {
-    
+
     private final JobNodePath jobNodePath = new JobNodePath("test_job");
-    
+
     @Test
     void assertGetFullPath() {
         assertThat(jobNodePath.getFullPath("node"), is("/test_job/node"));
     }
-    
+
     @Test
     void assertGetServerNodePath() {
         assertThat(jobNodePath.getServerNodePath(), is("/test_job/servers"));
     }
-    
+
     @Test
     void assertGetServerNodePathForServerIp() {
         assertThat(jobNodePath.getServerNodePath("ip0"), is("/test_job/servers/ip0"));
     }
-    
+
     @Test
     void assertGetShardingNodePath() {
         assertThat(jobNodePath.getShardingNodePath(), is("/test_job/sharding"));
     }
-    
+
     @Test
     void assertGetShardingNodePathWihItemAndNode() {
         assertThat(jobNodePath.getShardingNodePath("0", "running"), is("/test_job/sharding/0/running"));
     }
-    
+
     @Test
     void assertGetLeaderIpNodePath() {
         assertThat(jobNodePath.getLeaderHostNodePath(), is("/test_job/leader/election/instance"));

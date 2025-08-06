@@ -21,15 +21,15 @@ import org.apache.shardingsphere.elasticjob.spi.listener.ElasticJobListener;
 import org.apache.shardingsphere.elasticjob.spi.listener.param.ShardingContexts;
 
 public class E2EFixtureJobListener implements ElasticJobListener {
-    
+
     @Override
     public void beforeJobExecuted(final ShardingContexts shardingContexts) {
     }
-    
+
     @Override
     public void afterJobExecuted(final ShardingContexts shardingContexts) {
     }
-    
+
     @Override
     public String getType() {
         return "INTEGRATE-TEST";

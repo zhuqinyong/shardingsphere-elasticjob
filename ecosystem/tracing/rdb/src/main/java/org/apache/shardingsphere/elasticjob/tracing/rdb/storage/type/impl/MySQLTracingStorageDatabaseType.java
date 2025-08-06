@@ -23,12 +23,12 @@ import org.apache.shardingsphere.elasticjob.tracing.rdb.storage.type.TracingStor
  * Tracing storage database type for MySQL.
  */
 public final class MySQLTracingStorageDatabaseType implements TracingStorageDatabaseType {
-    
+
     @Override
     public String getType() {
         return "MySQL";
     }
-    
+
     @Override
     public int getDuplicateRecordErrorCode() {
         return 1062;

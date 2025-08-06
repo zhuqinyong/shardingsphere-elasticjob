@@ -24,12 +24,12 @@ import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public final class E2EFixtureJobImpl implements E2EFixtureJob {
-    
+
     private final Collection<Integer> completedJobItems = new CopyOnWriteArraySet<>();
-    
+
     @Getter
     private volatile boolean completed;
-    
+
     @Override
     public void foo(final ShardingContext shardingContext) {
         completedJobItems.add(shardingContext.getShardingItem());

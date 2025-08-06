@@ -31,16 +31,14 @@ import java.sql.SQLException;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class RDBJobEventRepositoryTest {
-    
+
     private RDBJobEventRepository repository;
-    
+
     private HikariDataSource dataSource;
-    
+
     @BeforeEach
     void setup() throws SQLException {
         dataSource = new HikariDataSource();
@@ -50,23 +48,23 @@ class RDBJobEventRepositoryTest {
         dataSource.setPassword("");
         repository = RDBJobEventRepository.getInstance(dataSource);
     }
-    
+
     @AfterEach
     void tearDown() {
         dataSource.close();
     }
-    
+
     @Test
     void assertAddJobExecutionEvent() {
         assertTrue(repository.addJobExecutionEvent(new JobExecutionEvent("localhost", "127.0.0.1", "fake_task_id", "test_job", JobExecutionEvent.ExecutionSource.NORMAL_TRIGGER, 0)));
     }
-    
+
     @Test
     void assertAddJobStatusTraceEvent() {
         assertTrue(repository.addJobStatusTraceEvent(
                 new JobStatusTraceEvent("test_job", "fake_task_id", "fake_slave_id", ExecutionType.READY, "0", State.TASK_RUNNING, "message is empty.")));
     }
-    
+
     @Test
     void assertUpdateJobExecutionEventWhenSuccess() {
         JobExecutionEvent startEvent = new JobExecutionEvent("localhost", "127.0.0.1", "fake_task_id", "test_job", JobExecutionEvent.ExecutionSource.NORMAL_TRIGGER, 0);
@@ -74,7 +72,7 @@ class RDBJobEventRepositoryTest {
         JobExecutionEvent successEvent = startEvent.executionSuccess();
         assertTrue(repository.addJobExecutionEvent(successEvent));
     }
-    
+
     @Test
     void assertUpdateJobExecutionEventWhenFailure() {
         JobExecutionEvent startEvent = new JobExecutionEvent("localhost", "127.0.0.1", "fake_task_id", "test_job", JobExecutionEvent.ExecutionSource.NORMAL_TRIGGER, 0);
@@ -84,7 +82,7 @@ class RDBJobEventRepositoryTest {
         assertThat(failureEvent.getFailureCause(), is("java.lang.RuntimeException: failure"));
         assertNotNull(failureEvent.getCompleteTime());
     }
-    
+
     @Test
     void assertUpdateJobExecutionEventWhenSuccessAndConflict() {
         JobExecutionEvent startEvent = new JobExecutionEvent("localhost", "127.0.0.1", "fake_task_id", "test_job", JobExecutionEvent.ExecutionSource.NORMAL_TRIGGER, 0);
@@ -92,7 +90,7 @@ class RDBJobEventRepositoryTest {
         assertTrue(repository.addJobExecutionEvent(successEvent));
         assertFalse(repository.addJobExecutionEvent(startEvent));
     }
-    
+
     @Test
     void assertUpdateJobExecutionEventWhenFailureAndConflict() {
         JobExecutionEvent startEvent = new JobExecutionEvent("localhost", "127.0.0.1", "fake_task_id", "test_job", JobExecutionEvent.ExecutionSource.NORMAL_TRIGGER, 0);
@@ -101,7 +99,7 @@ class RDBJobEventRepositoryTest {
         assertThat(failureEvent.getFailureCause(), is("java.lang.RuntimeException: failure"));
         assertFalse(repository.addJobExecutionEvent(startEvent));
     }
-    
+
     @Test
     void assertUpdateJobExecutionEventWhenFailureAndMessageExceed() {
         JobExecutionEvent startEvent = new JobExecutionEvent("localhost", "127.0.0.1", "fake_task_id", "test_job", JobExecutionEvent.ExecutionSource.NORMAL_TRIGGER, 0);
@@ -114,7 +112,7 @@ class RDBJobEventRepositoryTest {
         assertTrue(repository.addJobExecutionEvent(failEvent));
         assertThat(failEvent.getFailureCause(), startsWith("java.lang.RuntimeException: failure"));
     }
-    
+
     @Test
     void assertFindJobExecutionEvent() {
         repository.addJobExecutionEvent(new JobExecutionEvent("localhost", "127.0.0.1", "fake_task_id", "test_job", JobExecutionEvent.ExecutionSource.NORMAL_TRIGGER, 0));

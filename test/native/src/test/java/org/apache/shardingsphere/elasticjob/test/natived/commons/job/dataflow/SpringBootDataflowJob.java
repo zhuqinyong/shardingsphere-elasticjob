@@ -34,12 +34,12 @@ import java.util.List;
 @SuppressWarnings("LoggingSimilarMessage")
 @Component
 public class SpringBootDataflowJob implements DataflowJob<Foo> {
-    
+
     private final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    
+
     @Autowired
     private SpringBootFooRepository springBootFooRepository;
-    
+
     @Override
     public List<Foo> fetchData(final ShardingContext shardingContext) {
         logger.info("Item: {} | Time: {} | Thread: {} | {}",
@@ -49,7 +49,7 @@ public class SpringBootDataflowJob implements DataflowJob<Foo> {
                 "DATAFLOW FETCH");
         return springBootFooRepository.findUnfinishedData(shardingContext.getShardingParameter(), 10);
     }
-    
+
     @Override
     public void processData(final ShardingContext shardingContext, final List<Foo> data) {
         logger.info("Item: {} | Time: {} | Thread: {} | {}",

@@ -28,7 +28,7 @@ import org.apache.shardingsphere.infra.spi.type.typed.TypedSPI;
  */
 @SingletonSPI
 public interface YamlConfigurationConverter<T, Y extends YamlConfiguration<T>> extends TypedSPI {
-    
+
     /**
      * Convert to YAML configuration.
      *
@@ -36,7 +36,7 @@ public interface YamlConfigurationConverter<T, Y extends YamlConfiguration<T>> e
      * @return YAML configuration
      */
     Y convertToYamlConfiguration(T data);
-    
+
     @Override
     Class<T> getType();
 }

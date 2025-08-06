@@ -29,32 +29,32 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class SnapshotServiceEnableE2ETest extends BaseSnapshotServiceE2ETest {
-    
+
     SnapshotServiceEnableE2ETest() {
         super(new E2EFixtureJobImpl());
     }
-    
+
     @BeforeEach
     void listenMonitor() {
         getSnapshotService().listen();
     }
-    
+
     @AfterEach
     void closeMonitor() {
         getSnapshotService().close();
     }
-    
+
     @Test
     void assertMonitorWithCommand() throws IOException {
         assertNotNull(SocketUtils.sendCommand(SnapshotService.DUMP_COMMAND + getJobName(), DUMP_PORT));
         assertEquals(SocketUtils.sendCommand("unknown_command", DUMP_PORT), "");
     }
-    
+
     @Test
     void assertDumpJobDirectly() {
         assertNotNull(getSnapshotService().dumpJobDirectly(getJobName()));
     }
-    
+
     @Test
     void assertDumpJob() throws IOException {
         assertNotNull(SnapshotService.dumpJob("127.0.0.1", DUMP_PORT, getJobName()));

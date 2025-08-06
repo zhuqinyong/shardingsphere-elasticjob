@@ -20,7 +20,6 @@ package org.apache.shardingsphere.elasticjob.kernel.internal.sharding;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shardingsphere.elasticjob.api.JobConfiguration;
 import org.apache.shardingsphere.elasticjob.kernel.infra.util.BlockUtils;
-import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.strategy.JobShardingStrategy;
 import org.apache.shardingsphere.elasticjob.kernel.infra.yaml.YamlEngine;
 import org.apache.shardingsphere.elasticjob.kernel.internal.config.ConfigurationService;
 import org.apache.shardingsphere.elasticjob.kernel.internal.election.LeaderService;
@@ -28,6 +27,7 @@ import org.apache.shardingsphere.elasticjob.kernel.internal.instance.InstanceNod
 import org.apache.shardingsphere.elasticjob.kernel.internal.instance.InstanceService;
 import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.JobRegistry;
 import org.apache.shardingsphere.elasticjob.kernel.internal.server.ServerService;
+import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.strategy.JobShardingStrategy;
 import org.apache.shardingsphere.elasticjob.kernel.internal.storage.JobNodePath;
 import org.apache.shardingsphere.elasticjob.kernel.internal.storage.JobNodeStorage;
 import org.apache.shardingsphere.elasticjob.reg.base.CoordinatorRegistryCenter;
@@ -35,11 +35,7 @@ import org.apache.shardingsphere.elasticjob.reg.base.transaction.TransactionOper
 import org.apache.shardingsphere.infra.spi.type.typed.TypedSPILoader;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 /**
@@ -47,25 +43,25 @@ import java.util.Map.Entry;
  */
 @Slf4j
 public final class ShardingService {
-    
+
     private final String jobName;
-    
+
     private final JobNodeStorage jobNodeStorage;
-    
+
     private final LeaderService leaderService;
-    
+
     private final ConfigurationService configService;
-    
+
     private final InstanceService instanceService;
-    
+
     private final InstanceNode instanceNode;
-    
+
     private final ServerService serverService;
-    
+
     private final ExecutionService executionService;
-    
+
     private final JobNodePath jobNodePath;
-    
+
     public ShardingService(final CoordinatorRegistryCenter regCenter, final String jobName) {
         this.jobName = jobName;
         jobNodeStorage = new JobNodeStorage(regCenter, jobName);
@@ -77,7 +73,7 @@ public final class ShardingService {
         executionService = new ExecutionService(regCenter, jobName);
         jobNodePath = new JobNodePath(jobName);
     }
-    
+
     /**
      * Set resharding flag.
      */
@@ -87,22 +83,22 @@ public final class ShardingService {
         }
         jobNodeStorage.createJobNodeIfNeeded(ShardingNode.NECESSARY);
     }
-    
+
     /**
      * Judge is need resharding or not.
-     * 
+     *
      * @return is need resharding or not
      */
     public boolean isNeedSharding() {
         return jobNodeStorage.isJobNodeExisted(ShardingNode.NECESSARY);
     }
-    
+
     /**
      * Sharding if necessary.
-     * 
+     *
      * <p>
      * Sharding if current job server is leader server;
-     * Do not sharding if no available job server. 
+     * Do not sharding if no available job server.
      * </p>
      */
     public void shardingIfNecessary() {
@@ -124,21 +120,21 @@ public final class ShardingService {
         jobNodeStorage.executeInTransaction(getShardingResultTransactionOperations(jobShardingStrategy.sharding(availableJobInstances, jobName, shardingTotalCount)));
         log.debug("Job '{}' sharding complete.", jobName);
     }
-    
+
     private void blockUntilShardingCompleted() {
         while (!leaderService.isLeaderUntilBlock() && (jobNodeStorage.isJobNodeExisted(ShardingNode.NECESSARY) || jobNodeStorage.isJobNodeExisted(ShardingNode.PROCESSING))) {
             log.debug("Job '{}' sleep short time until sharding completed.", jobName);
             BlockUtils.waitingShortTime();
         }
     }
-    
+
     private void waitingOtherShardingItemCompleted() {
         while (executionService.hasRunningItems()) {
             log.debug("Job '{}' sleep short time until other job completed.", jobName);
             BlockUtils.waitingShortTime();
         }
     }
-    
+
     private void resetShardingInfo(final int shardingTotalCount) {
         for (int i = 0; i < shardingTotalCount; i++) {
             jobNodeStorage.removeJobNodeIfExisted(ShardingNode.getInstanceNode(i));
@@ -151,7 +147,7 @@ public final class ShardingService {
             }
         }
     }
-    
+
     private List<TransactionOperation> getShardingResultTransactionOperations(final Map<JobInstance, List<Integer>> shardingResults) {
         List<TransactionOperation> result = new ArrayList<>(shardingResults.size() + 2);
         for (Entry<JobInstance, List<Integer>> entry : shardingResults.entrySet()) {
@@ -165,7 +161,7 @@ public final class ShardingService {
         result.add(TransactionOperation.opDelete(jobNodePath.getFullPath(ShardingNode.PROCESSING)));
         return result;
     }
-    
+
     /**
      * Get sharding items.
      *
@@ -186,7 +182,7 @@ public final class ShardingService {
         }
         return result;
     }
-    
+
     /**
      * Get crashed sharding items.
      *
@@ -207,14 +203,14 @@ public final class ShardingService {
         }
         return result;
     }
-    
+
     private boolean isRunningItem(final int item) {
         return jobNodeStorage.isJobNodeExisted(ShardingNode.getRunningNode(item));
     }
-    
+
     /**
      * Get sharding items from localhost job server.
-     * 
+     *
      * @return sharding items from localhost job server
      */
     public List<Integer> getLocalShardingItems() {
@@ -223,10 +219,10 @@ public final class ShardingService {
         }
         return getShardingItems(JobRegistry.getInstance().getJobInstance(jobName).getJobInstanceId());
     }
-    
+
     /**
      * Query has sharding info in offline servers or not.
-     * 
+     *
      * @return has sharding info in offline servers or not
      */
     public boolean hasShardingInfoInOfflineServers() {
@@ -239,5 +235,5 @@ public final class ShardingService {
         }
         return false;
     }
-    
+
 }

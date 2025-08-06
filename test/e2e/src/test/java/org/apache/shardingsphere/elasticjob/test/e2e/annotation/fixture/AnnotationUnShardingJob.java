@@ -25,9 +25,9 @@ import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingCont
 @ElasticJobConfiguration(jobName = "AnnotationUnShardingJob", description = "desc", shardingTotalCount = 1)
 @Getter
 public final class AnnotationUnShardingJob implements SimpleJob {
-    
+
     private volatile boolean completed;
-    
+
     @Override
     public void execute(final ShardingContext shardingContext) {
         completed = true;

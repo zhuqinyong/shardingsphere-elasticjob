@@ -21,6 +21,6 @@ package org.apache.shardingsphere.elasticjob.kernel.internal.server;
  * Server status.
  */
 public enum ServerStatus {
-    
+
     ENABLED, DISABLED
 }

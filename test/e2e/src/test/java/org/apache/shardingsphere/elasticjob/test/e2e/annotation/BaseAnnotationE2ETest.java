@@ -27,35 +27,35 @@ import org.apache.shardingsphere.elasticjob.bootstrap.type.ScheduleJobBootstrap;
 import org.apache.shardingsphere.elasticjob.kernel.internal.annotation.JobAnnotationBuilder;
 import org.apache.shardingsphere.elasticjob.kernel.internal.election.LeaderService;
 import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.JobRegistry;
-import org.apache.shardingsphere.elasticjob.test.util.ReflectionUtils;
 import org.apache.shardingsphere.elasticjob.reg.base.CoordinatorRegistryCenter;
 import org.apache.shardingsphere.elasticjob.reg.zookeeper.ZookeeperConfiguration;
 import org.apache.shardingsphere.elasticjob.reg.zookeeper.ZookeeperRegistryCenter;
 import org.apache.shardingsphere.elasticjob.test.util.EmbedTestingServer;
+import org.apache.shardingsphere.elasticjob.test.util.ReflectionUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
 @Getter(AccessLevel.PROTECTED)
 public abstract class BaseAnnotationE2ETest {
-    
+
     private static final EmbedTestingServer EMBED_TESTING_SERVER = new EmbedTestingServer();
-    
+
     private static ZookeeperConfiguration zookeeperConfig;
-    
+
     @Getter(AccessLevel.PROTECTED)
     private static CoordinatorRegistryCenter registryCenter;
-    
+
     private final ElasticJob elasticJob;
-    
+
     private final JobConfiguration jobConfiguration;
-    
+
     private final JobBootstrap jobBootstrap;
-    
+
     private final LeaderService leaderService;
-    
+
     private final String jobName;
-    
+
     protected BaseAnnotationE2ETest(final TestType type, final ElasticJob elasticJob) {
         this.elasticJob = elasticJob;
         jobConfiguration = JobAnnotationBuilder.generateJobConfiguration(elasticJob.getClass());
@@ -63,7 +63,16 @@ public abstract class BaseAnnotationE2ETest {
         jobBootstrap = createJobBootstrap(type, elasticJob);
         leaderService = new LeaderService(registryCenter, jobName);
     }
-    
+
+    @BeforeAll
+    static void init() {
+        EMBED_TESTING_SERVER.start();
+        zookeeperConfig = new ZookeeperConfiguration(EMBED_TESTING_SERVER.getConnectionString(), "zkRegTestCenter");
+        registryCenter = new ZookeeperRegistryCenter(zookeeperConfig);
+        zookeeperConfig.setConnectionTimeoutMilliseconds(30000);
+        registryCenter.init();
+    }
+
     private JobBootstrap createJobBootstrap(final TestType type, final ElasticJob elasticJob) {
         switch (type) {
             case SCHEDULE:
@@ -74,16 +83,7 @@ public abstract class BaseAnnotationE2ETest {
                 throw new RuntimeException(String.format("Cannot support `%s`", type));
         }
     }
-    
-    @BeforeAll
-    static void init() {
-        EMBED_TESTING_SERVER.start();
-        zookeeperConfig = new ZookeeperConfiguration(EMBED_TESTING_SERVER.getConnectionString(), "zkRegTestCenter");
-        registryCenter = new ZookeeperRegistryCenter(zookeeperConfig);
-        zookeeperConfig.setConnectionTimeoutMilliseconds(30000);
-        registryCenter.init();
-    }
-    
+
     @BeforeEach
     void setUp() {
         if (jobBootstrap instanceof ScheduleJobBootstrap) {
@@ -92,15 +92,15 @@ public abstract class BaseAnnotationE2ETest {
             ((OneOffJobBootstrap) jobBootstrap).execute();
         }
     }
-    
+
     @AfterEach
     void tearDown() {
         jobBootstrap.shutdown();
         ReflectionUtils.setFieldValue(JobRegistry.getInstance(), "instance", null);
     }
-    
+
     public enum TestType {
-        
+
         SCHEDULE, ONE_OFF
     }
 }

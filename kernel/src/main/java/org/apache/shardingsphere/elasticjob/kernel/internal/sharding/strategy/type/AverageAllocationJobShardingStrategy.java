@@ -20,17 +20,13 @@ package org.apache.shardingsphere.elasticjob.kernel.internal.sharding.strategy.t
 import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.strategy.JobShardingStrategy;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Sharding strategy which for average by sharding item.
- * 
+ *
  * <p>
- * If the job server number and sharding count cannot be divided, 
+ * If the job server number and sharding count cannot be divided,
  * the redundant sharding item that cannot be divided will be added to the server with small sequence number in turn.
  * For example:
  * 1. If there are 3 job servers and the total sharding count is 9, each job server is divided into: 1=[0,1,2], 2=[3,4,5], 3=[6,7,8];
@@ -39,7 +35,7 @@ import java.util.Map;
  * </p>
  */
 public final class AverageAllocationJobShardingStrategy implements JobShardingStrategy {
-    
+
     @Override
     public Map<JobInstance, List<Integer>> sharding(final List<JobInstance> jobInstances, final String jobName, final int shardingTotalCount) {
         if (jobInstances.isEmpty()) {
@@ -49,7 +45,7 @@ public final class AverageAllocationJobShardingStrategy implements JobShardingSt
         addAliquant(jobInstances, shardingTotalCount, result);
         return result;
     }
-    
+
     private Map<JobInstance, List<Integer>> shardingAliquot(final List<JobInstance> shardingUnits, final int shardingTotalCount) {
         Map<JobInstance, List<Integer>> result = new LinkedHashMap<>(shardingUnits.size(), 1);
         int itemCountPerSharding = shardingTotalCount / shardingUnits.size();
@@ -64,7 +60,7 @@ public final class AverageAllocationJobShardingStrategy implements JobShardingSt
         }
         return result;
     }
-    
+
     private void addAliquant(final List<JobInstance> shardingUnits, final int shardingTotalCount, final Map<JobInstance, List<Integer>> shardingResults) {
         int aliquant = shardingTotalCount % shardingUnits.size();
         int count = 0;
@@ -75,12 +71,12 @@ public final class AverageAllocationJobShardingStrategy implements JobShardingSt
             count++;
         }
     }
-    
+
     @Override
     public String getType() {
         return "AVG_ALLOCATION";
     }
-    
+
     @Override
     public boolean isDefault() {
         return true;

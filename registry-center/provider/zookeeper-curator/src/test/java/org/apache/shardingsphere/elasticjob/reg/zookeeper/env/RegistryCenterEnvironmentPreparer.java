@@ -23,7 +23,7 @@ import org.apache.shardingsphere.elasticjob.reg.zookeeper.ZookeeperRegistryCente
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class RegistryCenterEnvironmentPreparer {
-    
+
     /**
      * Persist the data to registry center.
      *

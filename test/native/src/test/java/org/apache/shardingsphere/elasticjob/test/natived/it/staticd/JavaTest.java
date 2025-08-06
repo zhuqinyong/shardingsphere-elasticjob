@@ -51,13 +51,13 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @EnabledInNativeImage
 class JavaTest {
-    
+
     private static TestingServer testingServer;
-    
+
     private static CoordinatorRegistryCenter regCenter;
-    
+
     private static TracingConfiguration<DataSource> tracingConfig;
-    
+
     @BeforeAll
     static void beforeAll() throws Exception {
         testingServer = new TestingServer();
@@ -77,13 +77,13 @@ class JavaTest {
         config.setPassword("");
         tracingConfig = new TracingConfiguration<>("RDB", new HikariDataSource(config));
     }
-    
+
     @AfterAll
     static void afterAll() throws IOException {
         regCenter.close();
         testingServer.close();
     }
-    
+
     @Test
     void testHttpJob() {
         ScheduleJobBootstrap jobBootstrap = new ScheduleJobBootstrap(regCenter, "HTTP",
@@ -99,7 +99,7 @@ class JavaTest {
             jobBootstrap.shutdown();
         });
     }
-    
+
     @Test
     void testSimpleJob() {
         ScheduleJobBootstrap jobBootstrap = new ScheduleJobBootstrap(regCenter, new JavaSimpleJob(),
@@ -113,7 +113,7 @@ class JavaTest {
             jobBootstrap.shutdown();
         });
     }
-    
+
     @Test
     void testDataflowJob() {
         ScheduleJobBootstrap jobBootstrap = new ScheduleJobBootstrap(regCenter, new JavaDataflowJob(),
@@ -128,7 +128,7 @@ class JavaTest {
             jobBootstrap.shutdown();
         });
     }
-    
+
     @Test
     void testOneOffJob() {
         OneOffJobBootstrap jobBootstrap = new OneOffJobBootstrap(regCenter, new JavaSimpleJob(),
@@ -141,7 +141,7 @@ class JavaTest {
             jobBootstrap.shutdown();
         });
     }
-    
+
     @Test
     @EnabledOnOs(OS.LINUX)
     void testScriptJob() {

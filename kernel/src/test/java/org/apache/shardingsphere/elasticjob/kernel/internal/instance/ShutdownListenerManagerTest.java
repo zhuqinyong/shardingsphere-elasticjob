@@ -17,15 +17,15 @@
 
 package org.apache.shardingsphere.elasticjob.kernel.internal.instance;
 
-import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.JobRegistry;
 import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.JobScheduleController;
 import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.SchedulerFacade;
+import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.apache.shardingsphere.elasticjob.kernel.internal.storage.JobNodeStorage;
-import org.apache.shardingsphere.elasticjob.test.util.ReflectionUtils;
 import org.apache.shardingsphere.elasticjob.reg.base.CoordinatorRegistryCenter;
 import org.apache.shardingsphere.elasticjob.reg.listener.DataChangedEvent;
 import org.apache.shardingsphere.elasticjob.reg.listener.DataChangedEvent.Type;
+import org.apache.shardingsphere.elasticjob.test.util.ReflectionUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,30 +34,28 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ShutdownListenerManagerTest {
-    
+
     @Mock
     private CoordinatorRegistryCenter regCenter;
-    
+
     @Mock
     private JobScheduleController jobScheduleController;
-    
+
     @Mock
     private JobNodeStorage jobNodeStorage;
-    
+
     @Mock
     private InstanceService instanceService;
-    
+
     @Mock
     private SchedulerFacade schedulerFacade;
-    
+
     private ShutdownListenerManager shutdownListenerManager;
-    
+
     @BeforeEach
     void setUp() {
         JobRegistry.getInstance().addJobInstance("test_job", new JobInstance("127.0.0.1@-@0"));
@@ -66,24 +64,24 @@ class ShutdownListenerManagerTest {
         ReflectionUtils.setFieldValue(shutdownListenerManager, "schedulerFacade", schedulerFacade);
         ReflectionUtils.setSuperclassFieldValue(shutdownListenerManager, "jobNodeStorage", jobNodeStorage);
     }
-    
+
     @AfterEach
     void tearDown() {
         JobRegistry.getInstance().shutdown("test_job");
     }
-    
+
     @Test
     void assertStart() {
         shutdownListenerManager.start();
         verify(jobNodeStorage).addDataListener(ArgumentMatchers.any());
     }
-    
+
     @Test
     void assertIsShutdownAlready() {
         shutdownListenerManager.new InstanceShutdownStatusJobListener().onChange(new DataChangedEvent(Type.DELETED, "/test_job/instances/127.0.0.1@-@0", ""));
         verify(schedulerFacade, times(0)).shutdownInstance();
     }
-    
+
     @Test
     void assertIsNotLocalInstancePath() {
         JobRegistry.getInstance().registerRegistryCenter("test_job", regCenter);
@@ -91,7 +89,7 @@ class ShutdownListenerManagerTest {
         shutdownListenerManager.new InstanceShutdownStatusJobListener().onChange(new DataChangedEvent(Type.DELETED, "/test_job/instances/127.0.0.2@-@0", ""));
         verify(schedulerFacade, times(0)).shutdownInstance();
     }
-    
+
     @Test
     void assertUpdateLocalInstancePath() {
         JobRegistry.getInstance().registerRegistryCenter("test_job", regCenter);
@@ -99,7 +97,7 @@ class ShutdownListenerManagerTest {
         shutdownListenerManager.new InstanceShutdownStatusJobListener().onChange(new DataChangedEvent(Type.UPDATED, "/test_job/instances/127.0.0.1@-@0", ""));
         verify(schedulerFacade, times(0)).shutdownInstance();
     }
-    
+
     @Test
     void assertRemoveLocalInstancePathForPausedJob() {
         JobRegistry.getInstance().registerRegistryCenter("test_job", regCenter);
@@ -108,7 +106,7 @@ class ShutdownListenerManagerTest {
         shutdownListenerManager.new InstanceShutdownStatusJobListener().onChange(new DataChangedEvent(Type.DELETED, "/test_job/instances/127.0.0.1@-@0", ""));
         verify(schedulerFacade, times(0)).shutdownInstance();
     }
-    
+
     @Test
     void assertRemoveLocalInstancePathForReconnectedRegistryCenter() {
         JobRegistry.getInstance().registerRegistryCenter("test_job", regCenter);
@@ -117,7 +115,7 @@ class ShutdownListenerManagerTest {
         shutdownListenerManager.new InstanceShutdownStatusJobListener().onChange(new DataChangedEvent(Type.DELETED, "/test_job/instances/127.0.0.1@-@0", ""));
         verify(schedulerFacade, times(0)).shutdownInstance();
     }
-    
+
     @Test
     void assertRemoveLocalInstancePath() {
         JobRegistry.getInstance().registerRegistryCenter("test_job", regCenter);

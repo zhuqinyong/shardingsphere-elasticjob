@@ -40,13 +40,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class OneOffJobBootstrapTest {
-    
+
     private static final EmbedTestingServer EMBED_TESTING_SERVER = new EmbedTestingServer();
-    
+
     private static final int SHARDING_TOTAL_COUNT = 3;
-    
+
     private static ZookeeperRegistryCenter zkRegCenter;
-    
+
     @BeforeAll
     static void init() {
         EMBED_TESTING_SERVER.start();
@@ -54,18 +54,18 @@ class OneOffJobBootstrapTest {
         zkRegCenter = new ZookeeperRegistryCenter(zookeeperConfiguration);
         zkRegCenter.init();
     }
-    
+
     @AfterAll
     static void tearDown() {
         zkRegCenter.close();
     }
-    
+
     @Test
     void assertConfigFailedWithCron() {
         assertThrows(IllegalArgumentException.class, () -> new OneOffJobBootstrap(zkRegCenter, (SimpleJob) shardingContext -> {
         }, JobConfiguration.newBuilder("test_one_off_job_execute_with_config_cron", SHARDING_TOTAL_COUNT).cron("0/5 * * * * ?").build()));
     }
-    
+
     @Test
     void assertExecute() {
         AtomicInteger counter = new AtomicInteger(0);
@@ -76,7 +76,7 @@ class OneOffJobBootstrapTest {
         assertThat(counter.get(), is(SHARDING_TOTAL_COUNT));
         ((JobScheduler) ReflectionUtils.getFieldValue(oneOffJobBootstrap, "jobScheduler")).shutdown();
     }
-    
+
     @Test
     void assertShutdown() throws SchedulerException {
         OneOffJobBootstrap oneOffJobBootstrap = new OneOffJobBootstrap(zkRegCenter, (SimpleJob) shardingContext -> {
@@ -84,12 +84,12 @@ class OneOffJobBootstrapTest {
         oneOffJobBootstrap.shutdown();
         assertTrue(getScheduler(oneOffJobBootstrap).isShutdown());
     }
-    
+
     private Scheduler getScheduler(final OneOffJobBootstrap oneOffJobBootstrap) {
         JobScheduler jobScheduler = (JobScheduler) ReflectionUtils.getFieldValue(oneOffJobBootstrap, "jobScheduler");
         return (Scheduler) ReflectionUtils.getFieldValue(jobScheduler.getJobScheduleController(), "scheduler");
     }
-    
+
     private void blockUtilFinish(final OneOffJobBootstrap oneOffJobBootstrap, final AtomicInteger counter) {
         Scheduler scheduler = getScheduler(oneOffJobBootstrap);
         Awaitility.await().pollDelay(100L, TimeUnit.MILLISECONDS).until(() -> 0 != counter.get() && scheduler.getCurrentlyExecutingJobs().isEmpty());

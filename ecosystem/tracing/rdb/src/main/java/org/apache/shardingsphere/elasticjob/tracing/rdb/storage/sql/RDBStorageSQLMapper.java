@@ -26,29 +26,29 @@ import java.util.Properties;
  */
 @Getter
 public final class RDBStorageSQLMapper {
-    
+
     private final String createTableForJobExecutionLog;
-    
+
     private final String createTableForJobStatusTraceLog;
-    
+
     private final String createIndexForTaskIdStateIndex;
-    
+
     private final String insertForJobExecutionLog;
-    
+
     private final String insertForJobExecutionLogForComplete;
-    
+
     private final String insertForJobExecutionLogForFailure;
-    
+
     private final String updateForJobExecutionLog;
-    
+
     private final String updateForJobExecutionLogForFailure;
-    
+
     private final String insertForJobStatusTraceLog;
-    
+
     private final String selectForJobStatusTraceLog;
-    
+
     private final String selectOriginalTaskIdForJobStatusTraceLog;
-    
+
     public RDBStorageSQLMapper(final Properties props) {
         createTableForJobExecutionLog = props.getProperty("JOB_EXECUTION_LOG.TABLE.CREATE");
         createTableForJobStatusTraceLog = props.getProperty("JOB_STATUS_TRACE_LOG.TABLE.CREATE");

@@ -29,7 +29,7 @@ import org.yaml.snakeyaml.Yaml;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class YamlEngine {
-    
+
     /**
      * Marshal YAML.
      *
@@ -39,13 +39,13 @@ public final class YamlEngine {
     public static String marshal(final Object value) {
         return new Yaml(new ElasticJobYamlRepresenter(new DumperOptions())).dumpAsMap(value);
     }
-    
+
     /**
      * Unmarshal YAML.
      *
      * @param yamlContent YAML content
-     * @param classType class type
-     * @param <T> type of class
+     * @param classType   class type
+     * @param <T>         type of class
      * @return object from YAML
      */
     public static <T> T unmarshal(final String yamlContent, final Class<T> classType) {

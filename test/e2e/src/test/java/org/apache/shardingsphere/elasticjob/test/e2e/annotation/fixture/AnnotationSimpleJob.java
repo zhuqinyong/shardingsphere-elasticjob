@@ -35,9 +35,9 @@ import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingCont
         })
 @Getter
 public class AnnotationSimpleJob implements SimpleJob {
-    
+
     private volatile boolean completed;
-    
+
     @Override
     public void execute(final ShardingContext shardingContext) {
         completed = true;

@@ -28,39 +28,39 @@ import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.JobSchedule
 import org.apache.shardingsphere.elasticjob.reg.base.CoordinatorRegistryCenter;
 
 /**
- * One off job bootstrap.
+ * 一次性任务启动类
  */
 public class OneOffJobBootstrap implements JobBootstrap {
-    
+
     private final JobScheduler jobScheduler;
-    
+
     private final InstanceService instanceService;
-    
+
     public OneOffJobBootstrap(final CoordinatorRegistryCenter regCenter, final ElasticJob elasticJob, final JobConfiguration jobConfig) {
         Preconditions.checkArgument(Strings.isNullOrEmpty(jobConfig.getCron()), "Cron should be empty.");
         jobScheduler = new JobScheduler(regCenter, elasticJob, jobConfig);
         instanceService = new InstanceService(regCenter, jobConfig.getJobName());
     }
-    
+
     public OneOffJobBootstrap(final CoordinatorRegistryCenter regCenter, final String elasticJobType, final JobConfiguration jobConfig) {
         Preconditions.checkArgument(Strings.isNullOrEmpty(jobConfig.getCron()), "Cron should be empty.");
         jobScheduler = new JobScheduler(regCenter, elasticJobType, jobConfig);
         instanceService = new InstanceService(regCenter, jobConfig.getJobName());
     }
-    
+
     public OneOffJobBootstrap(final CoordinatorRegistryCenter regCenter, final ElasticJob elasticJob) {
         JobConfiguration jobConfig = JobAnnotationBuilder.generateJobConfiguration(elasticJob.getClass());
         jobScheduler = new JobScheduler(regCenter, elasticJob, jobConfig);
         instanceService = new InstanceService(regCenter, jobConfig.getJobName());
     }
-    
+
     /**
      * Execute job.
      */
     public void execute() {
         instanceService.triggerAllInstances();
     }
-    
+
     @Override
     public void shutdown() {
         jobScheduler.shutdown();

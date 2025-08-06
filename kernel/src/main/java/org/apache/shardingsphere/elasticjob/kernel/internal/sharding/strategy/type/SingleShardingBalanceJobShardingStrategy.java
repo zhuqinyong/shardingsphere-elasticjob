@@ -17,12 +17,12 @@
 
 package org.apache.shardingsphere.elasticjob.kernel.internal.sharding.strategy.type;
 
+import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
+import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.strategy.JobShardingStrategy;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
-import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.strategy.JobShardingStrategy;
 
 /**
  * Single sharding Balance strategy, referenced of ROUND_ROBIN strategy.
@@ -33,29 +33,28 @@ import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.strategy.Jo
  *
  * this is the real round robin balance job running in the job instance dimension.
  * </pre>
- *
  */
 public class SingleShardingBalanceJobShardingStrategy implements JobShardingStrategy {
-    
+
     private final AverageAllocationJobShardingStrategy averageAllocationJobShardingStrategy = new AverageAllocationJobShardingStrategy();
-    
+
     @Override
     public Map<JobInstance, List<Integer>> sharding(final List<JobInstance> jobInstances, final String jobName, final int shardingTotalCount) {
         int shardingUnitsSize = jobInstances.size();
         int offset = Math.abs(jobName.hashCode() + ((Long) System.currentTimeMillis()).intValue()) % shardingUnitsSize;
-        
+
         List<JobInstance> result = new ArrayList<>(shardingUnitsSize);
         for (int i = 0; i < shardingUnitsSize; i++) {
             int index = (i + offset) % shardingUnitsSize;
             result.add(jobInstances.get(index));
         }
-        
+
         return averageAllocationJobShardingStrategy.sharding(result, jobName, shardingTotalCount);
     }
-    
+
     @Override
     public String getType() {
         return "SINGLE_SHARDING_BALANCE";
     }
-    
+
 }

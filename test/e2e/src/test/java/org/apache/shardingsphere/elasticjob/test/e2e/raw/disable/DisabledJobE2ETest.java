@@ -18,9 +18,9 @@
 package org.apache.shardingsphere.elasticjob.test.e2e.raw.disable;
 
 import org.apache.shardingsphere.elasticjob.api.JobConfiguration;
+import org.apache.shardingsphere.elasticjob.bootstrap.type.ScheduleJobBootstrap;
 import org.apache.shardingsphere.elasticjob.kernel.infra.env.IpUtils;
 import org.apache.shardingsphere.elasticjob.kernel.infra.yaml.YamlEngine;
-import org.apache.shardingsphere.elasticjob.bootstrap.type.ScheduleJobBootstrap;
 import org.apache.shardingsphere.elasticjob.kernel.internal.config.JobConfigurationPOJO;
 import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.JobRegistry;
 import org.apache.shardingsphere.elasticjob.kernel.internal.server.ServerStatus;
@@ -36,11 +36,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 public abstract class DisabledJobE2ETest extends BaseE2ETest {
-    
+
     public DisabledJobE2ETest(final TestType type) {
         super(type, new E2EFixtureJobImpl());
     }
-    
+
     protected final void assertDisabledRegCenterInfo() {
         Awaitility.await().atLeast(1L, TimeUnit.MILLISECONDS).atMost(1L, TimeUnit.MINUTES).untilAsserted(() -> {
             assertThat(JobRegistry.getInstance().getCurrentShardingTotalCount(getJobName()), is(3));

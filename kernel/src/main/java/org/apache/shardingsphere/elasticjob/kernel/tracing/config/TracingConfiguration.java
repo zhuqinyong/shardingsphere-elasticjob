@@ -32,11 +32,11 @@ import org.apache.shardingsphere.infra.spi.exception.ServiceProviderNotFoundExce
 @RequiredArgsConstructor
 @Getter
 public final class TracingConfiguration<T> implements JobExtraConfiguration {
-    
+
     private final String type;
-    
+
     private final TracingStorageConfiguration<T> tracingStorageConfiguration;
-    
+
     @SuppressWarnings("unchecked")
     public TracingConfiguration(final String type, final T storage) {
         this.type = type;

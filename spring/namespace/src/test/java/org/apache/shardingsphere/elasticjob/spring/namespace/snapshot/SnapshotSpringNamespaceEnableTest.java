@@ -31,14 +31,14 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = "classpath:META-INF/snapshot/snapshotEnabled.xml")
 class SnapshotSpringNamespaceEnableTest {
-    
+
     private static final EmbedTestingServer EMBED_TESTING_SERVER = new EmbedTestingServer(3181);
-    
+
     @BeforeAll
     static void init() {
         EMBED_TESTING_SERVER.start();
     }
-    
+
     @Test
     void assertSnapshotEnable() throws IOException {
         assertNull(SocketUtils.sendCommand("unknown_command", 9988));

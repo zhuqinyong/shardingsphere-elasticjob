@@ -29,18 +29,18 @@ import java.sql.SQLException;
  * RDB tracing listener.
  */
 public final class RDBTracingListener implements TracingListener {
-    
+
     private final RDBJobEventRepository repository;
-    
+
     public RDBTracingListener(final DataSource dataSource) throws SQLException {
         repository = RDBJobEventRepository.getInstance(dataSource);
     }
-    
+
     @Override
     public void listen(final JobExecutionEvent executionEvent) {
         repository.addJobExecutionEvent(executionEvent);
     }
-    
+
     @Override
     public void listen(final JobStatusTraceEvent jobStatusTraceEvent) {
         repository.addJobStatusTraceEvent(jobStatusTraceEvent);

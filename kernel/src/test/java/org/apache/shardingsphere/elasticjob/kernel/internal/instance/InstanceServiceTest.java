@@ -17,9 +17,9 @@
 
 package org.apache.shardingsphere.elasticjob.kernel.internal.instance;
 
-import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.JobRegistry;
 import org.apache.shardingsphere.elasticjob.kernel.internal.server.ServerService;
+import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.apache.shardingsphere.elasticjob.kernel.internal.storage.JobNodeStorage;
 import org.apache.shardingsphere.elasticjob.test.util.ReflectionUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,15 +39,15 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class InstanceServiceTest {
-    
+
     @Mock
     private JobNodeStorage jobNodeStorage;
-    
+
     @Mock
     private ServerService serverService;
-    
+
     private InstanceService instanceService;
-    
+
     @BeforeEach
     void setUp() {
         JobRegistry.getInstance().addJobInstance("test_job", new JobInstance("127.0.0.1@-@0", null, "127.0.0.1"));
@@ -57,19 +57,19 @@ class InstanceServiceTest {
         ReflectionUtils.setFieldValue(instanceService, "jobNodeStorage", jobNodeStorage);
         ReflectionUtils.setFieldValue(instanceService, "serverService", serverService);
     }
-    
+
     @Test
     void assertPersistOnline() {
         instanceService.persistOnline();
         verify(jobNodeStorage).fillEphemeralJobNode("instances/127.0.0.1@-@0", "jobInstanceId: 127.0.0.1@-@0\nserverIp: 127.0.0.1\n");
     }
-    
+
     @Test
     void assertRemoveInstance() {
         instanceService.removeInstance();
         verify(jobNodeStorage).removeJobNodeIfExisted("instances/127.0.0.1@-@0");
     }
-    
+
     @Test
     void assertGetAvailableJobInstances() {
         when(jobNodeStorage.getJobNodeChildrenKeys(InstanceNode.ROOT)).thenReturn(Arrays.asList("127.0.0.1@-@0", "127.0.0.2@-@0"));
@@ -78,7 +78,7 @@ class InstanceServiceTest {
         when(serverService.isEnableServer("127.0.0.1")).thenReturn(true);
         assertThat(instanceService.getAvailableJobInstances(), is(Collections.singletonList(new JobInstance("127.0.0.1@-@0"))));
     }
-    
+
     @Test
     void assertGetAvailableJobInstancesWhenInstanceRemoving() {
         when(jobNodeStorage.getJobNodeChildrenKeys(InstanceNode.ROOT)).thenReturn(Arrays.asList("127.0.0.1@-@0", "127.0.0.2@-@0"));
@@ -86,13 +86,13 @@ class InstanceServiceTest {
         when(serverService.isEnableServer("127.0.0.1")).thenReturn(true);
         assertThat(instanceService.getAvailableJobInstances(), is(Collections.singletonList(new JobInstance("127.0.0.1@-@0"))));
     }
-    
+
     @Test
     void assertIsLocalJobInstanceExisted() {
         when(jobNodeStorage.isJobNodeExisted("instances/127.0.0.1@-@0")).thenReturn(true);
         assertTrue(instanceService.isLocalJobInstanceExisted());
     }
-    
+
     @Test
     void assertTriggerAllInstances() {
         when(jobNodeStorage.getJobNodeChildrenKeys(InstanceNode.ROOT)).thenReturn(Arrays.asList("127.0.0.1@-@0", "127.0.0.2@-@0"));

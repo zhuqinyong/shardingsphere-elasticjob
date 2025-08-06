@@ -25,8 +25,8 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SnapshotBeanDefinitionTag {
-    
+
     public static final String REGISTRY_CENTER_REF_ATTRIBUTE = "registry-center-ref";
-    
+
     public static final String DUMP_PORT_ATTRIBUTE = "dump-port";
 }

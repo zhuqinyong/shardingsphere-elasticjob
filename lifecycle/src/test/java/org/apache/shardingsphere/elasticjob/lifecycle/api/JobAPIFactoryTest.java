@@ -25,39 +25,39 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class JobAPIFactoryTest {
-    
+
     private static final EmbedTestingServer EMBED_TESTING_SERVER = new EmbedTestingServer();
-    
+
     @BeforeAll
     static void setUp() {
         EMBED_TESTING_SERVER.start();
     }
-    
+
     @Test
     void assertCreateJobConfigAPI() {
         assertThat(JobAPIFactory.createJobConfigurationAPI(EMBED_TESTING_SERVER.getConnectionString(), "namespace", null), instanceOf(JobConfigurationAPI.class));
     }
-    
+
     @Test
     void assertCreateJobOperateAPI() {
         assertThat(JobAPIFactory.createJobOperateAPI(EMBED_TESTING_SERVER.getConnectionString(), "namespace", null), instanceOf(JobOperateAPI.class));
     }
-    
+
     @Test
     void assertCreateServerOperateAPI() {
         assertThat(JobAPIFactory.createShardingOperateAPI(EMBED_TESTING_SERVER.getConnectionString(), "namespace", null), instanceOf(ShardingOperateAPI.class));
     }
-    
+
     @Test
     void assertCreateJobStatisticsAPI() {
         assertThat(JobAPIFactory.createJobStatisticsAPI(EMBED_TESTING_SERVER.getConnectionString(), "namespace", null), instanceOf(JobStatisticsAPI.class));
     }
-    
+
     @Test
     void assertCreateServerStatisticsAPI() {
         assertThat(JobAPIFactory.createServerStatisticsAPI(EMBED_TESTING_SERVER.getConnectionString(), "namespace", null), instanceOf(ServerStatisticsAPI.class));
     }
-    
+
     @Test
     void assertCreateShardingStatisticsAPI() {
         assertThat(JobAPIFactory.createShardingStatisticsAPI(EMBED_TESTING_SERVER.getConnectionString(), "namespace", null), instanceOf(ShardingStatisticsAPI.class));

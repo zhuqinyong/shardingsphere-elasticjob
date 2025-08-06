@@ -29,22 +29,22 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ShardingItemParametersTest {
-    
+
     @Test
     void assertNewWhenPairFormatInvalid() {
         assertThrows(JobConfigurationException.class, () -> new ShardingItemParameters("xxx-xxx"));
     }
-    
+
     @Test
     void assertNewWhenItemIsNotNumber() {
         assertThrows(JobConfigurationException.class, () -> new ShardingItemParameters("xxx=xxx"));
     }
-    
+
     @Test
     void assertGetMapWhenIsEmpty() {
         assertThat(new ShardingItemParameters("").getMap(), is(Collections.EMPTY_MAP));
     }
-    
+
     @Test
     void assertGetMap() {
         Map<Integer, String> expected = new HashMap<>(3);

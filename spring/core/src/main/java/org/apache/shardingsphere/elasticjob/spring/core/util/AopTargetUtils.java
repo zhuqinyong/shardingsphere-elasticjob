@@ -17,22 +17,23 @@
 
 package org.apache.shardingsphere.elasticjob.spring.core.util;
 
-import java.lang.reflect.Field;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.shardingsphere.elasticjob.kernel.infra.exception.JobSystemException;
 import org.springframework.aop.framework.AdvisedSupport;
 import org.springframework.aop.support.AopUtils;
 
+import java.lang.reflect.Field;
+
 /**
  * Aop target Utility.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class AopTargetUtils {
-    
+
     /**
      * Get target object.
-     * 
+     *
      * @param proxy proxy object
      * @return target object
      */
@@ -46,7 +47,7 @@ public final class AopTargetUtils {
             return getProxyTargetObject(proxy, "CGLIB$CALLBACK_0");
         }
     }
-    
+
     private static Object getProxyTargetObject(final Object proxy, final String proxyType) {
         Field h;
         try {
@@ -61,7 +62,7 @@ public final class AopTargetUtils {
             throw new JobSystemException(ex);
         }
     }
-    
+
     private static Object getProxyTargetObjectForCglibAndSpring4(final Object proxy) {
         Field h;
         try {
@@ -77,7 +78,7 @@ public final class AopTargetUtils {
             throw new JobSystemException(ex);
         }
     }
-    
+
     private static Object getTargetObject(final Object object) {
         try {
             Field advised = object.getClass().getDeclaredField("advised");

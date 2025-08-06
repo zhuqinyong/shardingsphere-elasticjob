@@ -19,23 +19,23 @@ package org.apache.shardingsphere.elasticjob.spi.executor.item;
 
 import org.apache.shardingsphere.elasticjob.api.ElasticJob;
 import org.apache.shardingsphere.elasticjob.api.JobConfiguration;
-import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
 import org.apache.shardingsphere.elasticjob.spi.executor.item.param.JobRuntimeService;
+import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
 
 /**
  * Job item executor.
- * 
+ *
  * @param <T> type of ElasticJob
  */
 public interface JobItemExecutor<T extends ElasticJob> {
-    
+
     /**
      * Process job item.
-     * 
-     * @param elasticJob elastic job
-     * @param jobConfig job configuration
+     *
+     * @param elasticJob        elastic job
+     * @param jobConfig         job configuration
      * @param jobRuntimeService job runtime service
-     * @param shardingContext sharding context
+     * @param shardingContext   sharding context
      */
     void process(T elasticJob, JobConfiguration jobConfig, JobRuntimeService jobRuntimeService, ShardingContext shardingContext);
 }

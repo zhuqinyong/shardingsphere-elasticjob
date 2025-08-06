@@ -18,18 +18,18 @@
 package org.apache.shardingsphere.elasticjob.spring.boot.job.executor;
 
 import org.apache.shardingsphere.elasticjob.api.JobConfiguration;
-import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
 import org.apache.shardingsphere.elasticjob.spi.executor.item.param.JobRuntimeService;
+import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
 import org.apache.shardingsphere.elasticjob.spi.executor.item.type.ClassedJobItemExecutor;
 import org.apache.shardingsphere.elasticjob.spring.boot.job.fixture.job.CustomJob;
 
 public final class CustomClassedJobExecutor implements ClassedJobItemExecutor<CustomJob> {
-    
+
     @Override
     public void process(final CustomJob elasticJob, final JobConfiguration jobConfig, final JobRuntimeService jobRuntimeService, final ShardingContext shardingContext) {
         elasticJob.execute(shardingContext);
     }
-    
+
     @Override
     public Class<CustomJob> getElasticJobClass() {
         return CustomJob.class;

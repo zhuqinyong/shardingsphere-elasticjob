@@ -36,17 +36,17 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ServerStatisticsAPIImplTest {
-    
+
     private ServerStatisticsAPI serverStatisticsAPI;
-    
+
     @Mock
     private CoordinatorRegistryCenter regCenter;
-    
+
     @BeforeEach
     void setUp() {
         serverStatisticsAPI = new ServerStatisticsAPIImpl(regCenter);
     }
-    
+
     @Test
     void assertGetJobsTotalCount() {
         when(regCenter.getChildrenKeys("/")).thenReturn(Arrays.asList("test_job_1", "test_job_2"));
@@ -54,7 +54,7 @@ class ServerStatisticsAPIImplTest {
         when(regCenter.getChildrenKeys("/test_job_2/servers")).thenReturn(Arrays.asList("ip2", "ip3"));
         assertThat(serverStatisticsAPI.getServersTotalCount(), is(3));
     }
-    
+
     @Test
     void assertGetAllServersBriefInfo() {
         when(regCenter.getChildrenKeys("/")).thenReturn(Arrays.asList("test_job1", "test_job2"));
@@ -63,14 +63,14 @@ class ServerStatisticsAPIImplTest {
         when(regCenter.get("/test_job1/servers/ip1")).thenReturn("DISABLED");
         when(regCenter.get("/test_job1/servers/ip2")).thenReturn("");
         when(regCenter.getChildrenKeys("/test_job1/instances")).thenReturn(Collections.singletonList("ip1@-@defaultInstance"));
-        
+
         when(regCenter.get("/test_job2/servers/ip1")).thenReturn("DISABLED");
         when(regCenter.get("/test_job2/servers/ip2")).thenReturn("DISABLED");
         when(regCenter.get("/test_job1/instances/ip1@-@defaultInstance")).thenReturn("jobInstanceId: ip1@-@defaultInstance\nserverIp: ip1\n");
         when(regCenter.get("/test_job2/instances/ip1@-@defaultInstance")).thenReturn("jobInstanceId: ip1@-@defaultInstance\nserverIp: ip1\n");
         when(regCenter.get("/test_job2/instances/ip2@-@defaultInstance2")).thenReturn("jobInstanceId: ip2@-@defaultInstance2\nserverIp: ip2\n");
         when(regCenter.getChildrenKeys("/test_job2/instances")).thenReturn(Arrays.asList("ip1@-@defaultInstance", "ip2@-@defaultInstance2"));
-        
+
         int i = 0;
         for (ServerBriefInfo each : serverStatisticsAPI.getAllServersBriefInfo()) {
             i++;

@@ -26,7 +26,7 @@ import java.util.Properties;
  * Job error handler properties validator for email.
  */
 public final class EmailJobErrorHandlerPropertiesValidator implements JobErrorHandlerPropertiesValidator {
-    
+
     @Override
     public void validate(final Properties props) {
         PropertiesPreconditions.checkRequired(props, EmailPropertiesConstants.HOST);
@@ -37,7 +37,7 @@ public final class EmailJobErrorHandlerPropertiesValidator implements JobErrorHa
         PropertiesPreconditions.checkRequired(props, EmailPropertiesConstants.FROM);
         PropertiesPreconditions.checkRequired(props, EmailPropertiesConstants.TO);
     }
-    
+
     @Override
     public String getType() {
         return "EMAIL";

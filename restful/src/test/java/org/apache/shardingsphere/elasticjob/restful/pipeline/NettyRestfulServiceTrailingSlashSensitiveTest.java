@@ -37,15 +37,15 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class NettyRestfulServiceTrailingSlashSensitiveTest {
-    
+
     private static final long TESTCASE_TIMEOUT = 10000L;
-    
+
     private static final String HOST = "localhost";
-    
+
     private static final int PORT = 18081;
-    
+
     private static RestfulService restfulService;
-    
+
     @BeforeAll
     static void init() {
         NettyRestfulServiceConfiguration config = new NettyRestfulServiceConfiguration(PORT);
@@ -55,7 +55,14 @@ class NettyRestfulServiceTrailingSlashSensitiveTest {
         restfulService = new NettyRestfulService(config);
         restfulService.startup();
     }
-    
+
+    @AfterAll
+    static void tearDown() {
+        if (null != restfulService) {
+            restfulService.shutdown();
+        }
+    }
+
     @Test
     @Timeout(value = TESTCASE_TIMEOUT, unit = TimeUnit.MILLISECONDS)
     void assertWithoutTrailingSlash() {
@@ -67,7 +74,7 @@ class NettyRestfulServiceTrailingSlashSensitiveTest {
             assertThat(body, is("without trailing slash"));
         }, TESTCASE_TIMEOUT);
     }
-    
+
     @Test
     @Timeout(value = TESTCASE_TIMEOUT, unit = TimeUnit.MILLISECONDS)
     void assertWithTrailingSlash() {
@@ -78,12 +85,5 @@ class NettyRestfulServiceTrailingSlashSensitiveTest {
             String body = new String(bytes, StandardCharsets.UTF_8);
             assertThat(body, is("with trailing slash"));
         }, TESTCASE_TIMEOUT);
-    }
-    
-    @AfterAll
-    static void tearDown() {
-        if (null != restfulService) {
-            restfulService.shutdown();
-        }
     }
 }

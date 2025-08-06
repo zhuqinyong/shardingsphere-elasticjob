@@ -20,20 +20,16 @@ package org.apache.shardingsphere.elasticjob.test.e2e.snapshot;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.net.Socket;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SocketUtils {
-    
+
     /**
      * Send command.
      *
-     * @param command command
+     * @param command  command
      * @param dumpPort the port for dumping data
      * @return result of command
      * @throws IOException io exception

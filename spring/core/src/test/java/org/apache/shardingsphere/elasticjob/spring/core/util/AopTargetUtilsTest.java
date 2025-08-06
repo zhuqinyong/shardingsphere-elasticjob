@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AopTargetUtilsTest {
-    
+
     @Test
     void assertJdkDynamicProxyForGetTarget() {
         ElasticJob target = new TargetJob();
@@ -38,7 +38,7 @@ class AopTargetUtilsTest {
         assertTrue(AopUtils.isJdkDynamicProxy(proxy));
         assertThat(AopTargetUtils.getTarget(proxy), is(target));
     }
-    
+
     @Test
     void assertCglibProxyForGetTarget() {
         ElasticJob target = new TargetJob();
@@ -48,7 +48,7 @@ class AopTargetUtilsTest {
         assertTrue(AopUtils.isCglibProxy(proxy));
         assertThat(AopTargetUtils.getTarget(proxy), is(target));
     }
-    
+
     @Test
     void assertNoneProxyForGetTarget() {
         ElasticJob proxy = new TargetJob();

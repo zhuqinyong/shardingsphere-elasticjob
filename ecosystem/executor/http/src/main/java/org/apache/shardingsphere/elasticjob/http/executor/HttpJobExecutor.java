@@ -29,11 +29,7 @@ import org.apache.shardingsphere.elasticjob.spi.executor.item.param.JobRuntimeSe
 import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
 import org.apache.shardingsphere.elasticjob.spi.executor.item.type.TypedJobItemExecutor;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -43,7 +39,7 @@ import java.nio.charset.StandardCharsets;
  */
 @Slf4j
 public final class HttpJobExecutor implements TypedJobItemExecutor {
-    
+
     @Override
     public void process(final ElasticJob elasticJob, final JobConfiguration jobConfig, final JobRuntimeService jobRuntimeService, final ShardingContext shardingContext) {
         HttpParam httpParam = new HttpParam(jobConfig.getProps());
@@ -80,7 +76,7 @@ public final class HttpJobExecutor implements TypedJobItemExecutor {
             }
         }
     }
-    
+
     private HttpURLConnection getHttpURLConnection(final HttpParam httpParam, final ShardingContext shardingContext) throws IOException {
         URL url = new URL(httpParam.getUrl());
         HttpURLConnection result = (HttpURLConnection) url.openConnection();
@@ -94,7 +90,7 @@ public final class HttpJobExecutor implements TypedJobItemExecutor {
         result.setRequestProperty(HttpJobProperties.SHARDING_CONTEXT_KEY, GsonFactory.getGson().toJson(shardingContext));
         return result;
     }
-    
+
     private InputStream getConnectionInputStream(final String jobName, final HttpURLConnection connection, final int code) throws IOException {
         if (isRequestSucceed(code)) {
             return connection.getInputStream();
@@ -102,11 +98,11 @@ public final class HttpJobExecutor implements TypedJobItemExecutor {
         log.warn("HTTP job {} executed with response code {}", jobName, code);
         return connection.getErrorStream();
     }
-    
+
     private boolean isRequestSucceed(final int httpStatusCode) {
         return HttpURLConnection.HTTP_BAD_REQUEST > httpStatusCode;
     }
-    
+
     @Override
     public String getType() {
         return "HTTP";

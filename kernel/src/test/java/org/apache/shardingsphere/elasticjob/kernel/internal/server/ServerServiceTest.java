@@ -17,12 +17,12 @@
 
 package org.apache.shardingsphere.elasticjob.kernel.internal.server;
 
-import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.JobRegistry;
 import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.JobScheduleController;
+import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.apache.shardingsphere.elasticjob.kernel.internal.storage.JobNodeStorage;
-import org.apache.shardingsphere.elasticjob.test.util.ReflectionUtils;
 import org.apache.shardingsphere.elasticjob.reg.base.CoordinatorRegistryCenter;
+import org.apache.shardingsphere.elasticjob.test.util.ReflectionUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,24 +34,22 @@ import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ServerServiceTest {
-    
+
     @Mock
     private CoordinatorRegistryCenter regCenter;
-    
+
     @Mock
     private JobScheduleController jobScheduleController;
-    
+
     @Mock
     private JobNodeStorage jobNodeStorage;
-    
+
     private ServerService serverService;
-    
+
     @BeforeEach
     void setUp() {
         JobRegistry.getInstance().addJobInstance("test_job", new JobInstance("127.0.0.1@-@0", null, "127.0.0.1"));
@@ -60,14 +58,14 @@ class ServerServiceTest {
         ReflectionUtils.setFieldValue(serverService, "serverNode", serverNode);
         ReflectionUtils.setFieldValue(serverService, "jobNodeStorage", jobNodeStorage);
     }
-    
+
     @Test
     void assertPersistOnlineForInstanceShutdown() {
         JobRegistry.getInstance().shutdown("test_job");
         serverService.persistOnline(false);
         verify(jobNodeStorage, times(0)).fillJobNode("servers/127.0.0.1", ServerStatus.DISABLED.name());
     }
-    
+
     @Test
     void assertPersistOnlineForDisabledServer() {
         JobRegistry.getInstance().registerRegistryCenter("test_job", regCenter);
@@ -76,7 +74,7 @@ class ServerServiceTest {
         verify(jobNodeStorage).fillJobNode("servers/127.0.0.1", ServerStatus.DISABLED.name());
         JobRegistry.getInstance().shutdown("test_job");
     }
-    
+
     @Test
     void assertPersistOnlineForEnabledServer() {
         JobRegistry.getInstance().registerRegistryCenter("test_job", regCenter);
@@ -85,7 +83,7 @@ class ServerServiceTest {
         verify(jobNodeStorage).fillJobNode("servers/127.0.0.1", ServerStatus.ENABLED.name());
         JobRegistry.getInstance().shutdown("test_job");
     }
-    
+
     @Test
     void assertHasAvailableServers() {
         when(jobNodeStorage.getJobNodeChildrenKeys("servers")).thenReturn(Arrays.asList("127.0.0.1", "127.0.0.2", "127.0.0.3"));
@@ -95,7 +93,7 @@ class ServerServiceTest {
         when(jobNodeStorage.getJobNodeChildrenKeys("instances")).thenReturn(Collections.singletonList("127.0.0.3@-@0"));
         assertTrue(serverService.hasAvailableServers());
     }
-    
+
     @Test
     void assertHasNotAvailableServers() {
         when(jobNodeStorage.getJobNodeChildrenKeys("servers")).thenReturn(Arrays.asList("127.0.0.1", "127.0.0.2"));
@@ -103,39 +101,39 @@ class ServerServiceTest {
         when(jobNodeStorage.getJobNodeData("servers/127.0.0.2")).thenReturn(ServerStatus.DISABLED.name());
         assertFalse(serverService.hasAvailableServers());
     }
-    
+
     @Test
     void assertIsNotAvailableServerWhenDisabled() {
         when(jobNodeStorage.getJobNodeData("servers/127.0.0.1")).thenReturn(ServerStatus.DISABLED.name());
         assertFalse(serverService.isAvailableServer("127.0.0.1"));
     }
-    
+
     @Test
     void assertIsNotAvailableServerWithoutOnlineInstances() {
         when(jobNodeStorage.getJobNodeChildrenKeys("instances")).thenReturn(Collections.singletonList("127.0.0.2@-@0"));
         when(jobNodeStorage.getJobNodeData("servers/127.0.0.1")).thenReturn(ServerStatus.ENABLED.name());
         assertFalse(serverService.isAvailableServer("127.0.0.1"));
     }
-    
+
     @Test
     void assertIsAvailableServer() {
         when(jobNodeStorage.getJobNodeChildrenKeys("instances")).thenReturn(Collections.singletonList("127.0.0.1@-@0"));
         when(jobNodeStorage.getJobNodeData("servers/127.0.0.1")).thenReturn(ServerStatus.ENABLED.name());
         assertTrue(serverService.isAvailableServer("127.0.0.1"));
     }
-    
+
     @Test
     void assertIsNotEnableServer() {
         when(jobNodeStorage.getJobNodeData("servers/127.0.0.1")).thenReturn("", ServerStatus.DISABLED.name());
         assertFalse(serverService.isEnableServer("127.0.0.1"));
     }
-    
+
     @Test
     void assertIsEnableServer() {
         when(jobNodeStorage.getJobNodeData("servers/127.0.0.1")).thenReturn("", ServerStatus.ENABLED.name());
         assertTrue(serverService.isEnableServer("127.0.0.1"));
     }
-    
+
     @Test
     void assertServerNodeAbsent() {
         assertFalse(serverService.isEnableServer("127.0.0.1"));

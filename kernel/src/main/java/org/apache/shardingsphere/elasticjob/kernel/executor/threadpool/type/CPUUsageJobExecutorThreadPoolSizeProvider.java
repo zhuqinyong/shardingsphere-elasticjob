@@ -23,17 +23,17 @@ import org.apache.shardingsphere.elasticjob.kernel.executor.threadpool.JobExecut
  * Job executor pool size provider with use CPU available processors.
  */
 public final class CPUUsageJobExecutorThreadPoolSizeProvider implements JobExecutorThreadPoolSizeProvider {
-    
+
     @Override
     public int getSize() {
         return Runtime.getRuntime().availableProcessors() * 2;
     }
-    
+
     @Override
     public String getType() {
         return "CPU";
     }
-    
+
     @Override
     public boolean isDefault() {
         return true;

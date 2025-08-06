@@ -19,38 +19,34 @@ package org.apache.shardingsphere.elasticjob.kernel.internal.sharding;
 
 import com.google.common.base.Strings;
 import org.apache.shardingsphere.elasticjob.api.JobConfiguration;
-import org.apache.shardingsphere.elasticjob.spi.listener.param.ShardingContexts;
 import org.apache.shardingsphere.elasticjob.kernel.internal.config.ConfigurationService;
 import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.JobRegistry;
 import org.apache.shardingsphere.elasticjob.kernel.internal.storage.JobNodeStorage;
 import org.apache.shardingsphere.elasticjob.reg.base.CoordinatorRegistryCenter;
+import org.apache.shardingsphere.elasticjob.spi.listener.param.ShardingContexts;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Execution service.
  */
 public final class ExecutionService {
-    
+
     private final String jobName;
-    
+
     private final JobNodeStorage jobNodeStorage;
-    
+
     private final ConfigurationService configService;
-    
+
     public ExecutionService(final CoordinatorRegistryCenter regCenter, final String jobName) {
         this.jobName = jobName;
         jobNodeStorage = new JobNodeStorage(regCenter, jobName);
         configService = new ConfigurationService(regCenter, jobName);
     }
-    
+
     /**
      * Register job begin.
-     * 
+     *
      * @param shardingContexts sharding contexts
      */
     public void registerJobBegin(final ShardingContexts shardingContexts) {
@@ -68,10 +64,10 @@ public final class ExecutionService {
             }
         }
     }
-    
+
     /**
      * Register job completed.
-     * 
+     *
      * @param shardingContexts sharding contexts
      */
     public void registerJobCompleted(final ShardingContexts shardingContexts) {
@@ -83,17 +79,17 @@ public final class ExecutionService {
             jobNodeStorage.removeJobNodeIfExisted(ShardingNode.getRunningNode(each));
         }
     }
-    
+
     /**
      * Clear all running info.
      */
     public void clearAllRunningInfo() {
         clearRunningInfo(getAllItems());
     }
-    
+
     /**
      * Clear running info.
-     * 
+     *
      * @param items sharding items which need to be cleared
      */
     public void clearRunningInfo(final List<Integer> items) {
@@ -101,7 +97,7 @@ public final class ExecutionService {
             jobNodeStorage.removeJobNodeIfExisted(ShardingNode.getRunningNode(each));
         }
     }
-    
+
     /**
      * Judge has running items or not.
      *
@@ -120,7 +116,7 @@ public final class ExecutionService {
         }
         return false;
     }
-    
+
     /**
      * Judge has running items or not.
      *
@@ -129,7 +125,7 @@ public final class ExecutionService {
     public boolean hasRunningItems() {
         return hasRunningItems(getAllItems());
     }
-    
+
     private List<Integer> getAllItems() {
         int shardingTotalCount = configService.load(true).getShardingTotalCount();
         List<Integer> result = new ArrayList<>(shardingTotalCount);
@@ -138,7 +134,7 @@ public final class ExecutionService {
         }
         return result;
     }
-    
+
     /**
      * Get all running items with instance.
      *
@@ -155,10 +151,10 @@ public final class ExecutionService {
         }
         return result;
     }
-    
+
     /**
      * Set misfire flag if sharding items still running.
-     * 
+     *
      * @param items sharding items need to be set misfire flag
      * @return is misfired for this schedule time or not
      */
@@ -169,7 +165,7 @@ public final class ExecutionService {
         setMisfire(items);
         return true;
     }
-    
+
     /**
      * Set misfire flag if sharding items still running.
      *
@@ -180,10 +176,10 @@ public final class ExecutionService {
             jobNodeStorage.createJobNodeIfNeeded(ShardingNode.getMisfireNode(each));
         }
     }
-    
+
     /**
      * Get misfired job sharding items.
-     * 
+     *
      * @param items sharding items need to be judged
      * @return misfired job sharding items
      */
@@ -196,10 +192,10 @@ public final class ExecutionService {
         }
         return result;
     }
-    
+
     /**
      * Clear misfire flag.
-     * 
+     *
      * @param items sharding items need to be cleared
      */
     public void clearMisfire(final Collection<Integer> items) {
@@ -207,7 +203,7 @@ public final class ExecutionService {
             jobNodeStorage.removeJobNodeIfExisted(ShardingNode.getMisfireNode(each));
         }
     }
-    
+
     /**
      * Get disabled sharding items.
      *

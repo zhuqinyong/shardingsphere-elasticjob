@@ -24,18 +24,18 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TracingStorageConfigurationConverterFactoryTest {
-    
+
     @Test
     void assertConverterExists() {
         assertTrue(TracingStorageConverterFactory.findConverter(TracingStorageFixture.class).isPresent());
     }
-    
+
     @Test
     void assertConverterNotFound() {
         assertFalse(TracingStorageConverterFactory.findConverter(AClassWithoutCorrespondingConverter.class).isPresent());
     }
-    
+
     private static class AClassWithoutCorrespondingConverter {
-        
+
     }
 }

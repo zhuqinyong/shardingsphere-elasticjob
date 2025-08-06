@@ -26,18 +26,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public final class DataChangedEvent {
-    
+
     private final Type type;
-    
+
     private final String key;
-    
+
     private final String value;
-    
+
     /**
      * Data changed type.
      */
     public enum Type {
-        
+
         ADDED, UPDATED, DELETED, IGNORED
     }
 }

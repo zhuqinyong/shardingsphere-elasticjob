@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 class RDBTracingStorageConfigurationTest {
-    
+
     @Test
     void assertGetDataSourceConfiguration() throws SQLException {
         HikariDataSource actualDataSource = new HikariDataSource();
@@ -49,7 +49,7 @@ class RDBTracingStorageConfigurationTest {
         assertThat(actual.getProps().get("password").toString(), is("root"));
         assertNull(actual.getProps().get("loginTimeout"));
     }
-    
+
     @Test
     void assertCreateDataSource() {
         Map<String, Object> props = new HashMap<>(16, 1);
@@ -67,7 +67,7 @@ class RDBTracingStorageConfigurationTest {
         assertThat(actual.getUsername(), is("root"));
         assertThat(actual.getPassword(), is("root"));
     }
-    
+
     @Test
     void assertEquals() {
         RDBTracingStorageConfiguration originalDataSourceConfig = new RDBTracingStorageConfiguration(HikariDataSource.class.getName());
@@ -78,7 +78,7 @@ class RDBTracingStorageConfigurationTest {
         targetDataSourceConfig.getProps().put("username", "root");
         assertThat(originalDataSourceConfig, is(targetDataSourceConfig));
     }
-    
+
     @Test
     void assertNotEquals() {
         RDBTracingStorageConfiguration originalDataSourceConfig = new RDBTracingStorageConfiguration(HikariDataSource.class.getName());
@@ -87,12 +87,12 @@ class RDBTracingStorageConfigurationTest {
         targetDataSourceConfig.getProps().put("username", "root0");
         assertThat(originalDataSourceConfig, not(targetDataSourceConfig));
     }
-    
+
     @Test
     void assertEqualsWithNull() {
         assertFalse(new RDBTracingStorageConfiguration(HikariDataSource.class.getName()).equals(null));
     }
-    
+
     @Test
     void assertSameHashCode() {
         RDBTracingStorageConfiguration originalDataSourceConfig = new RDBTracingStorageConfiguration(HikariDataSource.class.getName());
@@ -105,7 +105,7 @@ class RDBTracingStorageConfigurationTest {
         targetDataSourceConfig.getProps().put("password", "root");
         assertThat(originalDataSourceConfig.hashCode(), is(targetDataSourceConfig.hashCode()));
     }
-    
+
     @Test
     void assertDifferentHashCode() {
         RDBTracingStorageConfiguration originalDataSourceConfig = new RDBTracingStorageConfiguration(HikariDataSource.class.getName());
@@ -118,7 +118,7 @@ class RDBTracingStorageConfigurationTest {
         targetDataSourceConfig = new RDBTracingStorageConfiguration(DataSource.class.getName());
         assertThat(originalDataSourceConfig.hashCode(), not(targetDataSourceConfig.hashCode()));
     }
-    
+
     @Test
     void assertGetDataSourceConfigurationWithConnectionInitSqls() {
         HikariDataSource actualDataSource = new HikariDataSource();

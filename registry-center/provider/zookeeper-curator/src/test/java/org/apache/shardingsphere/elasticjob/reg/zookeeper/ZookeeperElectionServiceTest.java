@@ -37,29 +37,27 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ZookeeperElectionServiceTest {
-    
+
     private static final EmbedTestingServer EMBED_TESTING_SERVER = new EmbedTestingServer();
-    
+
     private static final int RANDOM_PORT = InstanceSpec.getRandomPort();
-    
+
     private static final String HOST_AND_PORT = "localhost:" + RANDOM_PORT;
-    
+
     private static final String ELECTION_PATH = "/election";
-    
+
     @Mock
     private ElectionCandidate electionCandidate;
-    
+
     @BeforeAll
     static void init() {
         EMBED_TESTING_SERVER.start();
     }
-    
+
     @Test
     void assertContend() throws Exception {
         CuratorFramework client = CuratorFrameworkFactory.newClient(EMBED_TESTING_SERVER.getConnectionString(), new RetryOneTime(2000));
@@ -82,11 +80,11 @@ class ZookeeperElectionServiceTest {
         verify(anotherElectionCandidate, atLeastOnce()).startLeadership();
         verify(anotherElectionCandidate, atLeastOnce()).stopLeadership();
     }
-    
+
     private void blockUntilCondition(final Supplier<Boolean> condition) {
         Awaitility.await().pollDelay(100L, TimeUnit.MILLISECONDS).until(condition::get);
     }
-    
+
     private boolean hasLeadership(final ZookeeperElectionService zookeeperElectionService) {
         return ((LeaderSelector) ReflectionUtils.getFieldValue(zookeeperElectionService, "leaderSelector")).hasLeadership();
     }

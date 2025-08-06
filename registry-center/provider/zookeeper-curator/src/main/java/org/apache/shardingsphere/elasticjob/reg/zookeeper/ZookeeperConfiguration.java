@@ -28,10 +28,10 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 public final class ZookeeperConfiguration {
-    
+
     /**
      * Server list of ZooKeeper.
-     * 
+     *
      * <p>
      * Include IP addresses and ports,
      * Multiple IP address split by comma.
@@ -39,42 +39,42 @@ public final class ZookeeperConfiguration {
      * </p>
      */
     private final String serverLists;
-    
+
     /**
      * Namespace.
      */
     private final String namespace;
-    
+
     /**
-     * Base sleep time milliseconds. 
+     * Base sleep time milliseconds.
      */
     private int baseSleepTimeMilliseconds = 1000;
-    
+
     /**
      * Max sleep time milliseconds.
      */
     private int maxSleepTimeMilliseconds = 3000;
-    
+
     /**
      * Max retry times.
      */
     private int maxRetries = 3;
-    
+
     /**
      * Session timeout milliseconds.
      */
     private int sessionTimeoutMilliseconds;
-    
+
     /**
      * Connection timeout milliseconds.
      */
     private int connectionTimeoutMilliseconds;
-    
+
     /**
      * Zookeeper digest.
      */
     private String digest;
-    
+
     /**
      * Allows configuring if the ensemble configuration changes are watched.
      * If the HA enabled Zookeeper clusters are hidden under a virtual IP of Kubernetes,

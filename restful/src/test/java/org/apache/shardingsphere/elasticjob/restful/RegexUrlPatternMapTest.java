@@ -23,12 +23,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class RegexUrlPatternMapTest {
-    
+
     @Test
     void assertRegexUrlPatternMap() {
         RegexUrlPatternMap<Integer> urlPatternMap = new RegexUrlPatternMap<>();
@@ -47,7 +45,7 @@ class RegexUrlPatternMapTest {
         mappingContext = urlPatternMap.match("/job/list");
         assertNull(mappingContext);
     }
-    
+
     @Test
     void assertAmbiguous() {
         RegexUrlPatternMap<Integer> urlPatternMap = new RegexUrlPatternMap<>();
@@ -58,7 +56,7 @@ class RegexUrlPatternMapTest {
         assertThat(mappingContext.pattern(), is("/foo/{bar}/operate/{metrics}"));
         assertThat(mappingContext.payload(), is(11));
     }
-    
+
     @Test
     void assertDuplicate() {
         assertThrows(IllegalArgumentException.class, () -> {

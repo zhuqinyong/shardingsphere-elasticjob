@@ -24,12 +24,12 @@ import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public final class DetailedFooJob implements FooJob {
-    
+
     private final Collection<Integer> completedJobItems = new CopyOnWriteArraySet<>();
-    
+
     @Getter
     private volatile boolean completed;
-    
+
     @Override
     public void foo(final ShardingContext shardingContext) {
         completedJobItems.add(shardingContext.getShardingItem());

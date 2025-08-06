@@ -25,7 +25,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class SingleThreadJobExecutorThreadPoolSizeProviderTest {
-    
+
     @Test
     void assertGetPoolSize() {
         assertThat((TypedSPILoader.getService(JobExecutorThreadPoolSizeProvider.class, "SINGLE_THREAD")).getSize(), is(1));

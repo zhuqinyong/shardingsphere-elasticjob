@@ -21,7 +21,7 @@ import org.apache.shardingsphere.elasticjob.api.ElasticJob;
 import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
 
 public interface CustomJob extends ElasticJob {
-    
+
     /**
      * Execute custom job.
      *

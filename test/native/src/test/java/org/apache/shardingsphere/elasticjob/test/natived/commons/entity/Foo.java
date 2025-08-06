@@ -28,16 +28,16 @@ import java.io.Serializable;
 @ToString
 @AllArgsConstructor
 public final class Foo implements Serializable {
-    
+
     private static final long serialVersionUID = 2706842871078949451L;
-    
+
     private final long id;
-    
+
     private final String location;
-    
+
     @Setter
     private Status status;
-    
+
     public enum Status {
         UNFINISHED,
         COMPLETED

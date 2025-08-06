@@ -34,19 +34,19 @@ import java.util.stream.Collectors;
  * Server service.
  */
 public final class ServerService {
-    
+
     private final String jobName;
-    
+
     private final JobNodeStorage jobNodeStorage;
-    
+
     private final ServerNode serverNode;
-    
+
     public ServerService(final CoordinatorRegistryCenter regCenter, final String jobName) {
         this.jobName = jobName;
         jobNodeStorage = new JobNodeStorage(regCenter, jobName);
         serverNode = new ServerNode(jobName);
     }
-    
+
     /**
      * Persist online status of job server.
      *
@@ -57,7 +57,7 @@ public final class ServerService {
             jobNodeStorage.fillJobNode(serverNode.getServerNode(JobRegistry.getInstance().getJobInstance(jobName).getServerIp()), enabled ? ServerStatus.ENABLED.name() : ServerStatus.DISABLED.name());
         }
     }
-    
+
     /**
      * Judge has available servers or not.
      *
@@ -72,7 +72,7 @@ public final class ServerService {
         }
         return false;
     }
-    
+
     /**
      * Judge is available server or not.
      *
@@ -82,7 +82,7 @@ public final class ServerService {
     public boolean isAvailableServer(final String ip) {
         return isEnableServer(ip) && hasOnlineInstances(ip);
     }
-    
+
     private boolean hasOnlineInstances(final String ip) {
         for (String each : jobNodeStorage.getJobNodeChildrenKeys(InstanceNode.ROOT)) {
             if (each.startsWith(ip)) {
@@ -91,7 +91,7 @@ public final class ServerService {
         }
         return false;
     }
-    
+
     /**
      * Judge is server enabled or not.
      *
@@ -106,9 +106,9 @@ public final class ServerService {
         }
         return ServerStatus.ENABLED.name().equals(serverStatus);
     }
-    
+
     /**
-     *  Remove unused server IP.
+     * Remove unused server IP.
      *
      * @return num of server IP to be removed
      */
@@ -126,7 +126,7 @@ public final class ServerService {
         if (serverIps == null || serverIps.isEmpty()) {
             return affectNums.get();
         }
-        
+
         serverIps.forEach(serverIp -> {
             if (instanceIps.contains(serverIp)) {
                 return;

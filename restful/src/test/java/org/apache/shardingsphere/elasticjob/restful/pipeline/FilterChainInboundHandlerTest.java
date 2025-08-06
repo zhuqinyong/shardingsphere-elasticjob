@@ -29,34 +29,31 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class FilterChainInboundHandlerTest {
-    
+
     @Mock
     private List<Filter> filterInstances;
-    
+
     @Mock
     private HandleContext<Handler> handleContext;
-    
+
     private EmbeddedChannel channel;
-    
+
     @BeforeEach
     void setUp() {
         channel = new EmbeddedChannel(new FilterChainInboundHandler(filterInstances));
     }
-    
+
     @Test
     void assertNoFilter() {
         when(filterInstances.isEmpty()).thenReturn(true);
         channel.writeOneInbound(handleContext);
         verify(handleContext, never()).getHttpRequest();
     }
-    
+
     @Test
     void assertFilterExists() {
         when(filterInstances.isEmpty()).thenReturn(false);

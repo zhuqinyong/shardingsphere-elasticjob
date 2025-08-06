@@ -17,7 +17,6 @@
 
 package org.apache.shardingsphere.elasticjob.kernel.internal.listener;
 
-import org.apache.shardingsphere.elasticjob.spi.listener.ElasticJobListener;
 import org.apache.shardingsphere.elasticjob.kernel.internal.config.RescheduleListenerManager;
 import org.apache.shardingsphere.elasticjob.kernel.internal.election.ElectionListenerManager;
 import org.apache.shardingsphere.elasticjob.kernel.internal.failover.FailoverListenerManager;
@@ -28,6 +27,7 @@ import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.ShardingLis
 import org.apache.shardingsphere.elasticjob.kernel.internal.storage.JobNodeStorage;
 import org.apache.shardingsphere.elasticjob.kernel.internal.trigger.TriggerListenerManager;
 import org.apache.shardingsphere.elasticjob.reg.base.CoordinatorRegistryCenter;
+import org.apache.shardingsphere.elasticjob.spi.listener.ElasticJobListener;
 
 import java.util.Collection;
 
@@ -35,27 +35,27 @@ import java.util.Collection;
  * Listener manager facade.
  */
 public final class ListenerManager {
-    
+
     private final JobNodeStorage jobNodeStorage;
-    
+
     private final ElectionListenerManager electionListenerManager;
-    
+
     private final ShardingListenerManager shardingListenerManager;
-    
+
     private final FailoverListenerManager failoverListenerManager;
-    
+
     private final MonitorExecutionListenerManager monitorExecutionListenerManager;
-    
+
     private final ShutdownListenerManager shutdownListenerManager;
-    
+
     private final TriggerListenerManager triggerListenerManager;
-    
+
     private final RescheduleListenerManager rescheduleListenerManager;
-    
+
     private final GuaranteeListenerManager guaranteeListenerManager;
-    
+
     private final RegistryCenterConnectionStateListener regCenterConnectionStateListener;
-    
+
     public ListenerManager(final CoordinatorRegistryCenter regCenter, final String jobName, final Collection<ElasticJobListener> elasticJobListeners) {
         jobNodeStorage = new JobNodeStorage(regCenter, jobName);
         ListenerNotifierManager.getInstance().registerJobNotifyExecutor(jobName);
@@ -69,7 +69,7 @@ public final class ListenerManager {
         guaranteeListenerManager = new GuaranteeListenerManager(regCenter, jobName, elasticJobListeners);
         regCenterConnectionStateListener = new RegistryCenterConnectionStateListener(regCenter, jobName);
     }
-    
+
     /**
      * Start all listeners.
      */

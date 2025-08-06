@@ -22,10 +22,10 @@ import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 import org.apache.curator.test.InstanceSpec;
 import org.apache.shardingsphere.elasticjob.error.handler.wechat.fixture.WechatInternalController;
-import org.apache.shardingsphere.elasticjob.spi.executor.error.handler.JobErrorHandler;
 import org.apache.shardingsphere.elasticjob.restful.NettyRestfulService;
 import org.apache.shardingsphere.elasticjob.restful.NettyRestfulServiceConfiguration;
 import org.apache.shardingsphere.elasticjob.restful.RestfulService;
+import org.apache.shardingsphere.elasticjob.spi.executor.error.handler.JobErrorHandler;
 import org.apache.shardingsphere.infra.spi.type.typed.TypedSPILoader;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -40,15 +40,15 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class WechatJobErrorHandlerTest {
-    
+
     private static final int PORT = InstanceSpec.getRandomPort();
-    
+
     private static final String HOST = "localhost";
-    
+
     private static RestfulService restfulService;
-    
+
     private static List<LoggingEvent> appenderList;
-    
+
     @SuppressWarnings({"unchecked", "rawtypes"})
     @BeforeAll
     static void init() {
@@ -61,19 +61,19 @@ class WechatJobErrorHandlerTest {
         ListAppender<LoggingEvent> appender = (ListAppender) log.getAppender("WechatJobErrorHandlerTestAppender");
         appenderList = appender.list;
     }
-    
-    @BeforeEach
-    void setUp() {
-        appenderList.clear();
-    }
-    
+
     @AfterAll
     static void close() {
         if (null != restfulService) {
             restfulService.shutdown();
         }
     }
-    
+
+    @BeforeEach
+    void setUp() {
+        appenderList.clear();
+    }
+
     @Test
     void assertHandleExceptionWithNotifySuccessful() {
         WechatJobErrorHandler actual = getWechatJobErrorHandler(createConfigurationProperties("http://localhost:" + PORT + "/send?key=mocked_key"));
@@ -83,7 +83,7 @@ class WechatJobErrorHandlerTest {
         assertThat(appenderList.get(0).getLevel(), is(Level.INFO));
         assertThat(appenderList.get(0).getFormattedMessage(), is("An exception has occurred in Job 'test_job', an wechat message has been sent successful."));
     }
-    
+
     @Test
     void assertHandleExceptionWithWrongToken() {
         WechatJobErrorHandler actual = getWechatJobErrorHandler(createConfigurationProperties("http://localhost:" + PORT + "/send?key=wrong_key"));
@@ -93,7 +93,7 @@ class WechatJobErrorHandlerTest {
         assertThat(appenderList.get(0).getLevel(), is(Level.ERROR));
         assertThat(appenderList.get(0).getFormattedMessage(), is("An exception has occurred in Job 'test_job' but failed to send wechat because of: token is invalid"));
     }
-    
+
     @Test
     void assertHandleExceptionWithWrongUrl() {
         WechatJobErrorHandler actual = getWechatJobErrorHandler(createConfigurationProperties("http://wrongUrl"));
@@ -103,7 +103,7 @@ class WechatJobErrorHandlerTest {
         assertThat(appenderList.get(0).getLevel(), is(Level.ERROR));
         assertThat(appenderList.get(0).getFormattedMessage(), is("An exception has occurred in Job 'test_job' but failed to send wechat because of"));
     }
-    
+
     @Test
     void assertHandleExceptionWithUrlIsNotFound() {
         WechatJobErrorHandler actual = getWechatJobErrorHandler(createConfigurationProperties("http://localhost:" + PORT + "/404"));
@@ -113,11 +113,11 @@ class WechatJobErrorHandlerTest {
         assertThat(appenderList.get(0).getLevel(), is(Level.ERROR));
         assertThat(appenderList.get(0).getFormattedMessage(), is("An exception has occurred in Job 'test_job' but failed to send wechat because of: unexpected http response status: 404"));
     }
-    
+
     private WechatJobErrorHandler getWechatJobErrorHandler(final Properties props) {
         return (WechatJobErrorHandler) TypedSPILoader.getService(JobErrorHandler.class, "WECHAT", props);
     }
-    
+
     private Properties createConfigurationProperties(final String webhook) {
         Properties result = new Properties();
         result.setProperty(WechatPropertiesConstants.WEBHOOK, webhook);

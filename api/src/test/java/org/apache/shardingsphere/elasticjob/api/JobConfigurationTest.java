@@ -21,13 +21,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class JobConfigurationTest {
-    
+
     @Test
     void assertBuildAllProperties() {
         JobConfiguration actual = JobConfiguration.newBuilder("test_job", 3)
@@ -58,7 +55,7 @@ class JobConfigurationTest {
         assertTrue(actual.isDisabled());
         assertTrue(actual.isOverwrite());
     }
-    
+
     @Test
     public void assertBuildRequiredProperties() {
         JobConfiguration actual = JobConfiguration.newBuilder("test_job", 3).cron("0/1 * * * * ?").timeZone("GMT+8").build();
@@ -81,12 +78,12 @@ class JobConfigurationTest {
         assertFalse(actual.isDisabled());
         assertFalse(actual.isOverwrite());
     }
-    
+
     @Test
     void assertBuildWithEmptyJobName() {
         assertThrows(IllegalArgumentException.class, () -> JobConfiguration.newBuilder("", 3).cron("0/1 * * * * ?").build());
     }
-    
+
     @Test
     void assertBuildWithInvalidShardingTotalCount() {
         assertThrows(IllegalArgumentException.class, () -> JobConfiguration.newBuilder("test_job", -1).cron("0/1 * * * * ?").build());

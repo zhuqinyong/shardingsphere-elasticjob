@@ -17,9 +17,9 @@
 
 package org.apache.shardingsphere.elasticjob.tracing.rdb.yaml;
 
-import org.apache.shardingsphere.elasticjob.spi.yaml.YamlConfigurationConverter;
-import org.apache.shardingsphere.elasticjob.spi.tracing.storage.TracingStorageConfiguration;
 import org.apache.shardingsphere.elasticjob.kernel.tracing.yaml.YamlTracingStorageConfiguration;
+import org.apache.shardingsphere.elasticjob.spi.tracing.storage.TracingStorageConfiguration;
+import org.apache.shardingsphere.elasticjob.spi.yaml.YamlConfigurationConverter;
 import org.apache.shardingsphere.elasticjob.tracing.rdb.config.RDBTracingStorageConfiguration;
 
 import javax.sql.DataSource;
@@ -29,7 +29,7 @@ import javax.sql.DataSource;
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public final class YamlDataSourceConfigurationConverter implements YamlConfigurationConverter<TracingStorageConfiguration<DataSource>, YamlTracingStorageConfiguration<DataSource>> {
-    
+
     @Override
     public YamlTracingStorageConfiguration<DataSource> convertToYamlConfiguration(final TracingStorageConfiguration<DataSource> data) {
         RDBTracingStorageConfiguration dataSourceConfig = (RDBTracingStorageConfiguration) data;
@@ -38,7 +38,7 @@ public final class YamlDataSourceConfigurationConverter implements YamlConfigura
         result.setProps(dataSourceConfig.getProps());
         return result;
     }
-    
+
     @Override
     public Class getType() {
         return RDBTracingStorageConfiguration.class;

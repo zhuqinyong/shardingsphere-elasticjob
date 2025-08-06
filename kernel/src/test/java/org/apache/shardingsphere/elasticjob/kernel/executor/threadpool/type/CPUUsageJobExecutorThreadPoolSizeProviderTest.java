@@ -25,7 +25,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class CPUUsageJobExecutorThreadPoolSizeProviderTest {
-    
+
     @Test
     void assertGetPoolSize() {
         assertThat((TypedSPILoader.getService(JobExecutorThreadPoolSizeProvider.class, "CPU")).getSize(), is(Runtime.getRuntime().availableProcessors() * 2));

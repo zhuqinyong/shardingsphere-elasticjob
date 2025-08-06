@@ -17,9 +17,9 @@
 
 package org.apache.shardingsphere.elasticjob.kernel.tracing.yaml;
 
-import org.apache.shardingsphere.elasticjob.spi.yaml.YamlConfigurationConverter;
 import org.apache.shardingsphere.elasticjob.kernel.tracing.config.TracingConfiguration;
 import org.apache.shardingsphere.elasticjob.spi.tracing.storage.TracingStorageConfiguration;
+import org.apache.shardingsphere.elasticjob.spi.yaml.YamlConfigurationConverter;
 import org.apache.shardingsphere.infra.spi.type.typed.TypedSPILoader;
 
 /**
@@ -29,7 +29,7 @@ import org.apache.shardingsphere.infra.spi.type.typed.TypedSPILoader;
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public final class YamlTracingConfigurationConverter<T> implements YamlConfigurationConverter<TracingConfiguration<T>, YamlTracingConfiguration<T>> {
-    
+
     @Override
     public YamlTracingConfiguration<T> convertToYamlConfiguration(final TracingConfiguration<T> tracingConfig) {
         YamlTracingConfiguration<T> result = new YamlTracingConfiguration<>();
@@ -37,11 +37,11 @@ public final class YamlTracingConfigurationConverter<T> implements YamlConfigura
         result.setTracingStorageConfiguration(convertTracingStorageConfiguration(tracingConfig.getTracingStorageConfiguration()));
         return result;
     }
-    
+
     private YamlTracingStorageConfiguration<T> convertTracingStorageConfiguration(final TracingStorageConfiguration<T> tracingStorageConfig) {
         return (YamlTracingStorageConfiguration) TypedSPILoader.getService(YamlConfigurationConverter.class, tracingStorageConfig.getClass()).convertToYamlConfiguration(tracingStorageConfig);
     }
-    
+
     @Override
     public Class getType() {
         return TracingConfiguration.class;

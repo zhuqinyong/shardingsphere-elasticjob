@@ -18,7 +18,6 @@
 package org.apache.shardingsphere.elasticjob.kernel.internal.failover;
 
 import org.apache.shardingsphere.elasticjob.api.JobConfiguration;
-import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.apache.shardingsphere.elasticjob.kernel.fixture.YamlConstants;
 import org.apache.shardingsphere.elasticjob.kernel.internal.config.ConfigurationService;
 import org.apache.shardingsphere.elasticjob.kernel.internal.instance.InstanceNode;
@@ -26,12 +25,13 @@ import org.apache.shardingsphere.elasticjob.kernel.internal.instance.InstanceSer
 import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.JobRegistry;
 import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.JobScheduleController;
 import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.ExecutionService;
+import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.ShardingService;
 import org.apache.shardingsphere.elasticjob.kernel.internal.storage.JobNodeStorage;
-import org.apache.shardingsphere.elasticjob.test.util.ReflectionUtils;
 import org.apache.shardingsphere.elasticjob.reg.listener.DataChangedEvent;
 import org.apache.shardingsphere.elasticjob.reg.listener.DataChangedEvent.Type;
 import org.apache.shardingsphere.elasticjob.reg.listener.DataChangedEventListener;
+import org.apache.shardingsphere.elasticjob.test.util.ReflectionUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,41 +44,29 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class FailoverListenerManagerTest {
-    
+
+    private final FailoverListenerManager failoverListenerManager = new FailoverListenerManager(null, "test_job");
     @Mock
     private JobNodeStorage jobNodeStorage;
-    
     @Mock
     private JobScheduleController jobScheduleController;
-    
     @Mock
     private ConfigurationService configService;
-    
     @Mock
     private ShardingService shardingService;
-    
     @Mock
     private FailoverService failoverService;
-    
     @Mock
     private InstanceService instanceService;
-    
     @Mock
     private ExecutionService executionService;
-    
     @Mock
     private InstanceNode instanceNode;
-    
-    private final FailoverListenerManager failoverListenerManager = new FailoverListenerManager(null, "test_job");
-    
+
     @BeforeEach
     void setUp() {
         ReflectionUtils.setSuperclassFieldValue(failoverListenerManager, "jobNodeStorage", jobNodeStorage);
@@ -89,19 +77,19 @@ class FailoverListenerManagerTest {
         ReflectionUtils.setFieldValue(failoverListenerManager, "executionService", executionService);
         ReflectionUtils.setFieldValue(failoverListenerManager, "instanceNode", instanceNode);
     }
-    
+
     @Test
     void assertStart() {
         failoverListenerManager.start();
         verify(jobNodeStorage, times(3)).addDataListener(ArgumentMatchers.any(DataChangedEventListener.class));
     }
-    
+
     @Test
     void assertJobCrashedJobListenerWhenFailoverDisabled() {
         failoverListenerManager.new JobCrashedJobListener().onChange(new DataChangedEvent(Type.DELETED, "/test_job/instances/127.0.0.1@-@0", ""));
         verify(failoverService, times(0)).failoverIfNecessary();
     }
-    
+
     @Test
     void assertJobCrashedJobListenerWhenIsNotNodeRemoved() {
         JobRegistry.getInstance().addJobInstance("test_job", new JobInstance("127.0.0.1@-@0"));
@@ -111,7 +99,7 @@ class FailoverListenerManagerTest {
         verify(failoverService, times(0)).failoverIfNecessary();
         JobRegistry.getInstance().shutdown("test_job");
     }
-    
+
     @Test
     void assertJobCrashedJobListenerWhenIsNotInstancesPath() {
         JobRegistry.getInstance().addJobInstance("test_job", new JobInstance("127.0.0.1@-@0"));
@@ -121,7 +109,7 @@ class FailoverListenerManagerTest {
         verify(failoverService, times(0)).failoverIfNecessary();
         JobRegistry.getInstance().shutdown("test_job");
     }
-    
+
     @Test
     void assertJobCrashedJobListenerWhenIsSameInstance() {
         JobRegistry.getInstance().addJobInstance("test_job", new JobInstance("127.0.0.1@-@0"));
@@ -131,7 +119,7 @@ class FailoverListenerManagerTest {
         verify(failoverService, times(0)).failoverIfNecessary();
         JobRegistry.getInstance().shutdown("test_job");
     }
-    
+
     @Test
     void assertJobCrashedJobListenerWhenIsOtherInstanceCrashed() {
         JobRegistry.getInstance().addJobInstance("test_job", new JobInstance("127.0.0.1@-@0"));
@@ -146,7 +134,7 @@ class FailoverListenerManagerTest {
         verify(failoverService, times(2)).failoverIfNecessary();
         JobRegistry.getInstance().shutdown("test_job");
     }
-    
+
     @Test
     void assertJobCrashedJobListenerWhenIsOtherFailoverInstanceCrashed() {
         JobRegistry.getInstance().addJobInstance("test_job", new JobInstance("127.0.0.1@-@0"));
@@ -161,31 +149,31 @@ class FailoverListenerManagerTest {
         verify(failoverService).failoverIfNecessary();
         JobRegistry.getInstance().shutdown("test_job");
     }
-    
+
     @Test
     void assertFailoverSettingsChangedJobListenerWhenIsNotFailoverPath() {
         failoverListenerManager.new FailoverSettingsChangedJobListener().onChange(new DataChangedEvent(Type.ADDED, "/test_job/other", YamlConstants.getJobYaml()));
         verify(failoverService, times(0)).removeFailoverInfo();
     }
-    
+
     @Test
     void assertFailoverSettingsChangedJobListenerWhenIsFailoverPathButNotUpdate() {
         failoverListenerManager.new FailoverSettingsChangedJobListener().onChange(new DataChangedEvent(Type.ADDED, "/test_job/config", ""));
         verify(failoverService, times(0)).removeFailoverInfo();
     }
-    
+
     @Test
     void assertFailoverSettingsChangedJobListenerWhenIsFailoverPathAndUpdateButEnableFailover() {
         failoverListenerManager.new FailoverSettingsChangedJobListener().onChange(new DataChangedEvent(Type.UPDATED, "/test_job/config", YamlConstants.getJobYaml()));
         verify(failoverService, times(0)).removeFailoverInfo();
     }
-    
+
     @Test
     void assertFailoverSettingsChangedJobListenerWhenIsFailoverPathAndUpdateButDisableFailover() {
         failoverListenerManager.new FailoverSettingsChangedJobListener().onChange(new DataChangedEvent(Type.UPDATED, "/test_job/config", YamlConstants.getJobYamlWithFailover(false)));
         verify(failoverService).removeFailoverInfo();
     }
-    
+
     @Test
     void assertLegacyCrashedRunningItemListenerWhenRunningItemsArePresent() {
         JobInstance jobInstance = new JobInstance("127.0.0.1@-@1");
@@ -207,7 +195,7 @@ class FailoverListenerManagerTest {
         verify(executionService).clearRunningInfo(Collections.singletonList(0));
         verify(failoverService).failoverIfNecessary();
     }
-    
+
     @Test
     void assertLegacyCrashedRunningItemListenerWhenJobInstanceAbsent() {
         failoverListenerManager.new LegacyCrashedRunningItemListener().onChange(new DataChangedEvent(Type.ADDED, "", ""));

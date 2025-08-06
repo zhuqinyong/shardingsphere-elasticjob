@@ -24,27 +24,27 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class SimpleOnceListener extends AbstractDistributeOnceElasticJobListener {
-    
+
     private final long startedTimeoutMilliseconds;
-    
+
     private final long completedTimeoutMilliseconds;
-    
+
     public SimpleOnceListener() {
         super(10000L, 20000L);
         startedTimeoutMilliseconds = 10000L;
         completedTimeoutMilliseconds = 20000L;
     }
-    
+
     @Override
     public void doBeforeJobExecutedAtLastStarted(final ShardingContexts shardingContexts) {
         assertThat(startedTimeoutMilliseconds, is(10000L));
     }
-    
+
     @Override
     public void doAfterJobExecutedAtLastCompleted(final ShardingContexts shardingContexts) {
         assertThat(completedTimeoutMilliseconds, is(20000L));
     }
-    
+
     @Override
     public String getType() {
         return "simpleOnceListener";

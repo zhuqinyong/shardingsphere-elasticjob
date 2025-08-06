@@ -25,17 +25,17 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class JobInstanceTest {
-    
+
     @Test
     void assertGetJobInstanceId() {
         assertThat(new JobInstance("127.0.0.1@-@0").getJobInstanceId(), is("127.0.0.1@-@0"));
     }
-    
+
     @Test
     void assertGetIp() {
         assertThat(new JobInstance().getServerIp(), is(IpUtils.getIp()));
     }
-    
+
     @Test
     void assertYamlConvert() {
         JobInstance actual = YamlEngine.unmarshal(YamlEngine.marshal(new JobInstance("id", "labels")), JobInstance.class);

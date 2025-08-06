@@ -35,18 +35,18 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ShardingStatisticsAPIImplTest {
-    
+
     private ShardingStatisticsAPI shardingStatisticsAPI;
-    
+
     // TODO We should not use `Mock.Strictness.LENIENT` here, but the default. This is a flaw in the unit test design.
     @Mock(strictness = Mock.Strictness.LENIENT)
     private CoordinatorRegistryCenter regCenter;
-    
+
     @BeforeEach
     void setUp() {
         shardingStatisticsAPI = new ShardingStatisticsAPIImpl(regCenter);
     }
-    
+
     @Test
     void assertGetShardingInfo() {
         when(regCenter.getChildrenKeys("/test_job/sharding")).thenReturn(Arrays.asList("0", "1", "2", "3"));

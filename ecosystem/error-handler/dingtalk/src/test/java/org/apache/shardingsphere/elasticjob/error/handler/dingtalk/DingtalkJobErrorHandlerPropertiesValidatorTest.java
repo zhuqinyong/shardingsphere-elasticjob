@@ -28,7 +28,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class DingtalkJobErrorHandlerPropertiesValidatorTest {
-    
+
     @Test
     void assertValidateWithNormal() {
         Properties properties = new Properties();
@@ -37,12 +37,12 @@ class DingtalkJobErrorHandlerPropertiesValidatorTest {
         properties.setProperty(DingtalkPropertiesConstants.CONNECT_TIMEOUT_MILLISECONDS, "2000");
         TypedSPILoader.getService(JobErrorHandlerPropertiesValidator.class, "DINGTALK").validate(properties);
     }
-    
+
     @Test
     void assertValidateWithPropsIsNull() {
         assertThrows(NullPointerException.class, () -> TypedSPILoader.getService(JobErrorHandlerPropertiesValidator.class, "DINGTALK").validate(null));
     }
-    
+
     @Test
     void assertValidateWithWebhookIsNull() {
         try {

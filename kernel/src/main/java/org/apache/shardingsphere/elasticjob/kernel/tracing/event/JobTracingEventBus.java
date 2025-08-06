@@ -23,9 +23,9 @@ import com.google.common.util.concurrent.MoreExecutors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.apache.shardingsphere.elasticjob.kernel.tracing.config.TracingConfiguration;
+import org.apache.shardingsphere.elasticjob.spi.tracing.event.JobEvent;
 import org.apache.shardingsphere.elasticjob.spi.tracing.exception.TracingConfigurationException;
 import org.apache.shardingsphere.elasticjob.spi.tracing.listener.TracingListenerFactory;
-import org.apache.shardingsphere.elasticjob.spi.tracing.event.JobEvent;
 import org.apache.shardingsphere.infra.spi.type.typed.TypedSPILoader;
 
 import java.util.concurrent.ExecutorService;
@@ -38,33 +38,32 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 public final class JobTracingEventBus {
-    
+
     private static final ExecutorService EXECUTOR_SERVICE;
-    
-    private final EventBus eventBus;
-    
-    private volatile boolean isRegistered;
-    
+
     static {
         EXECUTOR_SERVICE = createExecutorService(Runtime.getRuntime().availableProcessors() * 2);
     }
-    
+
+    private final EventBus eventBus;
+    private volatile boolean isRegistered;
+
     public JobTracingEventBus() {
         eventBus = null;
     }
-    
+
     public JobTracingEventBus(final TracingConfiguration<?> tracingConfig) {
         eventBus = new AsyncEventBus(EXECUTOR_SERVICE);
         register(tracingConfig);
     }
-    
+
     private static ExecutorService createExecutorService(final int threadSize) {
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(threadSize, threadSize, 5L, TimeUnit.MINUTES,
                 new LinkedBlockingQueue<>(), new BasicThreadFactory.Builder().namingPattern(String.join("-", "job-event", "%s")).build());
         threadPoolExecutor.allowCoreThreadTimeOut(true);
         return MoreExecutors.listeningDecorator(MoreExecutors.getExitingExecutorService(threadPoolExecutor));
     }
-    
+
     @SuppressWarnings("unchecked")
     private void register(final TracingConfiguration<?> tracingConfig) {
         try {
@@ -78,7 +77,7 @@ public final class JobTracingEventBus {
             log.error("Elastic job: create tracing listener failure, error is: ", ex);
         }
     }
-    
+
     /**
      * Post event.
      *

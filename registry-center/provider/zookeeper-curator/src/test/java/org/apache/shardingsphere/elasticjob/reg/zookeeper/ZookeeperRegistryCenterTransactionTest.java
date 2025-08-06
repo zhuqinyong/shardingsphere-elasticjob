@@ -33,11 +33,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class ZookeeperRegistryCenterTransactionTest {
-    
+
     private static final EmbedTestingServer EMBED_TESTING_SERVER = new EmbedTestingServer();
-    
+
     private static ZookeeperRegistryCenter zkRegCenter;
-    
+
     @BeforeAll
     static void setUp() {
         EMBED_TESTING_SERVER.start();
@@ -46,12 +46,12 @@ class ZookeeperRegistryCenterTransactionTest {
         zookeeperConfiguration.setConnectionTimeoutMilliseconds(30000);
         zkRegCenter.init();
     }
-    
+
     @BeforeEach
     void setup() {
         RegistryCenterEnvironmentPreparer.persist(zkRegCenter);
     }
-    
+
     @Test
     void assertExecuteInTransactionSucceeded() throws Exception {
         List<TransactionOperation> operations = new ArrayList<>(3);
@@ -62,7 +62,7 @@ class ZookeeperRegistryCenterTransactionTest {
         zkRegCenter.executeInTransaction(operations);
         assertThat(zkRegCenter.getDirectly("/test/transaction"), is("transaction"));
     }
-    
+
     @Test
     void assertExecuteInTransactionFailed() throws Exception {
         List<TransactionOperation> operations = new ArrayList<>(3);

@@ -19,36 +19,34 @@ package org.apache.shardingsphere.elasticjob.kernel.internal.reconcile;
 
 import com.google.common.collect.Lists;
 import org.apache.shardingsphere.elasticjob.api.JobConfiguration;
-import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.apache.shardingsphere.elasticjob.kernel.internal.config.ConfigurationService;
 import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.JobRegistry;
+import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.ShardingService;
-import org.apache.shardingsphere.elasticjob.test.util.ReflectionUtils;
 import org.apache.shardingsphere.elasticjob.reg.base.CoordinatorRegistryCenter;
+import org.apache.shardingsphere.elasticjob.test.util.ReflectionUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ReconcileServiceTest {
-    
+
     @Mock
     private ConfigurationService configService;
-    
+
     @Mock
     private ShardingService shardingService;
-    
+
     @Mock
     private CoordinatorRegistryCenter regCenter;
-    
+
     private ReconcileService reconcileService;
-    
+
     @BeforeEach
     void setup() {
         JobRegistry.getInstance().addJobInstance("test_job", new JobInstance("127.0.0.1@-@0"));
@@ -57,7 +55,7 @@ class ReconcileServiceTest {
         ReflectionUtils.setFieldValue(reconcileService, "configService", configService);
         ReflectionUtils.setFieldValue(reconcileService, "shardingService", shardingService);
     }
-    
+
     @Test
     void assertReconcile() {
         when(configService.load(true)).thenReturn(JobConfiguration.newBuilder("test_job", 3).cron("0/1 * * * * ?").reconcileIntervalMinutes(1).build());
@@ -68,7 +66,7 @@ class ReconcileServiceTest {
         verify(shardingService).hasShardingInfoInOfflineServers();
         verify(shardingService).setReshardingFlag();
     }
-    
+
     @Test
     void assertReconcileWithStaticSharding() {
         when(configService.load(true)).thenReturn(JobConfiguration.newBuilder("test_job", 3).cron("0/1 * * * * ?").reconcileIntervalMinutes(1).staticSharding(true).build());

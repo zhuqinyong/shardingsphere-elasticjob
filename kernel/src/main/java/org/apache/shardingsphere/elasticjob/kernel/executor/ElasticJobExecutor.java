@@ -20,16 +20,16 @@ package org.apache.shardingsphere.elasticjob.kernel.executor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shardingsphere.elasticjob.api.ElasticJob;
 import org.apache.shardingsphere.elasticjob.api.JobConfiguration;
-import org.apache.shardingsphere.elasticjob.spi.executor.error.handler.JobErrorHandler;
 import org.apache.shardingsphere.elasticjob.kernel.executor.error.handler.JobErrorHandlerReloader;
 import org.apache.shardingsphere.elasticjob.kernel.executor.facade.JobFacade;
-import org.apache.shardingsphere.elasticjob.spi.executor.item.JobItemExecutor;
 import org.apache.shardingsphere.elasticjob.kernel.executor.item.JobItemExecutorFactory;
-import org.apache.shardingsphere.elasticjob.spi.executor.item.type.TypedJobItemExecutor;
 import org.apache.shardingsphere.elasticjob.kernel.executor.threadpool.ExecutorServiceReloader;
 import org.apache.shardingsphere.elasticjob.kernel.infra.env.IpUtils;
 import org.apache.shardingsphere.elasticjob.kernel.infra.exception.ExceptionUtils;
 import org.apache.shardingsphere.elasticjob.kernel.infra.exception.JobExecutionEnvironmentException;
+import org.apache.shardingsphere.elasticjob.spi.executor.error.handler.JobErrorHandler;
+import org.apache.shardingsphere.elasticjob.spi.executor.item.JobItemExecutor;
+import org.apache.shardingsphere.elasticjob.spi.executor.item.type.TypedJobItemExecutor;
 import org.apache.shardingsphere.elasticjob.spi.listener.param.ShardingContexts;
 import org.apache.shardingsphere.elasticjob.spi.tracing.event.JobExecutionEvent;
 import org.apache.shardingsphere.elasticjob.spi.tracing.event.JobExecutionEvent.ExecutionSource;
@@ -47,28 +47,28 @@ import java.util.concurrent.ExecutorService;
  */
 @Slf4j
 public final class ElasticJobExecutor {
-    
+
     private final ElasticJob elasticJob;
-    
+
     private final JobFacade jobFacade;
-    
+
     @SuppressWarnings("rawtypes")
     private final JobItemExecutor jobItemExecutor;
-    
+
     private final ExecutorServiceReloader executorServiceReloader;
-    
+
     private final JobErrorHandlerReloader jobErrorHandlerReloader;
-    
+
     private final Map<Integer, String> itemErrorMessages;
-    
+
     public ElasticJobExecutor(final ElasticJob elasticJob, final JobConfiguration jobConfig, final JobFacade jobFacade) {
         this(elasticJob, jobConfig, jobFacade, JobItemExecutorFactory.getExecutor(elasticJob.getClass()));
     }
-    
+
     public ElasticJobExecutor(final String type, final JobConfiguration jobConfig, final JobFacade jobFacade) {
         this(null, jobConfig, jobFacade, TypedSPILoader.getService(TypedJobItemExecutor.class, type));
     }
-    
+
     private ElasticJobExecutor(final ElasticJob elasticJob, final JobConfiguration jobConfig, final JobFacade jobFacade, final JobItemExecutor jobItemExecutor) {
         this.elasticJob = elasticJob;
         this.jobFacade = jobFacade;
@@ -78,7 +78,7 @@ public final class ElasticJobExecutor {
         jobErrorHandlerReloader = new JobErrorHandlerReloader(loadedJobConfig);
         itemErrorMessages = new ConcurrentHashMap<>(jobConfig.getShardingTotalCount(), 1);
     }
-    
+
     /**
      * Execute job.
      */
@@ -121,7 +121,7 @@ public final class ElasticJobExecutor {
             jobErrorHandler.handleException(jobConfig.getJobName(), cause);
         }
     }
-    
+
     private void execute(final JobConfiguration jobConfig, final ShardingContexts shardingContexts, final ExecutionSource executionSource) {
         if (shardingContexts.getShardingItemParameters().isEmpty()) {
             jobFacade.postJobStatusTraceEvent(shardingContexts.getTaskId(), State.TASK_FINISHED, String.format("Sharding item for job '%s' is empty.", jobConfig.getJobName()));
@@ -143,7 +143,7 @@ public final class ElasticJobExecutor {
             }
         }
     }
-    
+
     private void process(final JobConfiguration jobConfig, final ShardingContexts shardingContexts, final ExecutionSource executionSource) {
         Collection<Integer> items = shardingContexts.getShardingItemParameters().keySet();
         if (1 == items.size()) {
@@ -173,7 +173,7 @@ public final class ElasticJobExecutor {
             Thread.currentThread().interrupt();
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     private void process(final JobConfiguration jobConfig, final ShardingContexts shardingContexts, final int item, final JobExecutionEvent startEvent) {
         jobFacade.postJobExecutionEvent(startEvent);
@@ -194,7 +194,7 @@ public final class ElasticJobExecutor {
             jobErrorHandler.handleException(jobConfig.getJobName(), cause);
         }
     }
-    
+
     /**
      * Shutdown executor.
      */

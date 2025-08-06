@@ -31,12 +31,12 @@ import java.util.Date;
 
 @Component
 public class SpringBootSimpleJob implements SimpleJob {
-    
+
     private final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    
+
     @Autowired
     private SpringBootFooRepository springBootFooRepository;
-    
+
     @Override
     public void execute(final ShardingContext shardingContext) {
         logger.info(

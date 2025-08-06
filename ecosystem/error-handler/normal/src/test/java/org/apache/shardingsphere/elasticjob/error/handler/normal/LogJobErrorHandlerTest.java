@@ -34,9 +34,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class LogJobErrorHandlerTest {
-    
+
     private static List<LoggingEvent> appenderList;
-    
+
     @SuppressWarnings({"unchecked", "rawtypes"})
     @BeforeAll
     static void setupLogger() {
@@ -44,12 +44,12 @@ class LogJobErrorHandlerTest {
         ListAppender<LoggingEvent> appender = (ListAppender) log.getAppender("LogJobErrorHandlerTestAppender");
         appenderList = appender.list;
     }
-    
+
     @BeforeEach
     void setUp() {
         appenderList.clear();
     }
-    
+
     @Test
     void assertHandleException() {
         LogJobErrorHandler actual = (LogJobErrorHandler) TypedSPILoader.getService(JobErrorHandler.class, "LOG", new Properties());

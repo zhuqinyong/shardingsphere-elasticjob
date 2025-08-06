@@ -18,8 +18,8 @@
 package org.apache.shardingsphere.elasticjob.lifecycle.internal.statistics;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.apache.shardingsphere.elasticjob.kernel.infra.yaml.YamlEngine;
+import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.apache.shardingsphere.elasticjob.kernel.internal.storage.JobNodePath;
 import org.apache.shardingsphere.elasticjob.lifecycle.api.ShardingStatisticsAPI;
 import org.apache.shardingsphere.elasticjob.lifecycle.domain.ShardingInfo;
@@ -35,9 +35,9 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 public final class ShardingStatisticsAPIImpl implements ShardingStatisticsAPI {
-    
+
     private final CoordinatorRegistryCenter regCenter;
-    
+
     @Override
     public Collection<ShardingInfo> getShardingInfo(final String jobName) {
         String shardingRootPath = new JobNodePath(jobName).getShardingNodePath();
@@ -49,7 +49,7 @@ public final class ShardingStatisticsAPIImpl implements ShardingStatisticsAPI {
         Collections.sort(result);
         return result;
     }
-    
+
     private ShardingInfo getShardingInfo(final String jobName, final String item) {
         ShardingInfo result = new ShardingInfo();
         result.setItem(Integer.parseInt(item));

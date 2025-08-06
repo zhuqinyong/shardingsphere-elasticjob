@@ -17,23 +17,23 @@
 
 package org.apache.shardingsphere.elasticjob.test.e2e.raw.fixture.listener;
 
-import org.apache.shardingsphere.elasticjob.spi.listener.param.ShardingContexts;
 import org.apache.shardingsphere.elasticjob.kernel.listener.AbstractDistributeOnceElasticJobListener;
+import org.apache.shardingsphere.elasticjob.spi.listener.param.ShardingContexts;
 
 public class DistributeOnceE2EFixtureJobListener extends AbstractDistributeOnceElasticJobListener {
-    
+
     public DistributeOnceE2EFixtureJobListener() {
         super(100L, 100L);
     }
-    
+
     @Override
     public void doBeforeJobExecutedAtLastStarted(final ShardingContexts shardingContexts) {
     }
-    
+
     @Override
     public void doAfterJobExecutedAtLastCompleted(final ShardingContexts shardingContexts) {
     }
-    
+
     @Override
     public String getType() {
         return "INTEGRATE-DISTRIBUTE";

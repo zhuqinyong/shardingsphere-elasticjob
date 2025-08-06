@@ -24,17 +24,17 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class SimpleListener implements ElasticJobListener {
-    
+
     @Override
     public void beforeJobExecuted(final ShardingContexts shardingContexts) {
         assertThat(shardingContexts.getJobName(), is("simpleElasticJob_namespace_listener"));
     }
-    
+
     @Override
     public void afterJobExecuted(final ShardingContexts shardingContexts) {
         assertThat(shardingContexts.getJobName(), is("simpleElasticJob_namespace_listener"));
     }
-    
+
     @Override
     public String getType() {
         return "simpleListener";

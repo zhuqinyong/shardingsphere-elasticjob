@@ -27,9 +27,9 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class GsonFactory {
-    
+
     private static final Gson GSON = new GsonBuilder().create();
-    
+
     /**
      * Get gson instance.
      *

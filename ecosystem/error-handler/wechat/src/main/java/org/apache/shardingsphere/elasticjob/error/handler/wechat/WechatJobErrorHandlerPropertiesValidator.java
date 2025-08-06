@@ -26,14 +26,14 @@ import java.util.Properties;
  * Job error handler properties validator for wechat.
  */
 public final class WechatJobErrorHandlerPropertiesValidator implements JobErrorHandlerPropertiesValidator {
-    
+
     @Override
     public void validate(final Properties props) {
         PropertiesPreconditions.checkRequired(props, WechatPropertiesConstants.WEBHOOK);
         PropertiesPreconditions.checkPositiveInteger(props, WechatPropertiesConstants.CONNECT_TIMEOUT_MILLISECONDS);
         PropertiesPreconditions.checkPositiveInteger(props, WechatPropertiesConstants.READ_TIMEOUT_MILLISECONDS);
     }
-    
+
     @Override
     public String getType() {
         return "WECHAT";

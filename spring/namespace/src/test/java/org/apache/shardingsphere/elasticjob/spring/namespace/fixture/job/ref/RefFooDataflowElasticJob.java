@@ -19,22 +19,29 @@ package org.apache.shardingsphere.elasticjob.spring.namespace.fixture.job.ref;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
 import org.apache.shardingsphere.elasticjob.dataflow.job.DataflowJob;
+import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
 import org.apache.shardingsphere.elasticjob.spring.namespace.fixture.service.FooService;
 
 import java.util.Collections;
 import java.util.List;
 
 public class RefFooDataflowElasticJob implements DataflowJob<String> {
-    
+
     @Getter
     private static volatile boolean completed;
-    
+
     @Getter
     @Setter
     private FooService fooService;
-    
+
+    /**
+     * Set completed to false.
+     */
+    public static void reset() {
+        completed = false;
+    }
+
     @Override
     public List<String> fetchData(final ShardingContext shardingContext) {
         if (completed) {
@@ -43,16 +50,9 @@ public class RefFooDataflowElasticJob implements DataflowJob<String> {
         fooService.foo();
         return Collections.singletonList("data");
     }
-    
+
     @Override
     public void processData(final ShardingContext shardingContext, final List<String> data) {
         completed = true;
-    }
-    
-    /**
-     * Set completed to false.
-     */
-    public static void reset() {
-        completed = false;
     }
 }

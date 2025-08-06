@@ -17,10 +17,10 @@
 
 package org.apache.shardingsphere.elasticjob.kernel.internal.sharding;
 
-import org.apache.shardingsphere.elasticjob.kernel.internal.config.JobConfigurationPOJO;
 import org.apache.shardingsphere.elasticjob.kernel.infra.yaml.YamlEngine;
 import org.apache.shardingsphere.elasticjob.kernel.internal.config.ConfigurationNode;
 import org.apache.shardingsphere.elasticjob.kernel.internal.config.ConfigurationService;
+import org.apache.shardingsphere.elasticjob.kernel.internal.config.JobConfigurationPOJO;
 import org.apache.shardingsphere.elasticjob.kernel.internal.instance.InstanceNode;
 import org.apache.shardingsphere.elasticjob.kernel.internal.listener.AbstractListenerManager;
 import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.JobRegistry;
@@ -35,21 +35,21 @@ import org.apache.shardingsphere.elasticjob.reg.listener.DataChangedEventListene
  * Sharding listener manager.
  */
 public final class ShardingListenerManager extends AbstractListenerManager {
-    
+
     private final String jobName;
-    
+
     private final ConfigurationNode configNode;
-    
+
     private final InstanceNode instanceNode;
-    
+
     private final ServerNode serverNode;
-    
+
     private final ShardingService shardingService;
-    
+
     private final JobNodePath jobNodePath;
-    
+
     private final ConfigurationService configService;
-    
+
     public ShardingListenerManager(final CoordinatorRegistryCenter regCenter, final String jobName) {
         super(regCenter, jobName);
         this.jobName = jobName;
@@ -60,15 +60,15 @@ public final class ShardingListenerManager extends AbstractListenerManager {
         jobNodePath = new JobNodePath(jobName);
         configService = new ConfigurationService(regCenter, jobName);
     }
-    
+
     @Override
     public void start() {
         addDataListener(new ShardingTotalCountChangedJobListener());
         addDataListener(new ListenServersChangedJobListener());
     }
-    
+
     class ShardingTotalCountChangedJobListener implements DataChangedEventListener {
-        
+
         @Override
         public void onChange(final DataChangedEvent event) {
             if (configNode.isConfigPath(event.getKey()) && 0 != JobRegistry.getInstance().getCurrentShardingTotalCount(jobName)) {
@@ -80,28 +80,28 @@ public final class ShardingListenerManager extends AbstractListenerManager {
             }
         }
     }
-    
+
     class ListenServersChangedJobListener implements DataChangedEventListener {
-        
+
         @Override
         public void onChange(final DataChangedEvent event) {
             if (!JobRegistry.getInstance().isShutdown(jobName) && (isInstanceChange(event.getType(), event.getKey()) || isServerChange(event.getKey())) && !(isStaticSharding() && hasShardingInfo())) {
                 shardingService.setReshardingFlag();
             }
         }
-        
+
         private boolean isStaticSharding() {
             return configService.load(true).isStaticSharding();
         }
-        
+
         private boolean hasShardingInfo() {
             return !JobRegistry.getInstance().getRegCenter(jobName).getChildrenKeys(jobNodePath.getShardingNodePath()).isEmpty();
         }
-        
+
         private boolean isInstanceChange(final Type eventType, final String path) {
             return instanceNode.isInstancePath(path) && Type.UPDATED != eventType;
         }
-        
+
         private boolean isServerChange(final String path) {
             return serverNode.isServerPath(path);
         }

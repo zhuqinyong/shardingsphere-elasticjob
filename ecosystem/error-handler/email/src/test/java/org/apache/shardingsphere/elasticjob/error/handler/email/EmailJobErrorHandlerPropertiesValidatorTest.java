@@ -28,7 +28,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class EmailJobErrorHandlerPropertiesValidatorTest {
-    
+
     @Test
     void assertValidateWithNormal() {
         Properties properties = new Properties();
@@ -41,12 +41,12 @@ class EmailJobErrorHandlerPropertiesValidatorTest {
         properties.setProperty(EmailPropertiesConstants.TO, "to@xxx.xx");
         TypedSPILoader.getService(JobErrorHandlerPropertiesValidator.class, "EMAIL").validate(properties);
     }
-    
+
     @Test
     void assertValidateWithPropsIsNull() {
         assertThrows(NullPointerException.class, () -> TypedSPILoader.getService(JobErrorHandlerPropertiesValidator.class, "EMAIL").validate(null));
     }
-    
+
     @Test
     void assertValidateWithHostIsNull() {
         try {

@@ -24,12 +24,12 @@ import org.apache.shardingsphere.elasticjob.spi.executor.item.type.ClassedJobIte
 import org.apache.shardingsphere.elasticjob.test.e2e.raw.fixture.job.E2EFixtureJob;
 
 public final class E2EFixtureJobExecutor implements ClassedJobItemExecutor<E2EFixtureJob> {
-    
+
     @Override
     public void process(final E2EFixtureJob elasticJob, final JobConfiguration jobConfig, final JobRuntimeService jobRuntimeService, final ShardingContext shardingContext) {
         elasticJob.foo(shardingContext);
     }
-    
+
     @Override
     public Class<E2EFixtureJob> getElasticJobClass() {
         return E2EFixtureJob.class;

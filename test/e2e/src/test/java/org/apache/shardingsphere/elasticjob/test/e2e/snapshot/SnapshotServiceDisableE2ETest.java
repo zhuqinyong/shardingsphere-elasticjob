@@ -29,21 +29,21 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class SnapshotServiceDisableE2ETest extends BaseSnapshotServiceE2ETest {
-    
+
     SnapshotServiceDisableE2ETest() {
         super(new E2EFixtureJobImpl());
     }
-    
+
     @Test
     void assertMonitorWithDumpCommand() {
         assertThrows(IOException.class, () -> SocketUtils.sendCommand(SnapshotService.DUMP_COMMAND, DUMP_PORT - 1));
     }
-    
+
     @Test
     void assertPortInvalid() {
         assertThrows(IllegalArgumentException.class, () -> new SnapshotService(getRegCenter(), -1).listen());
     }
-    
+
     @Test
     void assertListenException() throws IOException {
         ServerSocket serverSocket = new ServerSocket(9898);

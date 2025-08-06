@@ -21,7 +21,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 @ContextConfiguration(locations = "classpath:META-INF/job/oneOffWithListener.xml")
 class OneOffJobSpringNamespaceWithListenerTest extends AbstractOneOffJobSpringIntegrateTest {
-    
+
     OneOffJobSpringNamespaceWithListenerTest() {
         super("simpleElasticJob_namespace_listener", "dataflowElasticJob_namespace_listener");
     }

@@ -38,27 +38,27 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = "classpath:META-INF/job/oneOffWithJobType.xml")
 class OneOffJobSpringNamespaceWithTypeTest {
-    
+
     private static final EmbedTestingServer EMBED_TESTING_SERVER = new EmbedTestingServer(3181);
-    
+
     private final String scriptJobName = "oneOffScriptElasticJob_job_type";
-    
+
     @Autowired
     private ApplicationContext applicationContext;
-    
+
     @Autowired
     private CoordinatorRegistryCenter regCenter;
-    
+
     @BeforeAll
     static void init() {
         EMBED_TESTING_SERVER.start();
     }
-    
+
     @AfterEach
     void tearDown() {
         JobRegistry.getInstance().shutdown(scriptJobName);
     }
-    
+
     @Test
     void jobScriptWithJobTypeTest() {
         OneOffJobBootstrap bootstrap = applicationContext.getBean(scriptJobName, OneOffJobBootstrap.class);

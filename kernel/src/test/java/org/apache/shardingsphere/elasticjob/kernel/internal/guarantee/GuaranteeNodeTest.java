@@ -25,34 +25,34 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class GuaranteeNodeTest {
-    
+
     private final GuaranteeNode guaranteeNode = new GuaranteeNode("test_job");
-    
+
     @Test
     void assertGetStartedNode() {
         assertThat(GuaranteeNode.getStartedNode(1), is("guarantee/started/1"));
     }
-    
+
     @Test
     void assertGetCompletedNode() {
         assertThat(GuaranteeNode.getCompletedNode(1), is("guarantee/completed/1"));
     }
-    
+
     @Test
     void assertIsStartedRootNode() {
         assertTrue(guaranteeNode.isStartedRootNode("/test_job/guarantee/started"));
     }
-    
+
     @Test
     void assertIsNotStartedRootNode() {
         assertFalse(guaranteeNode.isStartedRootNode("/otherJob/guarantee/started"));
     }
-    
+
     @Test
     void assertIsCompletedRootNode() {
         assertTrue(guaranteeNode.isCompletedRootNode("/test_job/guarantee/completed"));
     }
-    
+
     @Test
     void assertIsNotCompletedRootNode() {
         assertFalse(guaranteeNode.isCompletedRootNode("/otherJob/guarantee/completed"));

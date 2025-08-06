@@ -27,7 +27,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class ElasticJobConfigurationPropertiesTest {
-    
+
     @Test
     void assertToJobConfiguration() {
         ElasticJobConfigurationProperties properties = new ElasticJobConfigurationProperties();

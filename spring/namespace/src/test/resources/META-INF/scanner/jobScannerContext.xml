@@ -16,21 +16,24 @@
   ~ limitations under the License.
   -->
 
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:elasticjob="http://shardingsphere.apache.org/schema/elasticjob"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
                         http://www.springframework.org/schema/beans/spring-beans.xsd 
                         http://www.springframework.org/schema/context 
                         http://www.springframework.org/schema/context/spring-context.xsd 
                         http://shardingsphere.apache.org/schema/elasticjob
                         http://shardingsphere.apache.org/schema/elasticjob/elasticjob.xsd
                         ">
-    <context:property-placeholder location="classpath:conf/job/conf.properties" />
+    <context:property-placeholder location="classpath:conf/job/conf.properties"/>
 
-    <elasticjob:zookeeper id="regCenter" server-lists="${regCenter.serverLists}" namespace="${regCenter.namespace}" base-sleep-time-milliseconds="${regCenter.baseSleepTimeMilliseconds}"
-                          max-sleep-time-milliseconds="${regCenter.maxSleepTimeMilliseconds}" max-retries="${regCenter.maxRetries}" />
+    <elasticjob:zookeeper id="regCenter" server-lists="${regCenter.serverLists}" namespace="${regCenter.namespace}"
+                          base-sleep-time-milliseconds="${regCenter.baseSleepTimeMilliseconds}"
+                          max-sleep-time-milliseconds="${regCenter.maxSleepTimeMilliseconds}"
+                          max-retries="${regCenter.maxRetries}"/>
 
-    <elasticjob:job-scanner id="job-scanner" base-package="org.apache.shardingsphere.elasticjob.spring.namespace.fixture.job.annotation"/>
+    <elasticjob:job-scanner id="job-scanner"
+                            base-package="org.apache.shardingsphere.elasticjob.spring.namespace.fixture.job.annotation"/>
 </beans>

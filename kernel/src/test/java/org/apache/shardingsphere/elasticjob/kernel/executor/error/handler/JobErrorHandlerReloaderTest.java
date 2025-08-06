@@ -38,10 +38,10 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class JobErrorHandlerReloaderTest {
-    
+
     @Mock
     private JobErrorHandler jobErrorHandler;
-    
+
     @Test
     void assertInitialize() {
         JobConfiguration jobConfig = JobConfiguration.newBuilder("job", 1).jobErrorHandlerType("FOO").build();
@@ -52,7 +52,7 @@ class JobErrorHandlerReloaderTest {
             assertTrue(actual instanceof FooJobErrorHandlerFixture);
         }
     }
-    
+
     @Test
     void assertReload() {
         JobConfiguration jobConfig = JobConfiguration.newBuilder("job", 1).jobErrorHandlerType("FOO").build();
@@ -68,7 +68,7 @@ class JobErrorHandlerReloaderTest {
             assertTrue(actual instanceof BarJobErrorHandlerFixture);
         }
     }
-    
+
     @Test
     void assertUnnecessaryToReload() {
         JobConfiguration jobConfig = JobConfiguration.newBuilder("job", 1).jobErrorHandlerType("FOO").build();
@@ -79,7 +79,7 @@ class JobErrorHandlerReloaderTest {
             assertThat(actual, is(expected));
         }
     }
-    
+
     @Test
     void assertShutdown() {
         JobConfiguration jobConfig = JobConfiguration.newBuilder("job", 1).jobErrorHandlerType("FOO").build();

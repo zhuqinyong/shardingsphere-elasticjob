@@ -27,7 +27,7 @@ import java.util.Properties;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ThrowJobErrorHandlerTest {
-    
+
     @Test
     void assertHandleException() {
         assertThrows(JobSystemException.class, () -> TypedSPILoader.getService(JobErrorHandler.class, "THROW", new Properties()).handleException("test_job", new RuntimeException("test")));

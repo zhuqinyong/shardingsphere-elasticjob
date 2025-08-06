@@ -16,7 +16,8 @@
   ~ limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.apache.shardingsphere.elasticjob</groupId>
@@ -25,7 +26,7 @@
     </parent>
     <artifactId>elasticjob-test-native</artifactId>
     <name>${project.artifactId}</name>
-    
+
     <properties>
         <maven.deploy.skip>true</maven.deploy.skip>
         <!--TODO Blocked by https://github.com/apache/shardingsphere-elasticjob/issues/2425 -->
@@ -33,7 +34,7 @@
         <slf4j.version>2.0.16</slf4j.version>
         <logback.version>1.5.11</logback.version>
     </properties>
-    
+
     <dependencies>
         <dependency>
             <groupId>org.apache.shardingsphere.elasticjob</groupId>
@@ -81,7 +82,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
+
     <build>
         <plugins>
             <plugin>

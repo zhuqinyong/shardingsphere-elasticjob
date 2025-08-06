@@ -26,24 +26,25 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.LongStream;
 
 public class FooRepository {
-    
+
     private final Map<Long, Foo> data = new ConcurrentHashMap<>(300, 1);
-    
+
     public FooRepository() {
         addData(0L, 100L, "Norddorf");
         addData(100L, 200L, "Bordeaux");
         addData(200L, 300L, "Somerset");
     }
-    
+
     private void addData(final long idFrom, final long idTo, final String location) {
         LongStream.range(idFrom, idTo)
                 .forEachOrdered(i -> data.put(i, new Foo(i, location, Foo.Status.UNFINISHED)));
     }
-    
+
     /**
      * Find Unfinished Data.
+     *
      * @param location location
-     * @param limit limit
+     * @param limit    limit
      * @return An ordered collection, where the user has precise control over where in the list each element is inserted.
      */
     public List<Foo> findUnfinishedData(final String location, final int limit) {
@@ -61,9 +62,10 @@ public class FooRepository {
         }
         return result;
     }
-    
+
     /**
      * Set completed.
+     *
      * @param id id
      */
     public void setCompleted(final long id) {

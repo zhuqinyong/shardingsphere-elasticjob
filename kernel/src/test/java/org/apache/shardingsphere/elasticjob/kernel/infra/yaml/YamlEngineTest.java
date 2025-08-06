@@ -25,15 +25,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 class YamlEngineTest {
-    
+
     private static final String YAML = "bar: bar\n"
             + "foo: foo\n"
             + "nest:\n"
             + "  bar: nest_bar\n"
             + "  foo: nest_foo\n";
-    
+
     private static final String YAML_WITH_NULL = "foo: foo\n";
-    
+
     @Test
     void assertMarshal() {
         FooYamlConfiguration actual = new FooYamlConfiguration();
@@ -45,14 +45,14 @@ class YamlEngineTest {
         actual.setNest(nest);
         assertThat(YamlEngine.marshal(actual), is(YAML));
     }
-    
+
     @Test
     void assertMarshalWithNullValue() {
         FooYamlConfiguration actual = new FooYamlConfiguration();
         actual.setFoo("foo");
         assertThat(YamlEngine.marshal(actual), is(YAML_WITH_NULL));
     }
-    
+
     @Test
     void assertUnmarshal() {
         FooYamlConfiguration actual = YamlEngine.unmarshal(YAML, FooYamlConfiguration.class);
@@ -61,7 +61,7 @@ class YamlEngineTest {
         assertThat(actual.getNest().getFoo(), is("nest_foo"));
         assertThat(actual.getNest().getBar(), is("nest_bar"));
     }
-    
+
     @Test
     void assertUnmarshalWithNullValue() {
         FooYamlConfiguration actual = YamlEngine.unmarshal(YAML_WITH_NULL, FooYamlConfiguration.class);

@@ -23,12 +23,12 @@ import org.apache.shardingsphere.elasticjob.tracing.rdb.storage.type.TracingStor
  * Tracing storage database type for PostgreSQL.
  */
 public final class PostgreSQLTracingStorageDatabaseType implements TracingStorageDatabaseType {
-    
+
     @Override
     public String getType() {
         return "PostgreSQL";
     }
-    
+
     @Override
     public int getDuplicateRecordErrorCode() {
         return 0;

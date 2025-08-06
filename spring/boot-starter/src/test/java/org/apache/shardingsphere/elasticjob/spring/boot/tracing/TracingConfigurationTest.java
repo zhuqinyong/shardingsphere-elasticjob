@@ -17,8 +17,8 @@
 
 package org.apache.shardingsphere.elasticjob.spring.boot.tracing;
 
-import org.apache.shardingsphere.elasticjob.test.util.EmbedTestingServer;
 import org.apache.shardingsphere.elasticjob.kernel.tracing.config.TracingConfiguration;
+import org.apache.shardingsphere.elasticjob.test.util.EmbedTestingServer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.ObjectProvider;
@@ -31,23 +31,21 @@ import org.springframework.test.context.ActiveProfiles;
 
 import javax.sql.DataSource;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(properties = "spring.main.banner-mode=off")
 @SpringBootApplication
 @ActiveProfiles("tracing")
 class TracingConfigurationTest {
-    
+
     @Autowired
     private ApplicationContext applicationContext;
-    
+
     @BeforeAll
     static void init() {
         new EmbedTestingServer(18181).start();
     }
-    
+
     @Test
     void assertNotRDBConfiguration() {
         assertNotNull(applicationContext);

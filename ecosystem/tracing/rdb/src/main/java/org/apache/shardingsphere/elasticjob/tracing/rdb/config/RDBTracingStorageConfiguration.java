@@ -31,13 +31,8 @@ import org.apache.shardingsphere.infra.spi.type.typed.TypedSPILoader;
 
 import javax.sql.DataSource;
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Optional;
 
 /**
  * RDB tracing storage configuration.
@@ -45,24 +40,24 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Getter
 public final class RDBTracingStorageConfiguration implements TracingStorageConfiguration<DataSource> {
-    
+
     private static final String GETTER_PREFIX = "get";
-    
+
     private static final String SETTER_PREFIX = "set";
-    
+
     private static final Collection<Class<?>> GENERAL_CLASS_TYPE;
-    
+
     private static final Collection<String> SKIPPED_PROPERTY_NAMES;
-    
+
     static {
         GENERAL_CLASS_TYPE = Sets.newHashSet(boolean.class, Boolean.class, int.class, Integer.class, long.class, Long.class, String.class, Collection.class, List.class);
         SKIPPED_PROPERTY_NAMES = Sets.newHashSet("loginTimeout");
     }
-    
+
     private final String dataSourceClassName;
-    
+
     private final Map<String, Object> props = new LinkedHashMap<>();
-    
+
     /**
      * Get data source configuration.
      *
@@ -74,7 +69,7 @@ public final class RDBTracingStorageConfiguration implements TracingStorageConfi
         result.props.putAll(findAllGetterProperties(dataSource));
         return result;
     }
-    
+
     @SneakyThrows(ReflectiveOperationException.class)
     private static Map<String, Object> findAllGetterProperties(final Object target) {
         Collection<Method> allGetterMethods = findAllGetterMethods(target.getClass());
@@ -87,7 +82,7 @@ public final class RDBTracingStorageConfiguration implements TracingStorageConfi
         }
         return result;
     }
-    
+
     private static Collection<Method> findAllGetterMethods(final Class<?> clazz) {
         Method[] methods = clazz.getMethods();
         Collection<Method> result = new HashSet<>(methods.length);
@@ -98,7 +93,7 @@ public final class RDBTracingStorageConfiguration implements TracingStorageConfi
         }
         return result;
     }
-    
+
     /**
      * Create data source.
      *
@@ -121,7 +116,7 @@ public final class RDBTracingStorageConfiguration implements TracingStorageConfi
         Optional<JDBCParameterDecorator> decorator = TypedSPILoader.findService(JDBCParameterDecorator.class, result.getClass());
         return decorator.isPresent() ? decorator.get().decorate(result) : result;
     }
-    
+
     private Optional<Method> findSetterMethod(final Method[] methods, final String property) {
         String setterMethodName = Joiner.on("").join(SETTER_PREFIX, CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, property));
         for (Method each : methods) {
@@ -131,21 +126,21 @@ public final class RDBTracingStorageConfiguration implements TracingStorageConfi
         }
         return Optional.empty();
     }
-    
+
     @Override
     public DataSource getStorage() {
         return DataSourceRegistry.getInstance().getDataSource(this);
     }
-    
+
     @Override
     public boolean equals(final Object obj) {
         return this == obj || null != obj && getClass() == obj.getClass() && equalsByProperties((RDBTracingStorageConfiguration) obj);
     }
-    
+
     private boolean equalsByProperties(final RDBTracingStorageConfiguration dataSourceConfig) {
         return dataSourceClassName.equals(dataSourceConfig.dataSourceClassName) && props.equals(dataSourceConfig.props);
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hashCode(dataSourceClassName, props);

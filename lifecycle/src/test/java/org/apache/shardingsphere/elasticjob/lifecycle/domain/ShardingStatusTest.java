@@ -23,22 +23,22 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class ShardingStatusTest {
-    
+
     @Test
     void assertGetShardingStatusWhenIsDisabled() {
         assertThat(ShardingInfo.ShardingStatus.getShardingStatus(true, false, true), is(ShardingInfo.ShardingStatus.DISABLED));
     }
-    
+
     @Test
     void assertGetShardingStatusWhenIsRunning() {
         assertThat(ShardingInfo.ShardingStatus.getShardingStatus(false, true, false), is(ShardingInfo.ShardingStatus.RUNNING));
     }
-    
+
     @Test
     void assertGetShardingStatusWhenIsPending() {
         assertThat(ShardingInfo.ShardingStatus.getShardingStatus(false, false, false), is(ShardingInfo.ShardingStatus.PENDING));
     }
-    
+
     @Test
     void assertGetShardingStatusWhenIsShardingError() {
         assertThat(ShardingInfo.ShardingStatus.getShardingStatus(false, false, true), is(ShardingInfo.ShardingStatus.SHARDING_FLAG));

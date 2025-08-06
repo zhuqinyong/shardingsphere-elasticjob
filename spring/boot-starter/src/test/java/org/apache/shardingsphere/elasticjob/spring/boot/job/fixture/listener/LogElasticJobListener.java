@@ -26,17 +26,17 @@ import org.apache.shardingsphere.elasticjob.spi.listener.param.ShardingContexts;
  */
 @Slf4j
 public final class LogElasticJobListener implements ElasticJobListener {
-    
+
     @Override
     public void beforeJobExecuted(final ShardingContexts shardingContexts) {
         log.info("Before job executed. {}", shardingContexts);
     }
-    
+
     @Override
     public void afterJobExecuted(final ShardingContexts shardingContexts) {
         log.info("After job executed. {}", shardingContexts);
     }
-    
+
     @Override
     public String getType() {
         return "LOG";

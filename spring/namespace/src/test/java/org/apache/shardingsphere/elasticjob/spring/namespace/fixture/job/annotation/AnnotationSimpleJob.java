@@ -20,8 +20,8 @@ package org.apache.shardingsphere.elasticjob.spring.namespace.fixture.job.annota
 import lombok.Getter;
 import org.apache.shardingsphere.elasticjob.annotation.ElasticJobConfiguration;
 import org.apache.shardingsphere.elasticjob.annotation.ElasticJobProp;
-import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
 import org.apache.shardingsphere.elasticjob.simple.job.SimpleJob;
+import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
 
 @Getter
 @ElasticJobConfiguration(
@@ -36,19 +36,19 @@ import org.apache.shardingsphere.elasticjob.simple.job.SimpleJob;
                 @ElasticJobProp(key = "print.content", value = "test content")
         })
 public final class AnnotationSimpleJob implements SimpleJob {
-    
+
     @Getter
     private static volatile boolean completed;
-    
-    @Override
-    public void execute(final ShardingContext shardingContext) {
-        completed = true;
-    }
-    
+
     /**
      * Set completed to false.
      */
     public static void reset() {
         completed = false;
+    }
+
+    @Override
+    public void execute(final ShardingContext shardingContext) {
+        completed = true;
     }
 }

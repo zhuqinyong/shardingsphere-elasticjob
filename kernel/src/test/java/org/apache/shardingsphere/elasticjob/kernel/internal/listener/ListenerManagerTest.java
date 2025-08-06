@@ -39,39 +39,29 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class ListenerManagerTest {
-    
+
+    private final ListenerManager listenerManager = new ListenerManager(null, "test_job", Collections.emptyList());
     @Mock
     private JobNodeStorage jobNodeStorage;
-    
     @Mock
     private ElectionListenerManager electionListenerManager;
-    
     @Mock
     private ShardingListenerManager shardingListenerManager;
-    
     @Mock
     private FailoverListenerManager failoverListenerManager;
-    
     @Mock
     private MonitorExecutionListenerManager monitorExecutionListenerManager;
-    
     @Mock
     private ShutdownListenerManager shutdownListenerManager;
-    
     @Mock
     private TriggerListenerManager triggerListenerManager;
-    
     @Mock
     private RescheduleListenerManager rescheduleListenerManager;
-    
     @Mock
     private GuaranteeListenerManager guaranteeListenerManager;
-    
     @Mock
     private RegistryCenterConnectionStateListener regCenterConnectionStateListener;
-    
-    private final ListenerManager listenerManager = new ListenerManager(null, "test_job", Collections.emptyList());
-    
+
     @BeforeEach
     void setUp() {
         ReflectionUtils.setFieldValue(listenerManager, "jobNodeStorage", jobNodeStorage);
@@ -85,7 +75,7 @@ class ListenerManagerTest {
         ReflectionUtils.setFieldValue(listenerManager, "guaranteeListenerManager", guaranteeListenerManager);
         ReflectionUtils.setFieldValue(listenerManager, "regCenterConnectionStateListener", regCenterConnectionStateListener);
     }
-    
+
     @Test
     void assertStartAllListeners() {
         listenerManager.startAllListeners();

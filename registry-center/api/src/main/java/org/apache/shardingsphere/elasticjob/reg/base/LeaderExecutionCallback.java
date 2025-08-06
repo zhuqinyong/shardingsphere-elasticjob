@@ -21,7 +21,7 @@ package org.apache.shardingsphere.elasticjob.reg.base;
  * Leader server execution callback.
  */
 public interface LeaderExecutionCallback {
-    
+
     /**
      * Execute after leader elected.
      */

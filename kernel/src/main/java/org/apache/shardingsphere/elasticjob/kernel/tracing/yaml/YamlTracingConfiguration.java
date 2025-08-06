@@ -19,8 +19,8 @@ package org.apache.shardingsphere.elasticjob.kernel.tracing.yaml;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.shardingsphere.elasticjob.spi.yaml.YamlConfiguration;
 import org.apache.shardingsphere.elasticjob.kernel.tracing.config.TracingConfiguration;
+import org.apache.shardingsphere.elasticjob.spi.yaml.YamlConfiguration;
 
 /**
  * YAML configuration for {@link TracingConfiguration}.
@@ -30,13 +30,13 @@ import org.apache.shardingsphere.elasticjob.kernel.tracing.config.TracingConfigu
 @Getter
 @Setter
 public final class YamlTracingConfiguration<T> implements YamlConfiguration<TracingConfiguration<T>> {
-    
+
     private static final long serialVersionUID = -6625535892000287729L;
-    
+
     private String type;
-    
+
     private YamlTracingStorageConfiguration<T> tracingStorageConfiguration;
-    
+
     @Override
     public TracingConfiguration<T> toConfiguration() {
         return new TracingConfiguration<>(type, tracingStorageConfiguration.toConfiguration());

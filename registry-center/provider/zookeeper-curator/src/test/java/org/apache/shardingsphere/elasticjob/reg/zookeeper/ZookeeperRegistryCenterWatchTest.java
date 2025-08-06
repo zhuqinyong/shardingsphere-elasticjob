@@ -26,21 +26,17 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class ZookeeperRegistryCenterWatchTest {
-    
+
     private static final EmbedTestingServer EMBED_TESTING_SERVER = new EmbedTestingServer();
-    
+
     private static ZookeeperRegistryCenter zkRegCenter;
-    
+
     @BeforeAll
     static void setUp() {
         EMBED_TESTING_SERVER.start();
@@ -50,12 +46,12 @@ class ZookeeperRegistryCenterWatchTest {
         zkRegCenter.init();
         RegistryCenterEnvironmentPreparer.persist(zkRegCenter);
     }
-    
+
     @AfterAll
     static void tearDown() {
         zkRegCenter.close();
     }
-    
+
     @Test
     @Timeout(value = 10000L, unit = TimeUnit.MILLISECONDS)
     void assertWatchWithoutExecutor() throws InterruptedException {
@@ -74,7 +70,7 @@ class ZookeeperRegistryCenterWatchTest {
         zkRegCenter.update(key, "countDown");
         waitingForCountDownValue.await();
     }
-    
+
     @Test
     @Timeout(value = 10000L, unit = TimeUnit.MILLISECONDS)
     void assertWatchWithExecutor() throws InterruptedException {

@@ -21,7 +21,7 @@ package org.apache.shardingsphere.elasticjob.spring.boot.job.repository;
  * Bar Repository.
  */
 public interface BarRepository {
-    
+
     /**
      * Get data by ID.
      *

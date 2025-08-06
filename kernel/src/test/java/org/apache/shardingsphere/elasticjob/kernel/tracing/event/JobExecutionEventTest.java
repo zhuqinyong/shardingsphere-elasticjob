@@ -22,13 +22,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class JobExecutionEventTest {
-    
+
     @Test
     void assertNewJobExecutionEvent() {
         JobExecutionEvent actual = new JobExecutionEvent("localhost", "127.0.0.1", "fake_task_id", "test_job", JobExecutionEvent.ExecutionSource.NORMAL_TRIGGER, 0);
@@ -41,7 +38,7 @@ class JobExecutionEventTest {
         assertFalse(actual.isSuccess());
         assertNull(actual.getFailureCause());
     }
-    
+
     @Test
     void assertExecutionSuccess() {
         JobExecutionEvent startEvent = new JobExecutionEvent("localhost", "127.0.0.1", "fake_task_id", "test_job", JobExecutionEvent.ExecutionSource.NORMAL_TRIGGER, 0);
@@ -49,7 +46,7 @@ class JobExecutionEventTest {
         assertNotNull(successEvent.getCompleteTime());
         assertTrue(successEvent.isSuccess());
     }
-    
+
     @Test
     void assertExecutionFailure() {
         JobExecutionEvent startEvent = new JobExecutionEvent("localhost", "127.0.0.1", "fake_task_id", "test_job", JobExecutionEvent.ExecutionSource.NORMAL_TRIGGER, 0);

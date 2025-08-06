@@ -21,12 +21,12 @@ import org.apache.shardingsphere.elasticjob.kernel.infra.exception.JobSystemExce
 import org.apache.shardingsphere.elasticjob.spi.executor.error.handler.JobErrorHandler;
 
 public final class FooJobErrorHandlerFixture implements JobErrorHandler {
-    
+
     @Override
     public void handleException(final String jobName, final Throwable cause) {
         throw new JobSystemException(cause);
     }
-    
+
     @Override
     public String getType() {
         return "FOO";

@@ -23,13 +23,13 @@ import org.apache.shardingsphere.elasticjob.bootstrap.JobBootstrap;
 import org.apache.shardingsphere.elasticjob.bootstrap.type.OneOffJobBootstrap;
 import org.apache.shardingsphere.elasticjob.bootstrap.type.ScheduleJobBootstrap;
 import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.JobScheduler;
+import org.apache.shardingsphere.elasticjob.kernel.tracing.config.TracingConfiguration;
 import org.apache.shardingsphere.elasticjob.reg.zookeeper.ZookeeperRegistryCenter;
 import org.apache.shardingsphere.elasticjob.spring.boot.job.fixture.job.impl.CustomTestJob;
 import org.apache.shardingsphere.elasticjob.spring.boot.reg.ZookeeperProperties;
 import org.apache.shardingsphere.elasticjob.spring.boot.tracing.TracingProperties;
 import org.apache.shardingsphere.elasticjob.test.util.EmbedTestingServer;
 import org.apache.shardingsphere.elasticjob.test.util.ReflectionUtils;
-import org.apache.shardingsphere.elasticjob.kernel.tracing.config.TracingConfiguration;
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -41,35 +41,28 @@ import org.springframework.test.context.ActiveProfiles;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(properties = "spring.main.banner-mode=off")
 @SpringBootApplication
 @ActiveProfiles("elasticjob")
 class ElasticJobSpringBootTest {
-    
+
     private static final EmbedTestingServer EMBED_TESTING_SERVER = new EmbedTestingServer(18181);
-    
+
     @Autowired
     private ApplicationContext applicationContext;
-    
+
     @BeforeAll
     static void init() {
         EMBED_TESTING_SERVER.start();
     }
-    
+
     @Test
     void assertZookeeperProperties() {
         assertNotNull(applicationContext);
@@ -77,7 +70,7 @@ class ElasticJobSpringBootTest {
         assertThat(actual.getServerLists(), is(EMBED_TESTING_SERVER.getConnectionString()));
         assertThat(actual.getNamespace(), is("elasticjob-spring-boot-starter"));
     }
-    
+
     @Test
     void assertRegistryCenterCreation() {
         assertNotNull(applicationContext);
@@ -86,7 +79,7 @@ class ElasticJobSpringBootTest {
         zookeeperRegistryCenter.persist("/foo", "bar");
         assertThat(zookeeperRegistryCenter.get("/foo"), is("bar"));
     }
-    
+
     @Test
     void assertTracingConfigurationCreation() throws SQLException {
         assertNotNull(applicationContext);
@@ -97,7 +90,7 @@ class ElasticJobSpringBootTest {
         DataSource dataSource = (DataSource) tracingConfig.getTracingStorageConfiguration().getStorage();
         assertNotNull(dataSource.getConnection());
     }
-    
+
     @Test
     void assertTracingProperties() {
         assertNotNull(applicationContext);
@@ -108,7 +101,7 @@ class ElasticJobSpringBootTest {
         excludeJobNames.add("customTestJob");
         assertThat(tracingProperties.getExcludeJobNames(), is(excludeJobNames));
     }
-    
+
     @Test
     void assertElasticJobProperties() {
         assertNotNull(applicationContext);
@@ -134,7 +127,7 @@ class ElasticJobSpringBootTest {
         assertThat(printTestJobProperties.getProps().size(), is(1));
         assertThat(printTestJobProperties.getProps().getProperty("print.content"), is("test print job"));
     }
-    
+
     @Test
     void assertJobScheduleCreation() {
         Awaitility.await().atLeast(100L, TimeUnit.MILLISECONDS).atMost(1L, TimeUnit.MINUTES).untilAsserted(() -> {
@@ -145,7 +138,7 @@ class ElasticJobSpringBootTest {
             assertFalse(jobBootstrapBeans.isEmpty());
         });
     }
-    
+
     @Test
     void assertOneOffJobBootstrapBeanName() {
         assertNotNull(applicationContext);
@@ -157,13 +150,13 @@ class ElasticJobSpringBootTest {
         extraConfigs = ((JobScheduler) ReflectionUtils.getFieldValue(printTestJobBootstrap, "jobScheduler")).getJobConfig().getExtraConfigurations();
         assertThat(extraConfigs.size(), is(1));
     }
-    
+
     @Test
     void assertDefaultBeanNameWithClassJob() {
         assertNotNull(applicationContext);
         assertNotNull(applicationContext.getBean("defaultBeanNameClassJobScheduleJobBootstrap", ScheduleJobBootstrap.class));
     }
-    
+
     @Test
     void assertDefaultBeanNameWithTypeJob() {
         assertNotNull(applicationContext);

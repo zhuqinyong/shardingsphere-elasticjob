@@ -21,7 +21,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 @ContextConfiguration(locations = "classpath:META-INF/job/oneOffWithEventTraceRdb.xml")
 class OneOffJobSpringNamespaceWithEventTraceRdbTest extends AbstractOneOffJobSpringIntegrateTest {
-    
+
     OneOffJobSpringNamespaceWithEventTraceRdbTest() {
         super("oneOffSimpleElasticJob_namespace_event_trace_rdb", "oneOffDataflowElasticJob_namespace_event_trace_rdb");
     }

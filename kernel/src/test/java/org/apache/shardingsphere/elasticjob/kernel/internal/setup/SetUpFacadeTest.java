@@ -17,15 +17,15 @@
 
 package org.apache.shardingsphere.elasticjob.kernel.internal.setup;
 
-import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.apache.shardingsphere.elasticjob.kernel.internal.election.LeaderService;
 import org.apache.shardingsphere.elasticjob.kernel.internal.instance.InstanceService;
 import org.apache.shardingsphere.elasticjob.kernel.internal.listener.ListenerManager;
 import org.apache.shardingsphere.elasticjob.kernel.internal.reconcile.ReconcileService;
 import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.JobRegistry;
 import org.apache.shardingsphere.elasticjob.kernel.internal.server.ServerService;
-import org.apache.shardingsphere.elasticjob.test.util.ReflectionUtils;
+import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.apache.shardingsphere.elasticjob.reg.base.CoordinatorRegistryCenter;
+import org.apache.shardingsphere.elasticjob.test.util.ReflectionUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,27 +39,27 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class SetUpFacadeTest {
-    
+
     @Mock
     private LeaderService leaderService;
-    
+
     @Mock
     private ServerService serverService;
-    
+
     @Mock
     private InstanceService instanceService;
-    
+
     @Mock
     private ReconcileService reconcileService;
-    
+
     @Mock
     private ListenerManager listenerManager;
-    
+
     @Mock
     private CoordinatorRegistryCenter regCenter;
-    
+
     private SetUpFacade setUpFacade;
-    
+
     @BeforeEach
     void setUp() {
         JobRegistry.getInstance().addJobInstance("test_job", new JobInstance("127.0.0.1@-@0"));
@@ -70,7 +70,7 @@ class SetUpFacadeTest {
         ReflectionUtils.setFieldValue(setUpFacade, "reconcileService", reconcileService);
         ReflectionUtils.setFieldValue(setUpFacade, "listenerManager", listenerManager);
     }
-    
+
     @Test
     void assertRegisterStartUpInfo() {
         setUpFacade.registerStartUpInfo(true);
@@ -78,7 +78,7 @@ class SetUpFacadeTest {
         verify(leaderService).electLeader();
         verify(serverService).persistOnline(true);
     }
-    
+
     @Test
     void assertTearDown() {
         when(reconcileService.isRunning()).thenReturn(true);

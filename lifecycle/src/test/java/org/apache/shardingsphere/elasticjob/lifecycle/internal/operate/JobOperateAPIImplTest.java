@@ -35,18 +35,18 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class JobOperateAPIImplTest {
-    
+
     private JobOperateAPI jobOperateAPI;
-    
+
     // TODO We should not use `Mock.Strictness.LENIENT` here, but the default. This is a flaw in the unit test design.
     @Mock(strictness = Mock.Strictness.LENIENT)
     private CoordinatorRegistryCenter regCenter;
-    
+
     @BeforeEach
     void setUp() {
         jobOperateAPI = new JobOperateAPIImpl(regCenter);
     }
-    
+
     @Test
     void assertTriggerWithJobName() {
         when(regCenter.isExisted("/test_job")).thenReturn(true);
@@ -58,13 +58,13 @@ class JobOperateAPIImplTest {
         verify(regCenter).persist("/test_job/trigger/ip1@-@defaultInstance", "");
         verify(regCenter).persist("/test_job/trigger/ip2@-@defaultInstance", "");
     }
-    
+
     @Test
     void assertDisableWithJobNameAndServerIp() {
         jobOperateAPI.disable("test_job", "localhost");
         verify(regCenter).persist("/test_job/servers/localhost", "DISABLED");
     }
-    
+
     @Test
     void assertDisableWithJobName() {
         when(regCenter.getChildrenKeys("/test_job/servers")).thenReturn(Arrays.asList("ip1", "ip2"));
@@ -73,7 +73,7 @@ class JobOperateAPIImplTest {
         verify(regCenter).persist("/test_job/servers/ip1", "DISABLED");
         verify(regCenter).persist("/test_job/servers/ip2", "DISABLED");
     }
-    
+
     @Test
     void assertDisableWithServerIp() {
         when(regCenter.getChildrenKeys("/")).thenReturn(Arrays.asList("test_job1", "test_job2"));
@@ -84,13 +84,13 @@ class JobOperateAPIImplTest {
         verify(regCenter).persist("/test_job1/servers/localhost", "DISABLED");
         verify(regCenter).persist("/test_job2/servers/localhost", "DISABLED");
     }
-    
+
     @Test
     void assertEnableWithJobNameAndServerIp() {
         jobOperateAPI.enable("test_job", "localhost");
         verify(regCenter).persist("/test_job/servers/localhost", "ENABLED");
     }
-    
+
     @Test
     void assertEnableWithJobName() {
         when(regCenter.getChildrenKeys("/test_job/servers")).thenReturn(Arrays.asList("ip1", "ip2"));
@@ -99,7 +99,7 @@ class JobOperateAPIImplTest {
         verify(regCenter).persist("/test_job/servers/ip1", "ENABLED");
         verify(regCenter).persist("/test_job/servers/ip2", "ENABLED");
     }
-    
+
     @Test
     void assertEnableWithServerIp() {
         when(regCenter.getChildrenKeys("/")).thenReturn(Arrays.asList("test_job1", "test_job2"));
@@ -110,7 +110,7 @@ class JobOperateAPIImplTest {
         verify(regCenter).persist("/test_job1/servers/localhost", "ENABLED");
         verify(regCenter).persist("/test_job2/servers/localhost", "ENABLED");
     }
-    
+
     @Test
     void assertShutdownWithJobNameAndServerIp() {
         when(regCenter.getChildrenKeys("/test_job/instances")).thenReturn(Collections.singletonList("localhost@-@defaultInstance"));
@@ -118,7 +118,7 @@ class JobOperateAPIImplTest {
         jobOperateAPI.shutdown("test_job", "localhost");
         verify(regCenter).remove("/test_job/instances/localhost@-@defaultInstance");
     }
-    
+
     @Test
     void assertShutdownWithJobName() {
         when(regCenter.getChildrenKeys("/test_job/instances")).thenReturn(Arrays.asList("ip1@-@defaultInstance", "ip2@-@defaultInstance"));
@@ -126,7 +126,7 @@ class JobOperateAPIImplTest {
         verify(regCenter).getChildrenKeys("/test_job/instances");
         verify(regCenter).remove("/test_job/instances/ip1@-@defaultInstance");
     }
-    
+
     @Test
     void assertShutdownWithServerIp() {
         when(regCenter.getChildrenKeys("/")).thenReturn(Arrays.asList("test_job1", "test_job2"));
@@ -139,14 +139,14 @@ class JobOperateAPIImplTest {
         verify(regCenter).remove("/test_job1/instances/localhost@-@defaultInstance");
         verify(regCenter).remove("/test_job2/instances/localhost@-@defaultInstance");
     }
-    
+
     @Test
     void assertRemoveWithJobNameAndServerIp() {
         jobOperateAPI.remove("test_job", "ip1");
         verify(regCenter).remove("/test_job/servers/ip1");
         assertFalse(regCenter.isExisted("/test_job/servers/ip1"));
     }
-    
+
     @Test
     void assertRemoveWithJobName() {
         when(regCenter.isExisted("/test_job")).thenReturn(true);
@@ -159,7 +159,7 @@ class JobOperateAPIImplTest {
         assertFalse(regCenter.isExisted("/test_job/servers/ip2"));
         assertTrue(regCenter.isExisted("/test_job"));
     }
-    
+
     @Test
     void assertRemoveWithServerIp() {
         when(regCenter.getChildrenKeys("/")).thenReturn(Arrays.asList("test_job1", "test_job2"));
@@ -167,5 +167,5 @@ class JobOperateAPIImplTest {
         assertFalse(regCenter.isExisted("/test_job1/servers/ip1"));
         assertFalse(regCenter.isExisted("/test_job2/servers/ip1"));
     }
-    
+
 }

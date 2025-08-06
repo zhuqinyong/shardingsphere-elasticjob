@@ -26,11 +26,11 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class NettyRestfulServiceTrailingSlashInsensitiveTest {
-    
+
     private static final String HOST = "localhost";
-    
+
     private static final int PORT = 18082;
-    
+
     @Test
     void assertPathDuplicateWhenTrailingSlashInsensitive() {
         assertThrows(IllegalArgumentException.class, () -> {

@@ -29,16 +29,16 @@ import java.util.Properties;
  * Job error handler reloader.
  */
 public final class JobErrorHandlerReloader implements Closeable {
-    
+
     private Properties props;
-    
+
     @Getter
     private JobErrorHandler jobErrorHandler;
-    
+
     public JobErrorHandlerReloader(final JobConfiguration jobConfig) {
         init(jobConfig);
     }
-    
+
     /**
      * Reload if necessary.
      *
@@ -51,12 +51,12 @@ public final class JobErrorHandlerReloader implements Closeable {
         jobErrorHandler.close();
         init(jobConfig);
     }
-    
+
     private void init(final JobConfiguration jobConfig) {
         props = jobConfig.getProps();
         jobErrorHandler = TypedSPILoader.getService(JobErrorHandler.class, jobConfig.getJobErrorHandlerType(), props);
     }
-    
+
     @Override
     public void close() {
         jobErrorHandler.close();

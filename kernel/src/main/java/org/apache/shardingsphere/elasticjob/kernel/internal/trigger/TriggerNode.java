@@ -17,28 +17,28 @@
 
 package org.apache.shardingsphere.elasticjob.kernel.internal.trigger;
 
-import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.JobRegistry;
+import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.apache.shardingsphere.elasticjob.kernel.internal.storage.JobNodePath;
 
 /**
  * Trigger node.
  */
 public final class TriggerNode {
-    
+
     public static final String ROOT = "trigger";
-    
+
     private static final String TRIGGER = ROOT + "/%s";
-    
+
     private final String jobName;
-    
+
     private final JobNodePath jobNodePath;
-    
+
     public TriggerNode(final String jobName) {
         this.jobName = jobName;
         jobNodePath = new JobNodePath(jobName);
     }
-    
+
     /**
      * Is local trigger path.
      *
@@ -49,7 +49,7 @@ public final class TriggerNode {
         JobInstance jobInstance = JobRegistry.getInstance().getJobInstance(jobName);
         return null != jobInstance && path.equals(jobNodePath.getFullPath(String.format(TRIGGER, jobInstance.getJobInstanceId())));
     }
-    
+
     /**
      * Get local trigger path.
      *
@@ -58,7 +58,7 @@ public final class TriggerNode {
     public String getLocalTriggerPath() {
         return getTriggerPath(JobRegistry.getInstance().getJobInstance(jobName).getJobInstanceId());
     }
-    
+
     /**
      * Get trigger path.
      *
@@ -68,7 +68,7 @@ public final class TriggerNode {
     public String getTriggerPath(final String instanceId) {
         return String.format(TRIGGER, instanceId);
     }
-    
+
     /**
      * Get trigger root.
      *

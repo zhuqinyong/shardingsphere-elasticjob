@@ -17,8 +17,8 @@
 
 package org.apache.shardingsphere.elasticjob.kernel.internal.instance;
 
-import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.JobRegistry;
+import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -28,45 +28,45 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class InstanceNodeTest {
-    
+
     private static InstanceNode instanceNode;
-    
+
     @BeforeAll
     static void setUp() {
         JobRegistry.getInstance().addJobInstance("test_job", new JobInstance("127.0.0.1@-@0"));
         instanceNode = new InstanceNode("test_job");
     }
-    
+
     @Test
     void assertGetInstanceFullPath() {
         assertThat(instanceNode.getInstanceFullPath(), is("/test_job/instances"));
     }
-    
+
     @Test
     void assertIsInstancePath() {
         assertTrue(instanceNode.isInstancePath("/test_job/instances/127.0.0.1@-@0"));
     }
-    
+
     @Test
     void assertIsNotInstancePath() {
         assertFalse(instanceNode.isInstancePath("/test_job/other/127.0.0.1@-@0"));
     }
-    
+
     @Test
     void assertIsLocalInstancePath() {
         assertTrue(instanceNode.isLocalInstancePath("/test_job/instances/127.0.0.1@-@0"));
     }
-    
+
     @Test
     void assertIsNotLocalInstancePath() {
         assertFalse(instanceNode.isLocalInstancePath("/test_job/instances/127.0.0.2@-@0"));
     }
-    
+
     @Test
     void assertGetLocalInstancePath() {
         assertThat(instanceNode.getLocalInstancePath(), is("instances/127.0.0.1@-@0"));
     }
-    
+
     @Test
     void assertGetInstancePath() {
         assertThat(instanceNode.getInstancePath("127.0.0.1@-@0"), is("instances/127.0.0.1@-@0"));

@@ -18,12 +18,12 @@
 package org.apache.shardingsphere.elasticjob.kernel.listener;
 
 import com.google.common.collect.Sets;
-import org.apache.shardingsphere.elasticjob.kernel.infra.time.TimeService;
 import org.apache.shardingsphere.elasticjob.kernel.infra.exception.JobSystemException;
-import org.apache.shardingsphere.elasticjob.spi.listener.param.ShardingContexts;
+import org.apache.shardingsphere.elasticjob.kernel.infra.time.TimeService;
+import org.apache.shardingsphere.elasticjob.kernel.internal.guarantee.GuaranteeService;
 import org.apache.shardingsphere.elasticjob.kernel.listener.fixture.ElasticJobListenerCaller;
 import org.apache.shardingsphere.elasticjob.kernel.listener.fixture.TestDistributeOnceElasticJobListener;
-import org.apache.shardingsphere.elasticjob.kernel.internal.guarantee.GuaranteeService;
+import org.apache.shardingsphere.elasticjob.spi.listener.param.ShardingContexts;
 import org.apache.shardingsphere.elasticjob.test.util.ReflectionUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,26 +36,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class DistributeOnceElasticJobListenerTest {
-    
+
     @Mock
     private GuaranteeService guaranteeService;
-    
+
     @Mock
     private TimeService timeService;
-    
+
     @Mock
     private ElasticJobListenerCaller elasticJobListenerCaller;
-    
+
     private ShardingContexts shardingContexts;
-    
+
     private TestDistributeOnceElasticJobListener distributeOnceElasticJobListener;
-    
+
     @BeforeEach
     void setUp() {
         distributeOnceElasticJobListener = new TestDistributeOnceElasticJobListener(elasticJobListenerCaller);
@@ -66,7 +64,7 @@ class DistributeOnceElasticJobListenerTest {
         map.put(1, "");
         shardingContexts = new ShardingContexts("fake_task_id", "test_job", 10, "", map);
     }
-    
+
     @Test
     void assertBeforeJobExecutedWhenIsAllStarted() {
         when(guaranteeService.isRegisterStartSuccess(Sets.newHashSet(0, 1))).thenReturn(true);
@@ -75,7 +73,7 @@ class DistributeOnceElasticJobListenerTest {
         verify(guaranteeService).registerStart(Sets.newHashSet(0, 1));
         verify(guaranteeService).executeInLeaderForLastStarted(distributeOnceElasticJobListener, shardingContexts);
     }
-    
+
     @Test
     void assertBeforeJobExecutedWhenIsNotAllStartedAndNotTimeout() {
         when(guaranteeService.isRegisterStartSuccess(Sets.newHashSet(0, 1))).thenReturn(true);
@@ -85,7 +83,7 @@ class DistributeOnceElasticJobListenerTest {
         verify(guaranteeService).registerStart(Sets.newHashSet(0, 1));
         verify(guaranteeService, times(0)).clearAllStartedInfo();
     }
-    
+
     @Test
     void assertBeforeJobExecutedWhenIsNotAllStartedAndTimeout() {
         assertThrows(JobSystemException.class, () -> {
@@ -97,7 +95,7 @@ class DistributeOnceElasticJobListenerTest {
             verify(guaranteeService, times(0)).clearAllStartedInfo();
         });
     }
-    
+
     @Test
     void assertAfterJobExecutedWhenIsAllCompleted() {
         when(guaranteeService.isRegisterCompleteSuccess(Sets.newHashSet(0, 1))).thenReturn(true);
@@ -106,7 +104,7 @@ class DistributeOnceElasticJobListenerTest {
         verify(guaranteeService).registerComplete(Sets.newHashSet(0, 1));
         verify(guaranteeService).executeInLeaderForLastCompleted(distributeOnceElasticJobListener, shardingContexts);
     }
-    
+
     @Test
     void assertAfterJobExecutedWhenIsAllCompletedAndNotTimeout() {
         when(guaranteeService.isRegisterCompleteSuccess(Sets.newHashSet(0, 1))).thenReturn(true);
@@ -116,7 +114,7 @@ class DistributeOnceElasticJobListenerTest {
         verify(guaranteeService).registerComplete(Sets.newHashSet(0, 1));
         verify(guaranteeService, times(0)).clearAllCompletedInfo();
     }
-    
+
     @Test
     void assertAfterJobExecutedWhenIsAllCompletedAndTimeout() {
         assertThrows(JobSystemException.class, () -> {

@@ -28,28 +28,27 @@ import org.springframework.util.Assert;
 
 /**
  * BeanDefinitionRegistryPostProcessor that searches recursively starting from a base package for interfaces.
- *
  */
 @Getter
 @RequiredArgsConstructor
 public class JobScannerConfiguration implements BeanDefinitionRegistryPostProcessor, InitializingBean {
-    
+
     private final String[] basePackages;
-    
+
     @Override
     public void afterPropertiesSet() {
         Assert.notNull(this.basePackages, "Property 'basePackage' is required");
     }
-    
+
     @Override
     public void postProcessBeanFactory(final ConfigurableListableBeanFactory beanFactory) throws BeansException {
         // left intentionally blank
     }
-    
+
     @Override
     public void postProcessBeanDefinitionRegistry(final BeanDefinitionRegistry registry) throws BeansException {
         ClassPathJobScanner classPathJobScanner = new ClassPathJobScanner(registry);
         classPathJobScanner.scan(basePackages);
     }
-    
+
 }

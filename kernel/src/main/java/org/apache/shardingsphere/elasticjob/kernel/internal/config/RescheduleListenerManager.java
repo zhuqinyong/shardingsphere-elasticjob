@@ -31,24 +31,24 @@ import org.apache.shardingsphere.elasticjob.reg.listener.DataChangedEventListene
  * Reschedule listener manager.
  */
 public final class RescheduleListenerManager extends AbstractListenerManager {
-    
+
     private final ConfigurationNode configNode;
-    
+
     private final String jobName;
-    
+
     public RescheduleListenerManager(final CoordinatorRegistryCenter regCenter, final String jobName) {
         super(regCenter, jobName);
         this.jobName = jobName;
         configNode = new ConfigurationNode(jobName);
     }
-    
+
     @Override
     public void start() {
         addDataListener(new CronSettingAndJobEventChangedJobListener());
     }
-    
+
     class CronSettingAndJobEventChangedJobListener implements DataChangedEventListener {
-        
+
         @Override
         public void onChange(final DataChangedEvent event) {
             if (configNode.isConfigPath(event.getKey()) && Type.UPDATED == event.getType() && !JobRegistry.getInstance().isShutdown(jobName)) {

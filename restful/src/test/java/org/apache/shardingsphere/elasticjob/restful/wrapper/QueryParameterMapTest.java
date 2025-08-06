@@ -19,19 +19,14 @@ package org.apache.shardingsphere.elasticjob.restful.wrapper;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class QueryParameterMapTest {
-    
+
     @Test
     void assertGetFirst() {
         QueryParameterMap queryParameterMap = new QueryParameterMap();
@@ -39,7 +34,7 @@ class QueryParameterMapTest {
         assertThat(queryParameterMap.getFirst("name"), is("foo"));
         assertFalse(queryParameterMap.isEmpty());
     }
-    
+
     @Test
     void assertConvertToSingleValueMap() {
         Map<String, List<String>> queries = new LinkedHashMap<>(1 << 2);
@@ -50,7 +45,7 @@ class QueryParameterMapTest {
         assertThat(singleValueMap.get("foo"), is("first_foo"));
         assertThat(singleValueMap.get("bar"), is("first_bar"));
     }
-    
+
     @Test
     void assertGetEntrySet() {
         QueryParameterMap queryParameterMap = new QueryParameterMap();

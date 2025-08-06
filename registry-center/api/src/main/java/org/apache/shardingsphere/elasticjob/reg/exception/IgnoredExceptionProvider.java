@@ -26,7 +26,7 @@ import java.util.Collection;
  */
 @SingletonSPI
 public interface IgnoredExceptionProvider {
-    
+
     /**
      * Get ignored exceptions.
      *

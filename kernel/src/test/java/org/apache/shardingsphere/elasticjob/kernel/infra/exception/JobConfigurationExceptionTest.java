@@ -24,12 +24,12 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class JobConfigurationExceptionTest {
-    
+
     @Test
     void assertGetMessage() {
         assertThat(new JobConfigurationException("message is: '%s'", "test").getMessage(), is("message is: 'test'"));
     }
-    
+
     @Test
     void assertGetCause() {
         assertThat(new JobConfigurationException(new RuntimeException()).getCause(), instanceOf(RuntimeException.class));

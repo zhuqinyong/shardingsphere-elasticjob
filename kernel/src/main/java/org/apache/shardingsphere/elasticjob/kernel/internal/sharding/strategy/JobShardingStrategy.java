@@ -27,12 +27,12 @@ import java.util.Map;
  * Job sharding strategy.
  */
 public interface JobShardingStrategy extends TypedSPI {
-    
+
     /**
      * Sharding job.
-     * 
-     * @param jobInstances all job instances which participate in sharding
-     * @param jobName job name
+     *
+     * @param jobInstances       all job instances which participate in sharding
+     * @param jobName            job name
      * @param shardingTotalCount sharding total count
      * @return sharding result
      */

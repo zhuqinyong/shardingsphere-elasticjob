@@ -32,14 +32,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = "classpath:META-INF/snapshot/snapshotDisabled.xml")
 class SnapshotSpringNamespaceDisableTest {
-    
+
     private static final EmbedTestingServer EMBED_TESTING_SERVER = new EmbedTestingServer(3181);
-    
+
     @BeforeAll
     static void init() {
         EMBED_TESTING_SERVER.start();
     }
-    
+
     @Test
     void assertSnapshotDisable() {
         assertThrows(IOException.class, () -> SocketUtils.sendCommand(SnapshotService.DUMP_COMMAND, 9998));

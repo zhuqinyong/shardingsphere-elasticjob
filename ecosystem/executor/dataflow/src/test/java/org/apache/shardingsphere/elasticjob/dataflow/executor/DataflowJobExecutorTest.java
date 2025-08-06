@@ -18,10 +18,10 @@
 package org.apache.shardingsphere.elasticjob.dataflow.executor;
 
 import org.apache.shardingsphere.elasticjob.api.JobConfiguration;
-import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
 import org.apache.shardingsphere.elasticjob.dataflow.job.DataflowJob;
 import org.apache.shardingsphere.elasticjob.dataflow.props.DataflowJobProperties;
 import org.apache.shardingsphere.elasticjob.spi.executor.item.param.JobRuntimeService;
+import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,35 +34,33 @@ import java.util.Properties;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class DataflowJobExecutorTest {
-    
+
     private DataflowJobExecutor jobExecutor;
-    
+
     @Mock
     private DataflowJob elasticJob;
-    
+
     @Mock
     private JobConfiguration jobConfig;
-    
+
     @Mock
     private JobRuntimeService jobRuntimeService;
-    
+
     @Mock
     private ShardingContext shardingContext;
-    
+
     @Mock
     private Properties properties;
-    
+
     @BeforeEach
     void createJobExecutor() {
         jobExecutor = new DataflowJobExecutor();
     }
-    
+
     @SuppressWarnings("unchecked")
     @Test
     void assertProcessWithStreamingExecute() {
@@ -74,7 +72,7 @@ class DataflowJobExecutorTest {
         jobExecutor.process(elasticJob, jobConfig, jobRuntimeService, shardingContext);
         verify(elasticJob, times(1)).processData(shardingContext, data);
     }
-    
+
     @SuppressWarnings("unchecked")
     @Test
     void assertProcessWithOneOffExecute() {
@@ -85,7 +83,7 @@ class DataflowJobExecutorTest {
         jobExecutor.process(elasticJob, jobConfig, jobRuntimeService, shardingContext);
         verify(elasticJob, times(1)).processData(shardingContext, data);
     }
-    
+
     @Test
     void assertGetElasticJobClass() {
         assertThat(jobExecutor.getElasticJobClass(), is(DataflowJob.class));

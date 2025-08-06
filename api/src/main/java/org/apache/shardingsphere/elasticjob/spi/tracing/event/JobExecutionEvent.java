@@ -32,35 +32,42 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Getter
 public final class JobExecutionEvent implements JobEvent {
-    
-    private String id = UUID.randomUUID().toString();
-    
+
     private final String hostname;
-    
     private final String ip;
-    
     private final String taskId;
-    
     private final String jobName;
-    
     private final ExecutionSource source;
-    
     private final int shardingItem;
-    
+    private String id = UUID.randomUUID().toString();
     private Date startTime = new Date();
-    
+
     @Setter
     private Date completeTime;
-    
+
     @Setter
     private boolean success;
-    
+
     @Setter
     private String failureCause;
-    
+
+    public JobExecutionEvent(String id, String hostname, String ip, String taskId, String jobName, ExecutionSource source, int shardingItem, Date startTime, Date completeTime, boolean success, String failureCause) {
+        this.id = id;
+        this.hostname = hostname;
+        this.ip = ip;
+        this.taskId = taskId;
+        this.jobName = jobName;
+        this.source = source;
+        this.shardingItem = shardingItem;
+        this.startTime = startTime;
+        this.completeTime = completeTime;
+        this.success = success;
+        this.failureCause = failureCause;
+    }
+
     /**
      * Execution success.
-     * 
+     *
      * @return job execution event
      */
     public JobExecutionEvent executionSuccess() {
@@ -69,10 +76,10 @@ public final class JobExecutionEvent implements JobEvent {
         result.setSuccess(true);
         return result;
     }
-    
+
     /**
      * Execution failure.
-     * 
+     *
      * @param failureCause failure cause
      * @return job execution event
      */
@@ -83,12 +90,12 @@ public final class JobExecutionEvent implements JobEvent {
         result.setFailureCause(failureCause);
         return result;
     }
-    
+
     /**
      * Execution source.
      */
     public enum ExecutionSource {
-        
+
         NORMAL_TRIGGER, MISFIRE, FAILOVER
     }
 }

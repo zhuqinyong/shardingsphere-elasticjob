@@ -27,9 +27,9 @@ import javax.annotation.Resource;
 
 @RestController
 public class OneOffJobController {
-    
+
     private static final String RES_TEXT = "{\"msg\":\"OK\"}";
-    
+
     @Resource(name = "manualScriptJobBean")
     private OneOffJobBootstrap manualScriptJob;
 
@@ -44,25 +44,25 @@ public class OneOffJobController {
     @Autowired
     @Qualifier(value = "occurErrorNoticeEmailBean")
     private OneOffJobBootstrap occurErrorNoticeEmailJob;
-    
+
     @GetMapping("/execute/manualScriptJob")
     public String executeManualScriptJob() {
         manualScriptJob.execute();
         return RES_TEXT;
     }
-    
+
     @GetMapping("/execute/occurErrorNoticeDingtalkJob")
     public String executeOneOffJob() {
         occurErrorNoticeDingtalkJob.execute();
         return RES_TEXT;
     }
-    
+
     @GetMapping("/execute/occurErrorNoticeWechatJob")
     public String executeOccurErrorNoticeWechatJob() {
         occurErrorNoticeWechatJob.execute();
         return RES_TEXT;
     }
-    
+
     @GetMapping("/execute/occurErrorNoticeEmailJob")
     public String executeOccurErrorNoticeEmailJob() {
         occurErrorNoticeEmailJob.execute();

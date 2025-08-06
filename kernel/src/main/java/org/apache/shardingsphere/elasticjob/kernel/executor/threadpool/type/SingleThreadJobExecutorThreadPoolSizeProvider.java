@@ -23,12 +23,12 @@ import org.apache.shardingsphere.elasticjob.kernel.executor.threadpool.JobExecut
  * Job executor pool size provider with single thread.
  */
 public final class SingleThreadJobExecutorThreadPoolSizeProvider implements JobExecutorThreadPoolSizeProvider {
-    
+
     @Override
     public int getSize() {
         return 1;
     }
-    
+
     @Override
     public String getType() {
         return "SINGLE_THREAD";

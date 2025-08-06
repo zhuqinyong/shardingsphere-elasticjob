@@ -29,9 +29,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ElasticJobExecutorServiceTest {
-    
+
     private static boolean hasExecuted;
-    
+
     @Test
     void assertCreateExecutorService() {
         ElasticJobExecutorService executorServiceObject = new ElasticJobExecutorService("executor-service-test", 1);
@@ -56,9 +56,9 @@ class ElasticJobExecutorServiceTest {
         assertTrue(executorServiceObject.isShutdown());
         hasExecuted = true;
     }
-    
+
     static class FooTask implements Runnable {
-        
+
         @Override
         public void run() {
             Awaitility.await().atMost(1L, TimeUnit.MINUTES).untilAsserted(() -> assertThat(hasExecuted, is(true)));

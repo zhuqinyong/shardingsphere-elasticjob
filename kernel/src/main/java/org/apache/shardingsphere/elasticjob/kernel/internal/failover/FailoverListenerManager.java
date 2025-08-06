@@ -17,50 +17,46 @@
 
 package org.apache.shardingsphere.elasticjob.kernel.internal.failover;
 
-import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
-import org.apache.shardingsphere.elasticjob.kernel.internal.config.JobConfigurationPOJO;
 import org.apache.shardingsphere.elasticjob.kernel.infra.yaml.YamlEngine;
 import org.apache.shardingsphere.elasticjob.kernel.internal.config.ConfigurationNode;
 import org.apache.shardingsphere.elasticjob.kernel.internal.config.ConfigurationService;
+import org.apache.shardingsphere.elasticjob.kernel.internal.config.JobConfigurationPOJO;
 import org.apache.shardingsphere.elasticjob.kernel.internal.instance.InstanceNode;
 import org.apache.shardingsphere.elasticjob.kernel.internal.instance.InstanceService;
 import org.apache.shardingsphere.elasticjob.kernel.internal.listener.AbstractListenerManager;
 import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.JobRegistry;
 import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.ExecutionService;
+import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.ShardingService;
 import org.apache.shardingsphere.elasticjob.reg.base.CoordinatorRegistryCenter;
 import org.apache.shardingsphere.elasticjob.reg.listener.DataChangedEvent;
 import org.apache.shardingsphere.elasticjob.reg.listener.DataChangedEvent.Type;
 import org.apache.shardingsphere.elasticjob.reg.listener.DataChangedEventListener;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
 /**
  * Failover listener manager.
  */
 public final class FailoverListenerManager extends AbstractListenerManager {
-    
+
     private final String jobName;
-    
+
     private final ConfigurationService configService;
-    
+
     private final ShardingService shardingService;
-    
+
     private final FailoverService failoverService;
-    
+
     private final ExecutionService executionService;
-    
+
     private final InstanceService instanceService;
-    
+
     private final ConfigurationNode configNode;
-    
+
     private final InstanceNode instanceNode;
-    
+
     public FailoverListenerManager(final CoordinatorRegistryCenter regCenter, final String jobName) {
         super(regCenter, jobName);
         this.jobName = jobName;
@@ -72,20 +68,20 @@ public final class FailoverListenerManager extends AbstractListenerManager {
         configNode = new ConfigurationNode(jobName);
         instanceNode = new InstanceNode(jobName);
     }
-    
+
     @Override
     public void start() {
         addDataListener(new JobCrashedJobListener());
         addDataListener(new FailoverSettingsChangedJobListener());
         addDataListener(new LegacyCrashedRunningItemListener());
     }
-    
+
     private boolean isFailoverEnabled() {
         return configService.load(true).isFailover();
     }
-    
+
     class JobCrashedJobListener implements DataChangedEventListener {
-        
+
         @Override
         public void onChange(final DataChangedEvent event) {
             if (!JobRegistry.getInstance().isShutdown(jobName) && isFailoverEnabled() && Type.DELETED == event.getType() && instanceNode.isInstancePath(event.getKey())) {
@@ -109,9 +105,9 @@ public final class FailoverListenerManager extends AbstractListenerManager {
             }
         }
     }
-    
+
     class FailoverSettingsChangedJobListener implements DataChangedEventListener {
-        
+
         @Override
         public void onChange(final DataChangedEvent event) {
             if (configNode.isConfigPath(event.getKey()) && Type.UPDATED == event.getType() && !YamlEngine.unmarshal(event.getValue(), JobConfigurationPOJO.class).toJobConfiguration().isFailover()) {
@@ -119,9 +115,9 @@ public final class FailoverListenerManager extends AbstractListenerManager {
             }
         }
     }
-    
+
     class LegacyCrashedRunningItemListener implements DataChangedEventListener {
-        
+
         @Override
         public void onChange(final DataChangedEvent event) {
             if (!isCurrentInstanceOnline(event) || !isFailoverEnabled()) {
@@ -153,11 +149,11 @@ public final class FailoverListenerManager extends AbstractListenerManager {
             }
             failoverService.failoverIfNecessary();
         }
-        
+
         private boolean isCurrentInstanceOnline(final DataChangedEvent event) {
             return Type.ADDED == event.getType() && !JobRegistry.getInstance().isShutdown(jobName) && event.getKey().endsWith(instanceNode.getLocalInstancePath());
         }
-        
+
         private boolean isTheOnlyInstance(final Set<JobInstance> availableJobInstances) {
             return Collections.singleton(JobRegistry.getInstance().getJobInstance(jobName)).equals(availableJobInstances);
         }

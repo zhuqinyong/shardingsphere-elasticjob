@@ -17,8 +17,8 @@
 
 package org.apache.shardingsphere.elasticjob.tracing.rdb.yaml;
 
-import org.apache.shardingsphere.elasticjob.tracing.rdb.config.RDBTracingStorageConfiguration;
 import org.apache.shardingsphere.elasticjob.kernel.tracing.yaml.YamlTracingStorageConfiguration;
+import org.apache.shardingsphere.elasticjob.tracing.rdb.config.RDBTracingStorageConfiguration;
 import org.junit.jupiter.api.Test;
 
 import javax.sql.DataSource;
@@ -29,7 +29,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class YamlRDBTracingStorageConfigurationConverterTest {
-    
+
     @Test
     void assertConvertDataSourceConfiguration() {
         RDBTracingStorageConfiguration dataSourceConfig = new RDBTracingStorageConfiguration("org.h2.Driver");

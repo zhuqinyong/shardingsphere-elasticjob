@@ -23,21 +23,21 @@ import org.apache.shardingsphere.elasticjob.kernel.internal.storage.JobNodePath;
  * Leader path node.
  */
 public final class LeaderNode {
-    
+
     public static final String ROOT = "leader";
-    
+
     private static final String ELECTION_ROOT = ROOT + "/election";
-    
+
     static final String INSTANCE = ELECTION_ROOT + "/instance";
-    
+
     static final String LATCH = ELECTION_ROOT + "/latch";
-    
+
     private final JobNodePath jobNodePath;
-    
+
     LeaderNode(final String jobName) {
         jobNodePath = new JobNodePath(jobName);
     }
-    
+
     boolean isLeaderInstancePath(final String path) {
         return jobNodePath.getFullPath(INSTANCE).equals(path);
     }

@@ -27,7 +27,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class ShardingContextsTest {
-    
+
     @Test
     void assertCreateShardingContext() {
         ShardingContexts shardingContexts = createShardingContexts();
@@ -39,7 +39,7 @@ class ShardingContextsTest {
         assertThat(actual.getShardingItem(), is(1));
         assertThat(actual.getShardingParameter(), is(shardingContexts.getShardingItemParameters().get(1)));
     }
-    
+
     private ShardingContexts createShardingContexts() {
         Map<Integer, String> map = new HashMap<>(2, 1F);
         map.put(0, "A");

@@ -18,10 +18,10 @@
 package org.apache.shardingsphere.elasticjob.kernel.internal.sharding;
 
 import org.apache.shardingsphere.elasticjob.api.JobConfiguration;
-import org.apache.shardingsphere.elasticjob.spi.listener.param.ShardingContexts;
 import org.apache.shardingsphere.elasticjob.kernel.internal.config.ConfigurationService;
 import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.JobRegistry;
 import org.apache.shardingsphere.elasticjob.kernel.internal.storage.JobNodeStorage;
+import org.apache.shardingsphere.elasticjob.spi.listener.param.ShardingContexts;
 import org.apache.shardingsphere.elasticjob.test.util.ReflectionUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,33 +40,28 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ExecutionServiceTest {
-    
+
+    private final ExecutionService executionService = new ExecutionService(null, "test_job");
     @Mock
     private JobNodeStorage jobNodeStorage;
-    
     @Mock
     private ConfigurationService configService;
-    
-    private final ExecutionService executionService = new ExecutionService(null, "test_job");
-    
+
     @BeforeEach
     void setUp() {
         ReflectionUtils.setFieldValue(executionService, "jobNodeStorage", jobNodeStorage);
         ReflectionUtils.setFieldValue(executionService, "configService", configService);
     }
-    
+
     @AfterEach
     void tearDown() {
         JobRegistry.getInstance().shutdown("test_job");
     }
-    
+
     @Test
     void assertRegisterJobBeginWithoutMonitorExecution() {
         when(configService.load(true)).thenReturn(JobConfiguration.newBuilder("test_job", 3).cron("0/1 * * * * ?").monitorExecution(false).build());
@@ -74,7 +69,7 @@ class ExecutionServiceTest {
         verify(jobNodeStorage, times(0)).fillEphemeralJobNode(any(), any());
         assertTrue(JobRegistry.getInstance().isJobRunning("test_job"));
     }
-    
+
     @Test
     void assertRegisterJobBeginWithMonitorExecution() {
         String jobInstanceId = "127.0.0.1@-@1";
@@ -86,7 +81,7 @@ class ExecutionServiceTest {
         verify(jobNodeStorage).fillEphemeralJobNode("sharding/2/running", jobInstanceId);
         assertTrue(JobRegistry.getInstance().isJobRunning("test_job"));
     }
-    
+
     @Test
     void assertRegisterJobBeginWithFailoverEnabled() {
         String jobInstanceId = "127.0.0.1@-@1";
@@ -98,7 +93,7 @@ class ExecutionServiceTest {
         verify(jobNodeStorage).fillJobNode("sharding/2/running", jobInstanceId);
         assertTrue(JobRegistry.getInstance().isJobRunning("test_job"));
     }
-    
+
     @Test
     void assertRegisterJobCompletedWithoutMonitorExecution() {
         JobRegistry.getInstance().setJobRunning("test_job", true);
@@ -108,7 +103,7 @@ class ExecutionServiceTest {
         verify(jobNodeStorage, times(0)).createJobNodeIfNeeded(any());
         assertFalse(JobRegistry.getInstance().isJobRunning("test_job"));
     }
-    
+
     @Test
     void assertRegisterJobCompletedWithMonitorExecution() {
         JobRegistry.getInstance().setJobRunning("test_job", true);
@@ -119,7 +114,7 @@ class ExecutionServiceTest {
         verify(jobNodeStorage).removeJobNodeIfExisted("sharding/2/running");
         assertFalse(JobRegistry.getInstance().isJobRunning("test_job"));
     }
-    
+
     @Test
     void assertClearAllRunningInfo() {
         when(configService.load(true)).thenReturn(JobConfiguration.newBuilder("test_job", 3).cron("0/1 * * * * ?").monitorExecution(false).build());
@@ -128,20 +123,20 @@ class ExecutionServiceTest {
         verify(jobNodeStorage).removeJobNodeIfExisted("sharding/1/running");
         verify(jobNodeStorage).removeJobNodeIfExisted("sharding/2/running");
     }
-    
+
     @Test
     void assertClearRunningInfo() {
         executionService.clearRunningInfo(Arrays.asList(0, 1));
         verify(jobNodeStorage).removeJobNodeIfExisted("sharding/0/running");
         verify(jobNodeStorage).removeJobNodeIfExisted("sharding/1/running");
     }
-    
+
     @Test
     void assertNotHaveRunningItemsWithoutMonitorExecution() {
         when(configService.load(true)).thenReturn(JobConfiguration.newBuilder("test_job", 3).cron("0/1 * * * * ?").monitorExecution(false).build());
         assertFalse(executionService.hasRunningItems(Arrays.asList(0, 1, 2)));
     }
-    
+
     @Test
     void assertHasRunningItemsWithMonitorExecution() {
         when(configService.load(true)).thenReturn(JobConfiguration.newBuilder("test_job", 3).cron("0/1 * * * * ?").monitorExecution(true).build());
@@ -149,7 +144,7 @@ class ExecutionServiceTest {
         when(jobNodeStorage.isJobNodeExisted("sharding/1/running")).thenReturn(true);
         assertTrue(executionService.hasRunningItems(Arrays.asList(0, 1, 2)));
     }
-    
+
     @Test
     void assertNotHaveRunningItems() {
         when(configService.load(true)).thenReturn(JobConfiguration.newBuilder("test_job", 3).cron("0/1 * * * * ?").monitorExecution(true).build());
@@ -158,7 +153,7 @@ class ExecutionServiceTest {
         when(jobNodeStorage.isJobNodeExisted("sharding/2/running")).thenReturn(false);
         assertFalse(executionService.hasRunningItems(Arrays.asList(0, 1, 2)));
     }
-    
+
     @Test
     void assertHasRunningItemsForAll() {
         when(configService.load(true)).thenReturn(JobConfiguration.newBuilder("test_job", 3).cron("0/1 * * * * ?").build());
@@ -166,7 +161,7 @@ class ExecutionServiceTest {
         when(jobNodeStorage.isJobNodeExisted("sharding/1/running")).thenReturn(true);
         assertTrue(executionService.hasRunningItems());
     }
-    
+
     @Test
     void assertNotHaveRunningItemsForAll() {
         when(configService.load(true)).thenReturn(JobConfiguration.newBuilder("test_job", 3).cron("0/1 * * * * ?").build());
@@ -175,7 +170,7 @@ class ExecutionServiceTest {
         when(jobNodeStorage.isJobNodeExisted("sharding/2/running")).thenReturn(false);
         assertFalse(executionService.hasRunningItems());
     }
-    
+
     @Test
     void assertGetAllRunningItems() {
         when(configService.load(true)).thenReturn(JobConfiguration.newBuilder("test_job", 3).build());
@@ -187,7 +182,7 @@ class ExecutionServiceTest {
         assertThat(actual.get(0), is(new JobInstance(jobInstanceId)));
         assertThat(actual.get(2), is(new JobInstance(jobInstanceId)));
     }
-    
+
     @Test
     void assertMisfireIfNotRunning() {
         when(configService.load(true)).thenReturn(JobConfiguration.newBuilder("test_job", 3).cron("0/1 * * * * ?").monitorExecution(true).build());
@@ -196,7 +191,7 @@ class ExecutionServiceTest {
         when(jobNodeStorage.isJobNodeExisted("sharding/2/running")).thenReturn(false);
         assertFalse(executionService.misfireIfHasRunningItems(Arrays.asList(0, 1, 2)));
     }
-    
+
     @Test
     void assertMisfireIfRunning() {
         when(configService.load(true)).thenReturn(JobConfiguration.newBuilder("test_job", 3).cron("0/1 * * * * ?").monitorExecution(true).build());
@@ -204,7 +199,7 @@ class ExecutionServiceTest {
         when(jobNodeStorage.isJobNodeExisted("sharding/1/running")).thenReturn(true);
         assertTrue(executionService.misfireIfHasRunningItems(Arrays.asList(0, 1, 2)));
     }
-    
+
     @Test
     void assertSetMisfire() {
         executionService.setMisfire(Arrays.asList(0, 1, 2));
@@ -212,7 +207,7 @@ class ExecutionServiceTest {
         verify(jobNodeStorage).createJobNodeIfNeeded("sharding/1/misfire");
         verify(jobNodeStorage).createJobNodeIfNeeded("sharding/2/misfire");
     }
-    
+
     @Test
     void assertGetMisfiredJobItems() {
         when(jobNodeStorage.isJobNodeExisted("sharding/0/misfire")).thenReturn(true);
@@ -220,7 +215,7 @@ class ExecutionServiceTest {
         when(jobNodeStorage.isJobNodeExisted("sharding/2/misfire")).thenReturn(false);
         assertThat(executionService.getMisfiredJobItems(Arrays.asList(0, 1, 2)), is(Arrays.asList(0, 1)));
     }
-    
+
     @Test
     void assertClearMisfire() {
         executionService.clearMisfire(Arrays.asList(0, 1, 2));
@@ -228,7 +223,7 @@ class ExecutionServiceTest {
         verify(jobNodeStorage).removeJobNodeIfExisted("sharding/1/misfire");
         verify(jobNodeStorage).removeJobNodeIfExisted("sharding/2/misfire");
     }
-    
+
     @Test
     void assertGetDisabledItems() {
         when(jobNodeStorage.isJobNodeExisted("sharding/0/disabled")).thenReturn(true);
@@ -236,7 +231,7 @@ class ExecutionServiceTest {
         when(jobNodeStorage.isJobNodeExisted("sharding/2/disabled")).thenReturn(false);
         assertThat(executionService.getDisabledItems(Arrays.asList(0, 1, 2)), is(Arrays.asList(0, 1)));
     }
-    
+
     private ShardingContexts getShardingContext() {
         Map<Integer, String> map = new HashMap<>(3, 1);
         map.put(0, "");

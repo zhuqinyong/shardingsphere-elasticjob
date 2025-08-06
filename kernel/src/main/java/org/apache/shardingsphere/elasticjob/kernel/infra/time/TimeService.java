@@ -21,10 +21,10 @@ package org.apache.shardingsphere.elasticjob.kernel.infra.time;
  * Time service.
  */
 public final class TimeService {
-    
+
     /**
      * Get current millis.
-     * 
+     *
      * @return current millis
      */
     public long getCurrentMillis() {

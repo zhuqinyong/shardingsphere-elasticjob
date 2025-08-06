@@ -31,19 +31,17 @@ import java.util.Vector;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class IpUtilsTest {
-    
+
     @Test
     void assertGetIp() {
         assertNotNull(IpUtils.getIp());
     }
-    
+
     @Test
     void assertPreferredNetworkInterface() throws ReflectiveOperationException {
         System.setProperty(IpUtils.PREFERRED_NETWORK_INTERFACE, "eth0");
@@ -55,7 +53,7 @@ class IpUtilsTest {
         assertTrue(result);
         System.clearProperty(IpUtils.PREFERRED_NETWORK_INTERFACE);
     }
-    
+
     @Test
     void assertPreferredNetworkAddress() throws ReflectiveOperationException {
         Method declaredMethod = IpUtils.class.getDeclaredMethod("isPreferredAddress", InetAddress.class);
@@ -74,7 +72,7 @@ class IpUtilsTest {
         assertFalse((boolean) declaredMethod.invoke("isPreferredAddress", inetAddress));
         System.clearProperty(IpUtils.PREFERRED_NETWORK_IP);
     }
-    
+
     @Test
     void assertGetFirstNetworkInterface() throws IOException, ReflectiveOperationException {
         InetAddress address1 = mock(Inet4Address.class);
@@ -108,7 +106,7 @@ class IpUtilsTest {
         assertThat(declaredMethod.invoke("getFirstNetworkInterface", validNetworkInterfaces), is(networkInterface1));
         System.clearProperty(IpUtils.PREFERRED_NETWORK_IP);
     }
-    
+
     @Test
     void assertGetHostName() {
         assertNotNull(IpUtils.getHostName());

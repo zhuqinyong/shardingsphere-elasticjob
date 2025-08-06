@@ -23,17 +23,17 @@ import org.apache.shardingsphere.elasticjob.tracing.rdb.storage.type.TracingStor
  * Tracing storage database type for SQLServer.
  */
 public final class SQLServerTracingStorageDatabaseType implements TracingStorageDatabaseType {
-    
+
     @Override
     public String getType() {
         return "SQLServer";
     }
-    
+
     @Override
     public String getDatabaseProductName() {
         return "Microsoft SQL Server";
     }
-    
+
     @Override
     public int getDuplicateRecordErrorCode() {
         return 1;

@@ -24,12 +24,12 @@ import org.apache.shardingsphere.elasticjob.spi.executor.error.handler.JobErrorH
  * Job error handler for throw exception.
  */
 public final class ThrowJobErrorHandler implements JobErrorHandler {
-    
+
     @Override
     public void handleException(final String jobName, final Throwable cause) {
         throw new JobSystemException(cause);
     }
-    
+
     @Override
     public String getType() {
         return "THROW";

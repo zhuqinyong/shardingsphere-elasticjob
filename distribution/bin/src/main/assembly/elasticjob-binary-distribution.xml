@@ -15,7 +15,7 @@
   ~ limitations under the License.
   -->
 
-<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<assembly xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/ASSEMBLY/2.0.0"
           xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
     <id>lite-bin</id>
     <formats>
@@ -23,7 +23,7 @@
     </formats>
     <includeBaseDirectory>true</includeBaseDirectory>
     <baseDirectory>${project.build.finalName}-bin</baseDirectory>
-    
+
     <fileSets>
         <fileSet>
             <directory>../../</directory>
@@ -40,7 +40,7 @@
             <outputDirectory>.</outputDirectory>
         </fileSet>
     </fileSets>
-    
+
     <dependencySets>
         <dependencySet>
             <useProjectArtifact>true</useProjectArtifact>

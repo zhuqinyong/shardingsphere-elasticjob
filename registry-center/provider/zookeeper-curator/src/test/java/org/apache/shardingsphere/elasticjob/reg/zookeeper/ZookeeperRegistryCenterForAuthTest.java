@@ -32,13 +32,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ZookeeperRegistryCenterForAuthTest {
-    
+
     private static final EmbedTestingServer EMBED_TESTING_SERVER = new EmbedTestingServer();
-    
+
     private static final String NAME_SPACE = ZookeeperRegistryCenterForAuthTest.class.getName();
-    
+
     private static ZookeeperRegistryCenter zkRegCenter;
-    
+
     @BeforeAll
     static void setUp() {
         EMBED_TESTING_SERVER.start();
@@ -50,12 +50,12 @@ class ZookeeperRegistryCenterForAuthTest {
         zkRegCenter.init();
         RegistryCenterEnvironmentPreparer.persist(zkRegCenter);
     }
-    
+
     @AfterAll
     static void tearDown() {
         zkRegCenter.close();
     }
-    
+
     @Test
     void assertInitWithDigestSuccess() throws Exception {
         try (
@@ -68,7 +68,7 @@ class ZookeeperRegistryCenterForAuthTest {
             assertThat(client.getData().forPath("/" + ZookeeperRegistryCenterForAuthTest.class.getName() + "/test/deep/nested"), is("deepNested".getBytes()));
         }
     }
-    
+
     @Test
     void assertInitWithDigestFailure() {
         assertThrows(NoAuthException.class, () -> {

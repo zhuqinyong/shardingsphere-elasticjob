@@ -24,15 +24,15 @@ import org.apache.shardingsphere.elasticjob.spi.listener.param.ShardingContexts;
  * No operation elastic job listener.
  */
 public final class NoopElasticJobListener implements ElasticJobListener {
-    
+
     @Override
     public void beforeJobExecuted(final ShardingContexts shardingContexts) {
     }
-    
+
     @Override
     public void afterJobExecuted(final ShardingContexts shardingContexts) {
     }
-    
+
     @Override
     public String getType() {
         return "NOOP";

@@ -21,14 +21,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.embedded.EmbeddedChannel;
-import io.netty.handler.codec.http.DefaultFullHttpRequest;
-import io.netty.handler.codec.http.DefaultHttpHeaders;
-import io.netty.handler.codec.http.FullHttpRequest;
-import io.netty.handler.codec.http.FullHttpResponse;
-import io.netty.handler.codec.http.HttpHeaders;
-import io.netty.handler.codec.http.HttpMethod;
-import io.netty.handler.codec.http.HttpVersion;
-import io.netty.handler.codec.http.QueryStringEncoder;
+import io.netty.handler.codec.http.*;
 import org.apache.shardingsphere.elasticjob.restful.Http;
 import org.apache.shardingsphere.elasticjob.restful.RestfulController;
 import org.apache.shardingsphere.elasticjob.restful.annotation.Mapping;
@@ -44,9 +37,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class HandlerParameterDecoderTest {
-    
+
     private EmbeddedChannel channel;
-    
+
     @BeforeEach
     void setUp() {
         ContextInitializationInboundHandler contextInitializationInboundHandler = new ContextInitializationInboundHandler();
@@ -55,7 +48,7 @@ class HandlerParameterDecoderTest {
         HandleMethodExecutor handleMethodExecutor = new HandleMethodExecutor();
         channel = new EmbeddedChannel(contextInitializationInboundHandler, httpRequestDispatcher, handlerParameterDecoder, handleMethodExecutor);
     }
-    
+
     @Test
     void assertDecodeParameters() {
         QueryStringEncoder queryStringEncoder = new QueryStringEncoder("/myApp/C");
@@ -74,9 +67,9 @@ class HandlerParameterDecoderTest {
         assertThat(httpResponse.status().code(), is(200));
         assertThat(new String(ByteBufUtil.getBytes(httpResponse.content())), is("ok"));
     }
-    
+
     public static class DecoderTestController implements RestfulController {
-        
+
         /**
          * A handle method for decode testing.
          *
@@ -93,15 +86,15 @@ class HandlerParameterDecoderTest {
          */
         @Mapping(method = Http.GET, path = "/{appName}/{ch}")
         public String handle(
-                             final @Param(source = ParamSource.PATH, name = "appName") String appName,
-                             final @Param(source = ParamSource.PATH, name = "ch") char ch,
-                             final @Param(source = ParamSource.QUERY, name = "cron") String cron,
-                             final @Param(source = ParamSource.HEADER, name = "Message") String message,
-                             final @RequestBody String body,
-                             final @Param(source = ParamSource.QUERY, name = "integer") int integer,
-                             final @Param(source = ParamSource.QUERY, name = "bool") Boolean bool,
-                             final @Param(source = ParamSource.QUERY, name = "long") Long longValue,
-                             final @Param(source = ParamSource.QUERY, name = "double") double doubleValue) {
+                final @Param(source = ParamSource.PATH, name = "appName") String appName,
+                final @Param(source = ParamSource.PATH, name = "ch") char ch,
+                final @Param(source = ParamSource.QUERY, name = "cron") String cron,
+                final @Param(source = ParamSource.HEADER, name = "Message") String message,
+                final @RequestBody String body,
+                final @Param(source = ParamSource.QUERY, name = "integer") int integer,
+                final @Param(source = ParamSource.QUERY, name = "bool") Boolean bool,
+                final @Param(source = ParamSource.QUERY, name = "long") Long longValue,
+                final @Param(source = ParamSource.QUERY, name = "double") double doubleValue) {
             assertThat(appName, is("myApp"));
             assertThat(ch, is('C'));
             assertThat(cron, is("0 * * * * ?"));

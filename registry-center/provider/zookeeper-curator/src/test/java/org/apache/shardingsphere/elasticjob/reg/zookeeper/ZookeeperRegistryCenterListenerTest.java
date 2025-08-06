@@ -35,41 +35,31 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ZookeeperRegistryCenterListenerTest {
-    
+
+    private final String jobPath = "/test_job";
     @Mock
     private Map<String, CuratorCache> caches;
-    
     @Mock
     private CuratorFramework client;
-    
     @Mock
     private CuratorCache cache;
-    
     @Mock
     private Listenable<ConnectionStateListener> connStateListenable;
-    
     @Mock
     private Listenable<CuratorCacheListener> dataListenable;
-    
     private ZookeeperRegistryCenter regCenter;
-    
-    private final String jobPath = "/test_job";
-    
+
     @BeforeEach
     void setUp() {
         regCenter = new ZookeeperRegistryCenter(null);
         ReflectionUtils.setFieldValue(regCenter, "caches", caches);
         ReflectionUtils.setFieldValue(regCenter, "client", client);
     }
-    
+
     @Test
     void testAddConnectionStateChangedEventListener() {
         when(client.getConnectionStateListenable()).thenReturn(connStateListenable);
@@ -77,7 +67,7 @@ class ZookeeperRegistryCenterListenerTest {
         verify(client.getConnectionStateListenable()).addListener(any());
         assertEquals(1, getConnStateListeners().get(jobPath).size());
     }
-    
+
     @Test
     void testWatch() {
         when(caches.get(jobPath + "/")).thenReturn(cache);
@@ -86,7 +76,7 @@ class ZookeeperRegistryCenterListenerTest {
         verify(cache.listenable()).addListener(any());
         assertEquals(1, getDataListeners().get(jobPath).size());
     }
-    
+
     @Test
     void testRemoveDataListenersNonCache() {
         when(cache.listenable()).thenReturn(dataListenable);
@@ -94,7 +84,7 @@ class ZookeeperRegistryCenterListenerTest {
         verify(cache.listenable(), never()).removeListener(any());
         assertNull(getDataListeners().get(jobPath));
     }
-    
+
     @Test
     void testRemoveDataListenersHasCache() {
         when(caches.get(jobPath + "/")).thenReturn(cache);
@@ -107,7 +97,7 @@ class ZookeeperRegistryCenterListenerTest {
         assertNull(getDataListeners().get(jobPath));
         verify(cache.listenable(), times(2)).removeListener(null);
     }
-    
+
     @Test
     void testRemoveDataListenersHasCacheEmptyListeners() {
         when(caches.get(jobPath + "/")).thenReturn(cache);
@@ -116,7 +106,7 @@ class ZookeeperRegistryCenterListenerTest {
         assertNull(getDataListeners().get(jobPath));
         verify(cache.listenable(), never()).removeListener(null);
     }
-    
+
     @Test
     void testRemoveConnStateListener() {
         when(client.getConnectionStateListenable()).thenReturn(connStateListenable);
@@ -129,7 +119,7 @@ class ZookeeperRegistryCenterListenerTest {
         assertNull(getConnStateListeners().get(jobPath));
         verify(client.getConnectionStateListenable(), times(2)).removeListener(null);
     }
-    
+
     @Test
     void testRemoveConnStateListenerEmptyListeners() {
         when(client.getConnectionStateListenable()).thenReturn(connStateListenable);
@@ -137,12 +127,12 @@ class ZookeeperRegistryCenterListenerTest {
         assertNull(getConnStateListeners().get(jobPath));
         verify(client.getConnectionStateListenable(), never()).removeListener(null);
     }
-    
+
     @SuppressWarnings("unchecked")
     private Map<String, List<ConnectionStateListener>> getConnStateListeners() {
         return (Map<String, List<ConnectionStateListener>>) ReflectionUtils.getFieldValue(regCenter, "connStateListeners");
     }
-    
+
     @SuppressWarnings("unchecked")
     private Map<String, List<CuratorCacheListener>> getDataListeners() {
         return (Map<String, List<CuratorCacheListener>>) ReflectionUtils.getFieldValue(regCenter, "dataListeners");

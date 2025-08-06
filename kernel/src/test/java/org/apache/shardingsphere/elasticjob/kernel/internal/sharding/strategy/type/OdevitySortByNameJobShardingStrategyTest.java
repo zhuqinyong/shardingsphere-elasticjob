@@ -20,19 +20,15 @@ package org.apache.shardingsphere.elasticjob.kernel.internal.sharding.strategy.t
 import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class OdevitySortByNameJobShardingStrategyTest {
-    
+
     private final OdevitySortByNameJobShardingStrategy odevitySortByNameJobShardingStrategy = new OdevitySortByNameJobShardingStrategy();
-    
+
     @Test
     void assertShardingByAsc() {
         Map<JobInstance, List<Integer>> expected = new HashMap<>();
@@ -41,7 +37,7 @@ class OdevitySortByNameJobShardingStrategyTest {
         expected.put(new JobInstance("host2@-@0"), Collections.emptyList());
         assertThat(odevitySortByNameJobShardingStrategy.sharding(Arrays.asList(new JobInstance("host0@-@0"), new JobInstance("host1@-@0"), new JobInstance("host2@-@0")), "1", 2), is(expected));
     }
-    
+
     @Test
     void assertShardingByDesc() {
         Map<JobInstance, List<Integer>> expected = new HashMap<>();

@@ -23,13 +23,13 @@ import java.io.IOException;
  * Host exception.
  */
 public final class HostException extends RuntimeException {
-    
+
     private static final long serialVersionUID = 3589264847881174997L;
-    
+
     public HostException(final IOException cause) {
         super(cause);
     }
-    
+
     public HostException(final String message) {
         super(message);
     }

@@ -18,11 +18,7 @@
 package org.apache.shardingsphere.elasticjob.kernel.executor.facade;
 
 import com.google.common.base.Strings;
-
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.stream.Collectors;
-
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shardingsphere.elasticjob.api.JobConfiguration;
 import org.apache.shardingsphere.elasticjob.kernel.infra.exception.JobExecutionEnvironmentException;
 import org.apache.shardingsphere.elasticjob.kernel.internal.config.ConfigurationService;
@@ -41,28 +37,30 @@ import org.apache.shardingsphere.elasticjob.spi.tracing.event.JobExecutionEvent;
 import org.apache.shardingsphere.elasticjob.spi.tracing.event.JobStatusTraceEvent;
 import org.apache.shardingsphere.elasticjob.spi.tracing.event.JobStatusTraceEvent.State;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 /**
  * Abstract Job facade.
  */
 @Slf4j
 abstract class AbstractJobFacade implements JobFacade {
-    
+
     private final ConfigurationService configService;
-    
+
     private final ShardingService shardingService;
-    
+
     private final ExecutionContextService executionContextService;
-    
+
     private final ExecutionService executionService;
-    
+
     private final FailoverService failoverService;
-    
+
     private final Collection<ElasticJobListener> elasticJobListeners;
-    
+
     private final JobTracingEventBus jobTracingEventBus;
-    
+
     AbstractJobFacade(final CoordinatorRegistryCenter regCenter, final String jobName, final Collection<ElasticJobListener> elasticJobListeners, final TracingConfiguration<?> tracingConfig) {
         configService = new ConfigurationService(regCenter, jobName);
         shardingService = new ShardingService(regCenter, jobName);
@@ -72,7 +70,7 @@ abstract class AbstractJobFacade implements JobFacade {
         this.elasticJobListeners = elasticJobListeners.stream().sorted(Comparator.comparingInt(ElasticJobListener::order)).collect(Collectors.toList());
         this.jobTracingEventBus = null == tracingConfig ? new JobTracingEventBus() : new JobTracingEventBus(tracingConfig);
     }
-    
+
     /**
      * Load job configuration.
      *
@@ -83,7 +81,7 @@ abstract class AbstractJobFacade implements JobFacade {
     public JobConfiguration loadJobConfiguration(final boolean fromCache) {
         return configService.load(fromCache);
     }
-    
+
     /**
      * Check job execution environment.
      *
@@ -93,7 +91,7 @@ abstract class AbstractJobFacade implements JobFacade {
     public void checkJobExecutionEnvironment() throws JobExecutionEnvironmentException {
         configService.checkMaxTimeDiffSecondsTolerable();
     }
-    
+
     /**
      * Failover If necessary.
      */
@@ -103,7 +101,7 @@ abstract class AbstractJobFacade implements JobFacade {
             failoverService.failoverIfNecessary();
         }
     }
-    
+
     /**
      * Register job begin.
      *
@@ -113,7 +111,7 @@ abstract class AbstractJobFacade implements JobFacade {
     public void registerJobBegin(final ShardingContexts shardingContexts) {
         executionService.registerJobBegin(shardingContexts);
     }
-    
+
     /**
      * Register job completed.
      *
@@ -126,9 +124,9 @@ abstract class AbstractJobFacade implements JobFacade {
             failoverService.updateFailoverComplete(shardingContexts.getShardingItemParameters().keySet());
         }
     }
-    
+
     public abstract ShardingContexts getShardingContexts();
-    
+
     /**
      * Set task misfire flag.
      *
@@ -139,7 +137,7 @@ abstract class AbstractJobFacade implements JobFacade {
     public boolean misfireIfRunning(final Collection<Integer> shardingItems) {
         return executionService.misfireIfHasRunningItems(shardingItems);
     }
-    
+
     /**
      * Clear misfire flag.
      *
@@ -149,7 +147,7 @@ abstract class AbstractJobFacade implements JobFacade {
     public void clearMisfire(final Collection<Integer> shardingItems) {
         executionService.clearMisfire(shardingItems);
     }
-    
+
     /**
      * Judge job whether to need to execute misfire tasks.
      *
@@ -160,7 +158,7 @@ abstract class AbstractJobFacade implements JobFacade {
     public boolean isExecuteMisfired(final Collection<Integer> shardingItems) {
         return configService.load(true).isMisfire() && !isNeedSharding() && !executionService.getMisfiredJobItems(shardingItems).isEmpty();
     }
-    
+
     /**
      * Judge job whether to need resharding.
      *
@@ -170,7 +168,7 @@ abstract class AbstractJobFacade implements JobFacade {
     public boolean isNeedSharding() {
         return shardingService.isNeedSharding();
     }
-    
+
     /**
      * Call before job executed.
      *
@@ -182,7 +180,7 @@ abstract class AbstractJobFacade implements JobFacade {
             each.beforeJobExecuted(shardingContexts);
         }
     }
-    
+
     /**
      * Call after job executed.
      *
@@ -194,7 +192,7 @@ abstract class AbstractJobFacade implements JobFacade {
             each.afterJobExecuted(shardingContexts);
         }
     }
-    
+
     /**
      * Post job execution event.
      *
@@ -204,12 +202,12 @@ abstract class AbstractJobFacade implements JobFacade {
     public void postJobExecutionEvent(final JobExecutionEvent jobExecutionEvent) {
         jobTracingEventBus.post(jobExecutionEvent);
     }
-    
+
     /**
      * Post job status trace event.
      *
-     * @param taskId task Id
-     * @param state job state
+     * @param taskId  task Id
+     * @param state   job state
      * @param message job message
      */
     @Override
@@ -221,7 +219,7 @@ abstract class AbstractJobFacade implements JobFacade {
             log.trace(message);
         }
     }
-    
+
     /**
      * Get job runtime service.
      *

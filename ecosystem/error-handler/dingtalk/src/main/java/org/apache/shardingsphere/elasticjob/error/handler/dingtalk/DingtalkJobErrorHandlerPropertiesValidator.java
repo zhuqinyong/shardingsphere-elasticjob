@@ -26,14 +26,14 @@ import java.util.Properties;
  * Job error handler properties validator for Dingtalk.
  */
 public final class DingtalkJobErrorHandlerPropertiesValidator implements JobErrorHandlerPropertiesValidator {
-    
+
     @Override
     public void validate(final Properties props) {
         PropertiesPreconditions.checkRequired(props, DingtalkPropertiesConstants.WEBHOOK);
         PropertiesPreconditions.checkPositiveInteger(props, DingtalkPropertiesConstants.CONNECT_TIMEOUT_MILLISECONDS);
         PropertiesPreconditions.checkPositiveInteger(props, DingtalkPropertiesConstants.READ_TIMEOUT_MILLISECONDS);
     }
-    
+
     @Override
     public String getType() {
         return "DINGTALK";

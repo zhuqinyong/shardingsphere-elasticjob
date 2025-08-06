@@ -18,7 +18,7 @@
 package org.apache.shardingsphere.elasticjob.spring.namespace.fixture.service;
 
 public class FooServiceImpl implements FooService {
-    
+
     @Override
     public String foo() {
         return "this is fooService.";

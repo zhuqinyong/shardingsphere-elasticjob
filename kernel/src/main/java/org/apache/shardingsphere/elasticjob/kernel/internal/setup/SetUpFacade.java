@@ -17,13 +17,13 @@
 
 package org.apache.shardingsphere.elasticjob.kernel.internal.setup;
 
-import org.apache.shardingsphere.elasticjob.spi.listener.ElasticJobListener;
 import org.apache.shardingsphere.elasticjob.kernel.internal.election.LeaderService;
 import org.apache.shardingsphere.elasticjob.kernel.internal.instance.InstanceService;
 import org.apache.shardingsphere.elasticjob.kernel.internal.listener.ListenerManager;
 import org.apache.shardingsphere.elasticjob.kernel.internal.reconcile.ReconcileService;
 import org.apache.shardingsphere.elasticjob.kernel.internal.server.ServerService;
 import org.apache.shardingsphere.elasticjob.reg.base.CoordinatorRegistryCenter;
+import org.apache.shardingsphere.elasticjob.spi.listener.ElasticJobListener;
 
 import java.util.Collection;
 
@@ -31,27 +31,27 @@ import java.util.Collection;
  * Set up facade.
  */
 public final class SetUpFacade {
-    
+
     private final LeaderService leaderService;
-    
+
     private final ServerService serverService;
-    
+
     private final InstanceService instanceService;
-    
+
     private final ReconcileService reconcileService;
-    
+
     private final ListenerManager listenerManager;
-    
+
     /**
      * JobName.
      */
     private final String jobName;
-    
+
     /**
      * Registry center.
      */
     private final CoordinatorRegistryCenter regCenter;
-    
+
     public SetUpFacade(final CoordinatorRegistryCenter regCenter, final String jobName, final Collection<ElasticJobListener> elasticJobListeners) {
         leaderService = new LeaderService(regCenter, jobName);
         serverService = new ServerService(regCenter, jobName);
@@ -61,10 +61,10 @@ public final class SetUpFacade {
         this.jobName = jobName;
         this.regCenter = regCenter;
     }
-    
+
     /**
      * Register start up info.
-     * 
+     *
      * @param enabled enable job on startup
      */
     public void registerStartUpInfo(final boolean enabled) {
@@ -77,7 +77,7 @@ public final class SetUpFacade {
         }
         serverService.removeOfflineServers();
     }
-    
+
     /**
      * Tear down.
      */

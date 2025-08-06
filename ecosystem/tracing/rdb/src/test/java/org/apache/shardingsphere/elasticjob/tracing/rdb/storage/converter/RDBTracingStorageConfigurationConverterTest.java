@@ -19,8 +19,8 @@ package org.apache.shardingsphere.elasticjob.tracing.rdb.storage.converter;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.shardingsphere.elasticjob.kernel.tracing.exception.TracingStorageUnavailableException;
-import org.apache.shardingsphere.elasticjob.spi.tracing.storage.TracingStorageConfigurationConverter;
 import org.apache.shardingsphere.elasticjob.kernel.tracing.storage.TracingStorageConverterFactory;
+import org.apache.shardingsphere.elasticjob.spi.tracing.storage.TracingStorageConfigurationConverter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -40,16 +40,16 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RDBTracingStorageConfigurationConverterTest {
-    
+
     @Mock
     private DataSource dataSource;
-    
+
     @Mock
     private Connection connection;
-    
+
     @Mock
     private DatabaseMetaData databaseMetaData;
-    
+
     @Test
     void assertConvert() throws SQLException {
         when(dataSource.getConnection()).thenReturn(connection);
@@ -58,7 +58,7 @@ class RDBTracingStorageConfigurationConverterTest {
         RDBTracingStorageConfigurationConverter converter = new RDBTracingStorageConfigurationConverter();
         assertNotNull(converter.toConfiguration(dataSource));
     }
-    
+
     @Test
     void assertConvertFailed() {
         assertThrows(TracingStorageUnavailableException.class, () -> {
@@ -67,7 +67,7 @@ class RDBTracingStorageConfigurationConverterTest {
             converter.toConfiguration(dataSource);
         });
     }
-    
+
     @Test
     void assertStorageType() {
         TracingStorageConfigurationConverter<HikariDataSource> converter = TracingStorageConverterFactory.findConverter(HikariDataSource.class).orElse(null);

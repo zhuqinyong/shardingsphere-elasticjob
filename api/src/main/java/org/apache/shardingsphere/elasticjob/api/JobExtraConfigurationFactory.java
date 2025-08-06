@@ -23,10 +23,10 @@ import java.util.Optional;
  * Job extra configuration factory.
  */
 public interface JobExtraConfigurationFactory {
-    
+
     /**
      * Get job extra configuration.
-     * 
+     *
      * @return job extra configuration
      */
     Optional<JobExtraConfiguration> getJobExtraConfiguration();

@@ -23,12 +23,12 @@ import org.apache.shardingsphere.elasticjob.tracing.rdb.storage.type.TracingStor
  * Default tracing storage database type.
  */
 public class DefaultTracingStorageDatabaseType implements TracingStorageDatabaseType {
-    
+
     @Override
     public String getType() {
         return "SQL92";
     }
-    
+
     @Override
     public int getDuplicateRecordErrorCode() {
         return Integer.MIN_VALUE;

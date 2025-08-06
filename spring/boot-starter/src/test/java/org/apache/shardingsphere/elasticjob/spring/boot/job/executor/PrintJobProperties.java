@@ -18,6 +18,6 @@
 package org.apache.shardingsphere.elasticjob.spring.boot.job.executor;
 
 public final class PrintJobProperties {
-    
+
     public static final String CONTENT_KEY = "print.content";
 }

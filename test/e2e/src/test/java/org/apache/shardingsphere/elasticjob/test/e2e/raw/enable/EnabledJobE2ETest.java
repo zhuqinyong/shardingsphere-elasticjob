@@ -19,13 +19,13 @@ package org.apache.shardingsphere.elasticjob.test.e2e.raw.enable;
 
 import org.apache.shardingsphere.elasticjob.api.ElasticJob;
 import org.apache.shardingsphere.elasticjob.api.JobConfiguration;
-import org.apache.shardingsphere.elasticjob.kernel.infra.env.IpUtils;
-import org.apache.shardingsphere.elasticjob.kernel.internal.config.JobConfigurationPOJO;
-import org.apache.shardingsphere.elasticjob.kernel.infra.yaml.YamlEngine;
 import org.apache.shardingsphere.elasticjob.bootstrap.type.ScheduleJobBootstrap;
-import org.apache.shardingsphere.elasticjob.test.e2e.raw.BaseE2ETest;
+import org.apache.shardingsphere.elasticjob.kernel.infra.env.IpUtils;
+import org.apache.shardingsphere.elasticjob.kernel.infra.yaml.YamlEngine;
+import org.apache.shardingsphere.elasticjob.kernel.internal.config.JobConfigurationPOJO;
 import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.JobRegistry;
 import org.apache.shardingsphere.elasticjob.kernel.internal.server.ServerStatus;
+import org.apache.shardingsphere.elasticjob.test.e2e.raw.BaseE2ETest;
 import org.junit.jupiter.api.BeforeEach;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -34,11 +34,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class EnabledJobE2ETest extends BaseE2ETest {
-    
+
     protected EnabledJobE2ETest(final TestType type, final ElasticJob elasticJob) {
         super(type, elasticJob);
     }
-    
+
     @BeforeEach
     void assertEnabledRegCenterInfo() {
         assertThat(JobRegistry.getInstance().getCurrentShardingTotalCount(getJobName()), is(3));

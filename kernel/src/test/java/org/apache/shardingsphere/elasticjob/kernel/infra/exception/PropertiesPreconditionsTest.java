@@ -25,7 +25,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class PropertiesPreconditionsTest {
-    
+
     @Test
     void assertValidateIsRequiredWithValidateError() {
         try {
@@ -34,26 +34,26 @@ class PropertiesPreconditionsTest {
             assertThat(ex.getMessage(), is(String.format("The property `%s` is required.", "key")));
         }
     }
-    
+
     @Test
     void assertValidateIsRequiredWithNormal() {
         Properties props = new Properties();
         props.setProperty("key", "value");
         PropertiesPreconditions.checkRequired(props, "key");
     }
-    
+
     @Test
     void assertValidateIsPositiveIntegerWithValueNoExist() {
         PropertiesPreconditions.checkPositiveInteger(new Properties(), "key");
     }
-    
+
     @Test
     void assertValidateIsPositiveIntegerWithNormal() {
         Properties props = new Properties();
         props.setProperty("key", "1");
         PropertiesPreconditions.checkPositiveInteger(props, "key");
     }
-    
+
     @Test
     void assertValidateIsPositiveIntegerWithWrongString() {
         Properties props = new Properties();
@@ -64,7 +64,7 @@ class PropertiesPreconditionsTest {
             assertThat(ex.getMessage(), is(String.format("The property `%s` should be integer.", "key")));
         }
     }
-    
+
     @Test
     void assertValidateIsPositiveIntegerWithNegativeNumber() {
         Properties props = new Properties();

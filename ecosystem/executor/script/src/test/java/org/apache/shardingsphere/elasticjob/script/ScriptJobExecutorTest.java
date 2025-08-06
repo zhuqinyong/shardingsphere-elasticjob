@@ -20,12 +20,12 @@ package org.apache.shardingsphere.elasticjob.script;
 import org.apache.commons.exec.OS;
 import org.apache.shardingsphere.elasticjob.api.ElasticJob;
 import org.apache.shardingsphere.elasticjob.api.JobConfiguration;
-import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
-import org.apache.shardingsphere.elasticjob.spi.executor.item.param.JobRuntimeService;
 import org.apache.shardingsphere.elasticjob.kernel.infra.exception.JobConfigurationException;
 import org.apache.shardingsphere.elasticjob.kernel.infra.exception.JobSystemException;
 import org.apache.shardingsphere.elasticjob.script.executor.ScriptJobExecutor;
 import org.apache.shardingsphere.elasticjob.script.props.ScriptJobProperties;
+import org.apache.shardingsphere.elasticjob.spi.executor.item.param.JobRuntimeService;
+import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,29 +41,29 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ScriptJobExecutorTest {
-    
+
     @Mock
     private ElasticJob elasticJob;
-    
+
     @Mock
     private JobConfiguration jobConfig;
-    
+
     @Mock
     private JobRuntimeService jobRuntimeService;
-    
+
     @Mock
     private Properties properties;
-    
+
     @Mock
     private ShardingContext shardingContext;
-    
+
     private ScriptJobExecutor jobExecutor;
-    
+
     @BeforeEach
     void setUp() {
         jobExecutor = new ScriptJobExecutor();
     }
-    
+
     @Test
     void assertProcessWithJobConfigurationException() {
         assertThrows(JobConfigurationException.class, () -> {
@@ -71,7 +71,7 @@ class ScriptJobExecutorTest {
             jobExecutor.process(elasticJob, jobConfig, jobRuntimeService, shardingContext);
         });
     }
-    
+
     @Test
     void assertProcessWithJobSystemException() {
         assertThrows(JobSystemException.class, () -> {
@@ -80,26 +80,26 @@ class ScriptJobExecutorTest {
             jobExecutor.process(elasticJob, jobConfig, jobRuntimeService, shardingContext);
         });
     }
-    
+
     @Test
     void assertProcess() {
         when(jobConfig.getProps()).thenReturn(properties);
         when(properties.getProperty(ScriptJobProperties.SCRIPT_KEY)).thenReturn(determineCommandByPlatform());
         jobExecutor.process(elasticJob, jobConfig, jobRuntimeService, shardingContext);
     }
-    
+
     private String determineCommandByPlatform() {
         return OS.isFamilyWindows() ? getWindowsEcho() : getEcho();
     }
-    
+
     private String getWindowsEcho() {
         return "cmd /c echo script-job";
     }
-    
+
     private String getEcho() {
         return "echo script-job";
     }
-    
+
     @Test
     void assertGetType() {
         assertThat(jobExecutor.getType(), is("SCRIPT"));

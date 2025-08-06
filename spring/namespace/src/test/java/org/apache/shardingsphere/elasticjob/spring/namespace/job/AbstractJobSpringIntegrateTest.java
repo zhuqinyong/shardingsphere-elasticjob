@@ -41,46 +41,46 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(SpringExtension.class)
 @RequiredArgsConstructor
 public abstract class AbstractJobSpringIntegrateTest {
-    
+
     private static final EmbedTestingServer EMBED_TESTING_SERVER = new EmbedTestingServer(3181);
-    
+
     private final String simpleJobName;
-    
+
     private final String throughputDataflowJobName;
-    
+
     @Autowired
     private CoordinatorRegistryCenter regCenter;
-    
+
     @BeforeAll
     static void init() {
         EMBED_TESTING_SERVER.start();
     }
-    
+
     @BeforeEach
     @AfterEach
     void reset() {
         FooSimpleElasticJob.reset();
         DataflowElasticJob.reset();
     }
-    
+
     @AfterEach
     void tearDown() {
         JobRegistry.getInstance().shutdown(simpleJobName);
         JobRegistry.getInstance().shutdown(throughputDataflowJobName);
     }
-    
+
     @Test
     void assertSpringJobBean() {
         assertSimpleElasticJobBean();
         assertThroughputDataflowElasticJobBean();
     }
-    
+
     private void assertSimpleElasticJobBean() {
         Awaitility.await().atMost(1L, TimeUnit.MINUTES).untilAsserted(() -> assertThat(FooSimpleElasticJob.isCompleted(), is(true)));
         assertTrue(FooSimpleElasticJob.isCompleted());
         assertTrue(regCenter.isExisted("/" + simpleJobName + "/sharding"));
     }
-    
+
     private void assertThroughputDataflowElasticJobBean() {
         Awaitility.await().atMost(1L, TimeUnit.MINUTES).untilAsserted(() -> assertThat(DataflowElasticJob.isCompleted(), is(true)));
         assertTrue(DataflowElasticJob.isCompleted());

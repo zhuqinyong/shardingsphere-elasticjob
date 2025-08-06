@@ -19,10 +19,10 @@ package org.apache.shardingsphere.elasticjob.tracing.rdb.storage.repository;
 
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shardingsphere.elasticjob.kernel.tracing.exception.TracingStorageUnavailableException;
 import org.apache.shardingsphere.elasticjob.spi.tracing.event.JobExecutionEvent;
 import org.apache.shardingsphere.elasticjob.spi.tracing.event.JobStatusTraceEvent;
 import org.apache.shardingsphere.elasticjob.spi.tracing.event.JobStatusTraceEvent.State;
-import org.apache.shardingsphere.elasticjob.kernel.tracing.exception.TracingStorageUnavailableException;
 import org.apache.shardingsphere.elasticjob.tracing.rdb.storage.sql.RDBStorageSQLMapper;
 import org.apache.shardingsphere.elasticjob.tracing.rdb.storage.sql.SQLPropertiesFactory;
 import org.apache.shardingsphere.elasticjob.tracing.rdb.storage.type.TracingStorageDatabaseType;
@@ -30,12 +30,7 @@ import org.apache.shardingsphere.elasticjob.tracing.rdb.storage.type.impl.Defaul
 import org.apache.shardingsphere.infra.spi.ShardingSphereServiceLoader;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -46,28 +41,28 @@ import java.util.function.Supplier;
  */
 @Slf4j
 public final class RDBJobEventRepository {
-    
+
     private static final String TABLE_JOB_EXECUTION_LOG = "JOB_EXECUTION_LOG";
-    
+
     private static final String TABLE_JOB_STATUS_TRACE_LOG = "JOB_STATUS_TRACE_LOG";
-    
+
     private static final String TASK_ID_STATE_INDEX = "TASK_ID_STATE_INDEX";
-    
+
     private static final Map<DataSource, RDBJobEventRepository> STORAGE_MAP = new ConcurrentHashMap<>();
-    
+
     private final DataSource dataSource;
-    
+
     private final TracingStorageDatabaseType tracingStorageDatabaseType;
-    
+
     private final RDBStorageSQLMapper sqlMapper;
-    
+
     private RDBJobEventRepository(final DataSource dataSource) throws SQLException {
         this.dataSource = dataSource;
         tracingStorageDatabaseType = getTracingStorageDatabaseType(dataSource);
         sqlMapper = new RDBStorageSQLMapper(SQLPropertiesFactory.getProperties(tracingStorageDatabaseType));
         initTablesAndIndexes();
     }
-    
+
     /**
      * The same data source always return the same RDB job event repository instance.
      *
@@ -84,7 +79,7 @@ public final class RDBJobEventRepository {
             }
         }));
     }
-    
+
     private static RDBJobEventRepository getInstance(final Supplier<RDBJobEventRepository> supplier) throws SQLException {
         try {
             return supplier.get();
@@ -95,7 +90,7 @@ public final class RDBJobEventRepository {
             throw ex;
         }
     }
-    
+
     private TracingStorageDatabaseType getTracingStorageDatabaseType(final DataSource dataSource) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             String databaseProductName = connection.getMetaData().getDatabaseProductName();
@@ -107,21 +102,21 @@ public final class RDBJobEventRepository {
         }
         return new DefaultTracingStorageDatabaseType();
     }
-    
+
     private void initTablesAndIndexes() throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             createJobExecutionTableAndIndexIfNeeded(connection);
             createJobStatusTraceTableAndIndexIfNeeded(connection);
         }
     }
-    
+
     private void createJobExecutionTableAndIndexIfNeeded(final Connection connection) throws SQLException {
         if (existsTable(connection, TABLE_JOB_EXECUTION_LOG) || existsTable(connection, TABLE_JOB_EXECUTION_LOG.toLowerCase())) {
             return;
         }
         createJobExecutionTable(connection);
     }
-    
+
     private void createJobStatusTraceTableAndIndexIfNeeded(final Connection connection) throws SQLException {
         if (existsTable(connection, TABLE_JOB_STATUS_TRACE_LOG) || existsTable(connection, TABLE_JOB_STATUS_TRACE_LOG.toLowerCase())) {
             return;
@@ -129,21 +124,21 @@ public final class RDBJobEventRepository {
         createJobStatusTraceTable(connection);
         createTaskIdIndexIfNeeded(connection);
     }
-    
+
     private boolean existsTable(final Connection connection, final String tableName) throws SQLException {
         DatabaseMetaData dbMetaData = connection.getMetaData();
         try (ResultSet resultSet = dbMetaData.getTables(connection.getCatalog(), null, tableName, new String[]{"TABLE"})) {
             return resultSet.next();
         }
     }
-    
+
     private void createTaskIdIndexIfNeeded(final Connection connection) throws SQLException {
         if (existsIndex(connection, TABLE_JOB_STATUS_TRACE_LOG, TASK_ID_STATE_INDEX) || existsIndex(connection, TABLE_JOB_STATUS_TRACE_LOG.toLowerCase(), TASK_ID_STATE_INDEX.toLowerCase())) {
             return;
         }
         createTaskIdAndStateIndex(connection);
     }
-    
+
     private boolean existsIndex(final Connection connection, final String tableName, final String indexName) throws SQLException {
         DatabaseMetaData dbMetaData = connection.getMetaData();
         try (ResultSet resultSet = dbMetaData.getIndexInfo(connection.getCatalog(), null, tableName, false, false)) {
@@ -155,28 +150,28 @@ public final class RDBJobEventRepository {
         }
         return false;
     }
-    
+
     private void createJobExecutionTable(final Connection connection) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlMapper.getCreateTableForJobExecutionLog())) {
             preparedStatement.execute();
         }
     }
-    
+
     private void createJobStatusTraceTable(final Connection connection) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlMapper.getCreateTableForJobStatusTraceLog())) {
             preparedStatement.execute();
         }
     }
-    
+
     private void createTaskIdAndStateIndex(final Connection connection) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlMapper.getCreateIndexForTaskIdStateIndex())) {
             preparedStatement.execute();
         }
     }
-    
+
     /**
      * Add job execution event.
-     * 
+     *
      * @param event job execution event
      * @return add success or not
      */
@@ -191,7 +186,7 @@ public final class RDBJobEventRepository {
             }
         }
     }
-    
+
     private boolean insertJobExecutionEvent(final JobExecutionEvent event) {
         boolean result = false;
         try (
@@ -216,7 +211,7 @@ public final class RDBJobEventRepository {
         }
         return result;
     }
-    
+
     private boolean updateJobExecutionEventWhenSuccess(final JobExecutionEvent event) {
         boolean result = false;
         try (
@@ -235,7 +230,7 @@ public final class RDBJobEventRepository {
         }
         return result;
     }
-    
+
     private boolean insertJobExecutionEventWhenSuccess(final JobExecutionEvent event) {
         boolean result = false;
         try (
@@ -262,7 +257,7 @@ public final class RDBJobEventRepository {
         }
         return result;
     }
-    
+
     private boolean updateJobExecutionEventFailure(final JobExecutionEvent event) {
         boolean result = false;
         try (
@@ -282,7 +277,7 @@ public final class RDBJobEventRepository {
         }
         return result;
     }
-    
+
     private boolean insertJobExecutionEventWhenFailure(final JobExecutionEvent event) {
         boolean result = false;
         try (
@@ -309,14 +304,14 @@ public final class RDBJobEventRepository {
         }
         return result;
     }
-    
+
     private boolean isDuplicateRecord(final SQLException ex) {
         return null != tracingStorageDatabaseType && tracingStorageDatabaseType.getDuplicateRecordErrorCode() == ex.getErrorCode();
     }
-    
+
     /**
      * Add job status trace event.
-     * 
+     *
      * @param event job status trace event
      * @return add success or not
      */
@@ -347,7 +342,7 @@ public final class RDBJobEventRepository {
         }
         return result;
     }
-    
+
     private String getOriginalTaskId(final String taskId) {
         String result = "";
         try (
@@ -365,7 +360,7 @@ public final class RDBJobEventRepository {
         }
         return result;
     }
-    
+
     private String truncateString(final String str) {
         return !Strings.isNullOrEmpty(str) && str.length() > 4000 ? str.substring(0, 4000) : str;
     }

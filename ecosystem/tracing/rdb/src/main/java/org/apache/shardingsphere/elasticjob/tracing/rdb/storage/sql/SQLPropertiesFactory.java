@@ -31,7 +31,7 @@ import java.util.Properties;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SQLPropertiesFactory {
-    
+
     /**
      * Get SQL properties.
      *
@@ -41,14 +41,14 @@ public final class SQLPropertiesFactory {
     public static Properties getProperties(final TracingStorageDatabaseType type) {
         return loadProps(String.format("%s.properties", type.getType()));
     }
-    
+
     @SneakyThrows(IOException.class)
     private static Properties loadProps(final String sqlPropertiesFileName) {
         Properties result = new Properties();
         result.load(getPropertiesInputStream(sqlPropertiesFileName));
         return result;
     }
-    
+
     private static InputStream getPropertiesInputStream(final String sqlPropertiesFileName) {
         InputStream sqlPropertiesFile = SQLPropertiesFactory.class.getClassLoader().getResourceAsStream(String.format("META-INF/sql/%s", sqlPropertiesFileName));
         return null == sqlPropertiesFile ? SQLPropertiesFactory.class.getClassLoader().getResourceAsStream("META-INF/sql/SQL92.properties") : sqlPropertiesFile;

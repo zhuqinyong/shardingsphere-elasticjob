@@ -26,12 +26,10 @@ import java.util.Collections;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class JobConfigurationPOJOTest {
-    
+
     private static final String YAML = "cron: 0/1 * * * * ?\n"
             + "description: Job description\n"
             + "disabled: false\n"
@@ -51,7 +49,7 @@ class JobConfigurationPOJOTest {
             + "shardingItemParameters: 0=A,1=B,2=C\n"
             + "shardingTotalCount: 3\n"
             + "staticSharding: false\n";
-    
+
     private static final String YAML_WITH_NULL = "cron: 0/1 * * * * ?\n"
             + "disabled: false\n"
             + "failover: false\n"
@@ -63,7 +61,7 @@ class JobConfigurationPOJOTest {
             + "reconcileIntervalMinutes: 0\n"
             + "shardingTotalCount: 3\n"
             + "staticSharding: false\n";
-    
+
     @Test
     void assertToJobConfiguration() {
         JobConfigurationPOJO pojo = new JobConfigurationPOJO();
@@ -101,7 +99,7 @@ class JobConfigurationPOJOTest {
         assertTrue(actual.isDisabled());
         assertTrue(actual.isOverwrite());
     }
-    
+
     @Test
     void assertFromJobConfiguration() {
         JobConfiguration jobConfig = JobConfiguration.newBuilder("test_job", 3)
@@ -129,7 +127,7 @@ class JobConfigurationPOJOTest {
         assertTrue(actual.isDisabled());
         assertTrue(actual.isOverwrite());
     }
-    
+
     @Test
     void assertMarshal() {
         JobConfigurationPOJO actual = new JobConfigurationPOJO();
@@ -146,7 +144,7 @@ class JobConfigurationPOJOTest {
         actual.getProps().setProperty("key", "value");
         assertThat(YamlEngine.marshal(actual), is(YAML));
     }
-    
+
     @Test
     void assertMarshalWithNullValue() {
         JobConfigurationPOJO actual = new JobConfigurationPOJO();
@@ -156,7 +154,7 @@ class JobConfigurationPOJOTest {
         actual.setMaxTimeDiffSeconds(-1);
         assertThat(YamlEngine.marshal(actual), is(YAML_WITH_NULL));
     }
-    
+
     @Test
     void assertUnmarshal() {
         JobConfigurationPOJO actual = YamlEngine.unmarshal(YAML, JobConfigurationPOJO.class);
@@ -174,7 +172,7 @@ class JobConfigurationPOJOTest {
         assertThat(actual.getDescription(), is("Job description"));
         assertThat(actual.getProps().getProperty("key"), is("value"));
     }
-    
+
     @Test
     void assertUnmarshalWithNullValue() {
         JobConfigurationPOJO actual = YamlEngine.unmarshal(YAML_WITH_NULL, JobConfigurationPOJO.class);

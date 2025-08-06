@@ -27,17 +27,17 @@ import java.lang.annotation.RetentionPolicy;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ElasticJobProp {
-    
+
     /**
      * Prop key.
-     * 
+     *
      * @return key
      */
     String key();
-    
+
     /**
      * Prop value.
-     * 
+     *
      * @return value
      */
     String value() default "";

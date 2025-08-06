@@ -40,35 +40,35 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(SpringExtension.class)
 @RequiredArgsConstructor
 public abstract class AbstractJobSpringIntegrateTest {
-    
+
     private static final EmbedTestingServer EMBED_TESTING_SERVER = new EmbedTestingServer(3181);
-    
+
     private final String simpleJobName;
-    
+
     @Autowired
     private CoordinatorRegistryCenter regCenter;
-    
+
     @BeforeAll
     static void init() {
         EMBED_TESTING_SERVER.start();
     }
-    
+
     @BeforeEach
     @AfterEach
     void reset() {
         AnnotationSimpleJob.reset();
     }
-    
+
     @AfterEach
     void tearDown() {
         JobRegistry.getInstance().shutdown(simpleJobName);
     }
-    
+
     @Test
     void assertSpringJobBean() {
         assertSimpleElasticJobBean();
     }
-    
+
     private void assertSimpleElasticJobBean() {
         Awaitility.await().atMost(10L, TimeUnit.SECONDS).untilAsserted(() -> assertThat(AnnotationSimpleJob.isCompleted(), is(true)));
         assertTrue(AnnotationSimpleJob.isCompleted());

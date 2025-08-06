@@ -21,9 +21,9 @@ package org.apache.shardingsphere.elasticjob.kernel.infra.exception;
  * Job execution exception.
  */
 public final class JobExecutionException extends RuntimeException {
-    
+
     private static final long serialVersionUID = -1701186463023700392L;
-    
+
     public JobExecutionException(final Throwable cause) {
         super(cause);
     }

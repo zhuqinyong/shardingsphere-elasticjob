@@ -21,31 +21,27 @@ import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance
 import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.strategy.JobShardingStrategy;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class AverageAllocationJobShardingStrategyTest {
-    
+
     private final JobShardingStrategy jobShardingStrategy = new AverageAllocationJobShardingStrategy();
-    
+
     @Test
     void shardingForZeroServer() {
         assertThat(jobShardingStrategy.sharding(Collections.emptyList(), "test_job", 3), is(Collections.<JobInstance, List<Integer>>emptyMap()));
     }
-    
+
     @Test
     void shardingForOneServer() {
         Map<JobInstance, List<Integer>> expected = new LinkedHashMap<>(1, 1);
         expected.put(new JobInstance("host0@-@0"), Arrays.asList(0, 1, 2));
         assertThat(jobShardingStrategy.sharding(Collections.singletonList(new JobInstance("host0@-@0")), "test_job", 3), is(expected));
     }
-    
+
     @Test
     void shardingForServersMoreThanShardingCount() {
         Map<JobInstance, List<Integer>> expected = new LinkedHashMap<>(3, 1);
@@ -54,7 +50,7 @@ class AverageAllocationJobShardingStrategyTest {
         expected.put(new JobInstance("host2@-@0"), Collections.emptyList());
         assertThat(jobShardingStrategy.sharding(Arrays.asList(new JobInstance("host0@-@0"), new JobInstance("host1@-@0"), new JobInstance("host2@-@0")), "test_job", 2), is(expected));
     }
-    
+
     @Test
     void shardingForServersLessThanShardingCountAliquot() {
         Map<JobInstance, List<Integer>> expected = new LinkedHashMap<>(3, 1);
@@ -63,7 +59,7 @@ class AverageAllocationJobShardingStrategyTest {
         expected.put(new JobInstance("host2@-@0"), Arrays.asList(6, 7, 8));
         assertThat(jobShardingStrategy.sharding(Arrays.asList(new JobInstance("host0@-@0"), new JobInstance("host1@-@0"), new JobInstance("host2@-@0")), "test_job", 9), is(expected));
     }
-    
+
     @Test
     void shardingForServersLessThanShardingCountAliquantFor8ShardingCountAnd3Servers() {
         Map<JobInstance, List<Integer>> expected = new LinkedHashMap<>(3, 1);
@@ -72,7 +68,7 @@ class AverageAllocationJobShardingStrategyTest {
         expected.put(new JobInstance("host2@-@0"), Arrays.asList(4, 5));
         assertThat(jobShardingStrategy.sharding(Arrays.asList(new JobInstance("host0@-@0"), new JobInstance("host1@-@0"), new JobInstance("host2@-@0")), "test_job", 8), is(expected));
     }
-    
+
     @Test
     void shardingForServersLessThanShardingCountAliquantFor10ShardingCountAnd3Servers() {
         Map<JobInstance, List<Integer>> expected = new LinkedHashMap<>(3, 1);

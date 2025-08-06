@@ -40,14 +40,14 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class RDBTracingListenerTest {
-    
+
     private static final String JOB_NAME = "test_rdb_event_listener";
-    
+
     @Mock
     private RDBJobEventRepository repository;
-    
+
     private JobTracingEventBus jobTracingEventBus;
-    
+
     @BeforeEach
     void setUp() throws SQLException {
         HikariDataSource dataSource = new HikariDataSource();
@@ -59,14 +59,14 @@ class RDBTracingListenerTest {
         ReflectionUtils.setFieldValue(tracingListener, "repository", repository);
         jobTracingEventBus = new JobTracingEventBus(new TracingConfiguration<DataSource>("RDB", dataSource));
     }
-    
+
     @Test
     void assertPostJobExecutionEvent() {
         JobExecutionEvent jobExecutionEvent = new JobExecutionEvent("localhost", "127.0.0.1", "fake_task_id", JOB_NAME, JobExecutionEvent.ExecutionSource.NORMAL_TRIGGER, 0);
         jobTracingEventBus.post(jobExecutionEvent);
         verify(repository, atMost(1)).addJobExecutionEvent(jobExecutionEvent);
     }
-    
+
     @Test
     void assertPostJobStatusTraceEvent() {
         JobStatusTraceEvent jobStatusTraceEvent = new JobStatusTraceEvent(JOB_NAME, "fake_task_id", "fake_slave_id", ExecutionType.READY, "0", State.TASK_RUNNING, "message is empty.");

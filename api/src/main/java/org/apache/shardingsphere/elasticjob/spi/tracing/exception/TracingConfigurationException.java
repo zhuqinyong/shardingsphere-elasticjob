@@ -21,13 +21,13 @@ package org.apache.shardingsphere.elasticjob.spi.tracing.exception;
  * Tracing configuration exception.
  */
 public final class TracingConfigurationException extends Exception {
-    
+
     private static final long serialVersionUID = 4069519372148227761L;
-    
+
     public TracingConfigurationException(final Exception ex) {
         super(ex);
     }
-    
+
     public TracingConfigurationException(final String errorMessage) {
         super(errorMessage);
     }

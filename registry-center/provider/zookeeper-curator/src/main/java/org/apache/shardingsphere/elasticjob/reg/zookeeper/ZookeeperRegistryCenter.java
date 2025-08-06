@@ -51,15 +51,8 @@ import org.apache.zookeeper.data.ACL;
 import org.apache.zookeeper.data.Stat;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
@@ -69,29 +62,29 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter {
-    
+
     @Getter(AccessLevel.PROTECTED)
     private final ZookeeperConfiguration zkConfig;
-    
+
     private final Map<String, CuratorCache> caches = new ConcurrentHashMap<>();
-    
+
     /**
      * Data listener list.
      */
     private final Map<String, List<CuratorCacheListener>> dataListeners = new ConcurrentHashMap<>();
-    
+
     /**
      * Connections state listener list.
      */
     private final Map<String, List<ConnectionStateListener>> connStateListeners = new ConcurrentHashMap<>();
-    
+
     @Getter
     private CuratorFramework client;
-    
+
     public ZookeeperRegistryCenter(final ZookeeperConfiguration zkConfig) {
         this.zkConfig = zkConfig;
     }
-    
+
     @Override
     public void init() {
         log.debug("Elastic job: zookeeper registry center init, server lists is: {}.", zkConfig.getServerLists());
@@ -109,12 +102,12 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
         if (!Strings.isNullOrEmpty(zkConfig.getDigest())) {
             builder.authorization("digest", zkConfig.getDigest().getBytes(StandardCharsets.UTF_8))
                     .aclProvider(new ACLProvider() {
-                        
+
                         @Override
                         public List<ACL> getDefaultAcl() {
                             return ZooDefs.Ids.CREATOR_ALL_ACL;
                         }
-                        
+
                         @Override
                         public List<ACL> getAclForPath(final String path) {
                             return ZooDefs.Ids.CREATOR_ALL_ACL;
@@ -134,7 +127,7 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
             RegExceptionHandler.handleException(ex);
         }
     }
-    
+
     @Override
     public void close() {
         for (Entry<String, CuratorCache> each : caches.entrySet()) {
@@ -143,7 +136,7 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
         waitForCacheClose();
         CloseableUtils.closeQuietly(client);
     }
-    
+
     /*
      * // TODO sleep 500ms, let cache client close first and then client, otherwise will throw exception reference：https://issues.apache.org/jira/browse/CURATOR-157
      */
@@ -154,7 +147,7 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
             Thread.currentThread().interrupt();
         }
     }
-    
+
     @Override
     public String get(final String key) {
         CuratorCache cache = findCuratorCache(key);
@@ -164,7 +157,7 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
         Optional<ChildData> resultInCache = cache.get(key);
         return resultInCache.map(v -> null == v.getData() ? null : new String(v.getData(), StandardCharsets.UTF_8)).orElseGet(() -> getDirectly(key));
     }
-    
+
     private CuratorCache findCuratorCache(final String key) {
         for (Entry<String, CuratorCache> entry : caches.entrySet()) {
             if (key.startsWith(entry.getKey())) {
@@ -173,7 +166,7 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
         }
         return null;
     }
-    
+
     @Override
     public String getDirectly(final String key) {
         try {
@@ -185,7 +178,7 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
             return null;
         }
     }
-    
+
     @Override
     public List<String> getChildrenKeys(final String key) {
         try {
@@ -199,7 +192,7 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
             return Collections.emptyList();
         }
     }
-    
+
     @Override
     public int getNumChildren(final String key) {
         try {
@@ -214,7 +207,7 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
         }
         return 0;
     }
-    
+
     @Override
     public boolean isExisted(final String key) {
         try {
@@ -226,7 +219,7 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
             return false;
         }
     }
-    
+
     @Override
     public void persist(final String key, final String value) {
         try {
@@ -241,7 +234,7 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
             RegExceptionHandler.handleException(ex);
         }
     }
-    
+
     @Override
     public void update(final String key, final String value) {
         try {
@@ -253,7 +246,7 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
             RegExceptionHandler.handleException(ex);
         }
     }
-    
+
     @Override
     public void persistEphemeral(final String key, final String value) {
         try {
@@ -267,7 +260,7 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
             RegExceptionHandler.handleException(ex);
         }
     }
-    
+
     @Override
     public String persistSequential(final String key, final String value) {
         try {
@@ -279,7 +272,7 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
         }
         return null;
     }
-    
+
     @Override
     public void persistEphemeralSequential(final String key) {
         try {
@@ -290,7 +283,7 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
             RegExceptionHandler.handleException(ex);
         }
     }
-    
+
     @Override
     public void remove(final String key) {
         try {
@@ -301,7 +294,7 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
             RegExceptionHandler.handleException(ex);
         }
     }
-    
+
     @Override
     public long getRegistryCenterTime(final String key) {
         long result = 0L;
@@ -316,12 +309,12 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
         Preconditions.checkState(0L != result, "Cannot get registry center time.");
         return result;
     }
-    
+
     @Override
     public Object getRawClient() {
         return client;
     }
-    
+
     @Override
     public void addConnectionStateChangedEventListener(final String key,
                                                        final ConnectionStateChangedEventListener listener) {
@@ -348,12 +341,12 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
         client.getConnectionStateListenable().addListener(connStateListener);
         connStateListeners.computeIfAbsent(key, k -> new LinkedList<>()).add(connStateListener);
     }
-    
+
     @Override
     public void executeInTransaction(final List<TransactionOperation> transactionOperations) throws Exception {
         client.transaction().forOperations(toCuratorOps(transactionOperations));
     }
-    
+
     private List<CuratorOp> toCuratorOps(final List<TransactionOperation> transactionOperations) {
         List<CuratorOp> result = new ArrayList<>(transactionOperations.size());
         TransactionOp transactionOp = client.transactionOp();
@@ -362,7 +355,7 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
         }
         return result;
     }
-    
+
     private CuratorOp toCuratorOp(final TransactionOperation each, final TransactionOp transactionOp) {
         try {
             switch (each.getType()) {
@@ -383,7 +376,7 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
             throw new RegException(ex);
         }
     }
-    
+
     @Override
     public void addCacheData(final String cachePath) {
         CuratorCache cache = CuratorCache.build(client, cachePath);
@@ -396,7 +389,7 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
         }
         caches.put(cachePath + "/", cache);
     }
-    
+
     @Override
     public void evictCacheData(final String cachePath) {
         CuratorCache cache = caches.remove(cachePath + "/");
@@ -404,12 +397,12 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
             cache.close();
         }
     }
-    
+
     @Override
     public Object getRawCache(final String cachePath) {
         return caches.get(cachePath + "/");
     }
-    
+
     @Override
     public void executeInLeader(final String key, final LeaderExecutionCallback callback) {
         try (LeaderLatch latch = new LeaderLatch(client, key)) {
@@ -422,7 +415,7 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
             handleException(ex);
         }
     }
-    
+
     @Override
     public void watch(final String key, final DataChangedEventListener listener, final Executor executor) {
         CuratorCache cache = caches.get(key + "/");
@@ -445,7 +438,7 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
         }
         dataListeners.computeIfAbsent(key, k -> new LinkedList<>()).add(cacheListener);
     }
-    
+
     @Override
     public void removeDataListeners(final String key) {
         final CuratorCache cache = caches.get(key + "/");
@@ -459,7 +452,7 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
         }
         cacheListenerList.forEach(listener -> cache.listenable().removeListener(listener));
     }
-    
+
     @Override
     public void removeConnStateListener(final String key) {
         final List<ConnectionStateListener> listenerList = connStateListeners.remove(key);
@@ -468,7 +461,7 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
         }
         listenerList.forEach(listener -> client.getConnectionStateListenable().removeListener(listener));
     }
-    
+
     private Type getTypeFromCuratorType(final CuratorCacheListener.Type curatorType) {
         switch (curatorType) {
             case NODE_CREATED:
@@ -481,7 +474,7 @@ public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter 
                 return Type.IGNORED;
         }
     }
-    
+
     private void handleException(final Exception ex) {
         if (ex instanceof InterruptedException) {
             Thread.currentThread().interrupt();

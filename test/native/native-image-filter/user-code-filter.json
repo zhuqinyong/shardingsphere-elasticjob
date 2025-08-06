@@ -1,7 +1,13 @@
 {
   "rules": [
-    {"excludeClasses": "**"},
-    {"includeClasses": "org.apache.shardingsphere.elasticjob.**"},
-    {"excludeClasses": "org.apache.shardingsphere.elasticjob.test.natived.**"}
+    {
+      "excludeClasses": "**"
+    },
+    {
+      "includeClasses": "org.apache.shardingsphere.elasticjob.**"
+    },
+    {
+      "excludeClasses": "org.apache.shardingsphere.elasticjob.test.natived.**"
+    }
   ]
 }

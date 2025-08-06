@@ -24,7 +24,7 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class JobClassNameProviderFactoryTest {
-    
+
     @Test
     void assertGetStrategy() {
         assertThat(JobClassNameProviderFactory.getProvider(), instanceOf(SpringProxyJobClassNameProvider.class));

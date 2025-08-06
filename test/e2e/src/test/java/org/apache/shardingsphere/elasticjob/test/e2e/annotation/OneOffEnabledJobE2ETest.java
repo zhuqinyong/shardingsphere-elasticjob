@@ -37,11 +37,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class OneOffEnabledJobE2ETest extends BaseAnnotationE2ETest {
-    
+
     OneOffEnabledJobE2ETest() {
         super(TestType.ONE_OFF, new AnnotationUnShardingJob());
     }
-    
+
     @BeforeEach
     void assertEnabledRegCenterInfo() {
         assertThat(JobRegistry.getInstance().getCurrentShardingTotalCount(getJobName()), is(1));
@@ -55,11 +55,11 @@ class OneOffEnabledJobE2ETest extends BaseAnnotationE2ETest {
         getRegistryCenter().remove("/" + getJobName() + "/leader/election");
         assertTrue(getLeaderService().isLeaderUntilBlock());
     }
-    
+
     @Test
     void assertJobInit() {
         Awaitility.await().atMost(1L, TimeUnit.MINUTES).untilAsserted(() -> MatcherAssert.assertThat(((AnnotationUnShardingJob) getElasticJob()).isCompleted(), is(true)));
         assertTrue(getRegistryCenter().isExisted("/" + getJobName() + "/sharding"));
     }
-    
+
 }

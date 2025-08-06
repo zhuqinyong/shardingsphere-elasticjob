@@ -28,14 +28,14 @@ import java.util.Map;
  * Sharding strategy which for round robin by name job.
  */
 public final class RoundRobinByNameJobShardingStrategy implements JobShardingStrategy {
-    
+
     private final AverageAllocationJobShardingStrategy averageAllocationJobShardingStrategy = new AverageAllocationJobShardingStrategy();
-    
+
     @Override
     public Map<JobInstance, List<Integer>> sharding(final List<JobInstance> jobInstances, final String jobName, final int shardingTotalCount) {
         return averageAllocationJobShardingStrategy.sharding(rotateServerList(jobInstances, jobName), jobName, shardingTotalCount);
     }
-    
+
     private List<JobInstance> rotateServerList(final List<JobInstance> shardingUnits, final String jobName) {
         int shardingUnitsSize = shardingUnits.size();
         int offset = Math.abs(jobName.hashCode()) % shardingUnitsSize;
@@ -49,7 +49,7 @@ public final class RoundRobinByNameJobShardingStrategy implements JobShardingStr
         }
         return result;
     }
-    
+
     @Override
     public String getType() {
         return "ROUND_ROBIN";

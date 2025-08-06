@@ -18,39 +18,35 @@
 package org.apache.shardingsphere.elasticjob.kernel.internal.sharding;
 
 import org.apache.shardingsphere.elasticjob.api.JobConfiguration;
-import org.apache.shardingsphere.elasticjob.spi.listener.param.ShardingContexts;
 import org.apache.shardingsphere.elasticjob.kernel.internal.config.ConfigurationService;
 import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.JobRegistry;
 import org.apache.shardingsphere.elasticjob.kernel.internal.storage.JobNodeStorage;
 import org.apache.shardingsphere.elasticjob.reg.base.CoordinatorRegistryCenter;
+import org.apache.shardingsphere.elasticjob.spi.listener.param.ShardingContexts;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * Execution context service.
  */
 public final class ExecutionContextService {
-    
+
     private final String jobName;
-    
+
     private final JobNodeStorage jobNodeStorage;
-    
+
     private final ConfigurationService configService;
-    
+
     public ExecutionContextService(final CoordinatorRegistryCenter regCenter, final String jobName) {
         this.jobName = jobName;
         jobNodeStorage = new JobNodeStorage(regCenter, jobName);
         configService = new ConfigurationService(regCenter, jobName);
     }
-    
+
     /**
      * Get job sharding context.
-     * 
+     *
      * @param shardingItems sharding items
      * @return job sharding context
      */
@@ -65,14 +61,14 @@ public final class ExecutionContextService {
         return new ShardingContexts(buildTaskId(jobConfig, shardingItems), jobConfig.getJobName(), jobConfig.getShardingTotalCount(),
                 jobConfig.getJobParameter(), getAssignedShardingItemParameterMap(shardingItems, shardingItemParameterMap));
     }
-    
+
     private String buildTaskId(final JobConfiguration jobConfig, final List<Integer> shardingItems) {
         JobInstance jobInstance = JobRegistry.getInstance().getJobInstance(jobName);
         String shardingItemsString = shardingItems.stream().map(Object::toString).collect(Collectors.joining(","));
         String jobInstanceId = null == jobInstance || null == jobInstance.getJobInstanceId() ? "127.0.0.1@-@1" : jobInstance.getJobInstanceId();
         return String.join("@-@", jobConfig.getJobName(), shardingItemsString, "READY", jobInstanceId);
     }
-    
+
     private void removeRunningIfMonitorExecution(final boolean monitorExecution, final List<Integer> shardingItems) {
         if (!monitorExecution) {
             return;
@@ -85,11 +81,11 @@ public final class ExecutionContextService {
         }
         shardingItems.removeAll(runningShardingItems);
     }
-    
+
     private boolean isRunning(final int shardingItem) {
         return jobNodeStorage.isJobNodeExisted(ShardingNode.getRunningNode(shardingItem));
     }
-    
+
     private Map<Integer, String> getAssignedShardingItemParameterMap(final List<Integer> shardingItems, final Map<Integer, String> shardingItemParameterMap) {
         Map<Integer, String> result = new HashMap<>(shardingItems.size(), 1);
         for (int each : shardingItems) {

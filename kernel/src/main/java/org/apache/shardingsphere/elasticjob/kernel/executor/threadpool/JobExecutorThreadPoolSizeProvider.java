@@ -25,14 +25,14 @@ import org.apache.shardingsphere.infra.spi.type.typed.TypedSPI;
  */
 @SingletonSPI
 public interface JobExecutorThreadPoolSizeProvider extends TypedSPI {
-    
+
     /**
      * Get thread pool size.
-     * 
+     *
      * @return thread pool size
      */
     int getSize();
-    
+
     @Override
     String getType();
 }

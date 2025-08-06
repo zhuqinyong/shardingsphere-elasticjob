@@ -21,7 +21,7 @@ package org.apache.shardingsphere.elasticjob.script.props;
  * Script job properties.
  */
 public final class ScriptJobProperties {
-    
+
     /**
      * Script command line to be executed.
      */

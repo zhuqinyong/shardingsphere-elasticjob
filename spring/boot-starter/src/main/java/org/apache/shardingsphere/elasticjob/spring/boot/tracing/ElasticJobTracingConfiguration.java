@@ -36,11 +36,11 @@ import javax.sql.DataSource;
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(TracingProperties.class)
 public class ElasticJobTracingConfiguration {
-    
+
     @Configuration(proxyBeanMethods = false)
     @ConditionalOnProperty(name = "elasticjob.tracing.type", havingValue = "RDB")
     static class RDBTracingConfiguration {
-        
+
         /**
          * Create a bean of tracing DataSource.
          *
@@ -58,11 +58,11 @@ public class ElasticJobTracingConfiguration {
             BeanUtils.copyProperties(dataSource, tracingDataSource);
             return tracingDataSource;
         }
-        
+
         /**
          * Create a bean of tracing configuration.
          *
-         * @param dataSource required by constructor
+         * @param dataSource        required by constructor
          * @param tracingDataSource tracing ataSource
          * @return a bean of tracing configuration
          */

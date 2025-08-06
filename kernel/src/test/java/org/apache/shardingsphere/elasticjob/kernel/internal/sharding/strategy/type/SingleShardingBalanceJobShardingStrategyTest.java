@@ -17,20 +17,20 @@
 
 package org.apache.shardingsphere.elasticjob.kernel.internal.sharding.strategy.type;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
-import org.junit.jupiter.api.Test;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 class SingleShardingBalanceJobShardingStrategyTest {
-    
+
     private final SingleShardingBalanceJobShardingStrategy singleShardingBalanceJobShardingStrategy = new SingleShardingBalanceJobShardingStrategy();
-    
+
     @Test
     void assertSharding() {
         Map<JobInstance, List<Integer>> sharding = singleShardingBalanceJobShardingStrategy.sharding(

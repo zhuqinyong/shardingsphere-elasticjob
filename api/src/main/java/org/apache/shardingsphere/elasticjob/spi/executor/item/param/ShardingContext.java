@@ -28,16 +28,16 @@ import lombok.ToString;
 @Getter
 @ToString
 public final class ShardingContext {
-    
+
     private final String jobName;
-    
+
     private final String taskId;
-    
+
     private final int shardingTotalCount;
-    
+
     private final String jobParameter;
-    
+
     private final int shardingItem;
-    
+
     private final String shardingParameter;
 }

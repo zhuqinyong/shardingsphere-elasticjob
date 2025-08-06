@@ -41,27 +41,27 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = "classpath:META-INF/job/withJobType.xml")
 class JobSpringNamespaceWithTypeTest {
-    
+
     private static final EmbedTestingServer EMBED_TESTING_SERVER = new EmbedTestingServer(3181);
-    
+
     private final String scriptJobName = "scriptElasticJob_job_type";
-    
+
     @Autowired
     private CoordinatorRegistryCenter regCenter;
-    
+
     private Scheduler scheduler;
-    
+
     @BeforeAll
     static void init() {
         EMBED_TESTING_SERVER.start();
     }
-    
+
     @AfterEach
     void tearDown() {
         Awaitility.await().atMost(1L, TimeUnit.MINUTES).untilAsserted(() -> assertThat(scheduler.getCurrentlyExecutingJobs().isEmpty(), is(true)));
         JobRegistry.getInstance().getJobScheduleController(scriptJobName).shutdown();
     }
-    
+
     @Test
     void jobScriptWithJobTypeTest() throws SchedulerException {
         Awaitility.await().atMost(1L, TimeUnit.MINUTES).untilAsserted(() -> assertThat(regCenter.isExisted("/" + scriptJobName + "/sharding"), is(true)));

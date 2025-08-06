@@ -26,46 +26,33 @@ import lombok.ToString;
 @Getter
 @ToString
 public final class TransactionOperation {
-    
-    public enum Type {
-        
-        CHECK_EXISTS,
-        
-        ADD,
-        
-        UPDATE,
-        
-        DELETE
-    }
-    
+
     private final Type type;
-    
     private final String key;
-    
     private final String value;
-    
+
     /**
      * Operation add.
      *
-     * @param key key
+     * @param key   key
      * @param value value
      * @return TransactionOperation
      */
     public static TransactionOperation opAdd(final String key, final String value) {
         return new TransactionOperation(Type.ADD, key, value);
     }
-    
+
     /**
      * Operation update.
      *
-     * @param key key
+     * @param key   key
      * @param value value
      * @return TransactionOperation
      */
     public static TransactionOperation opUpdate(final String key, final String value) {
         return new TransactionOperation(Type.UPDATE, key, value);
     }
-    
+
     /**
      * Operation delete.
      *
@@ -75,7 +62,7 @@ public final class TransactionOperation {
     public static TransactionOperation opDelete(final String key) {
         return new TransactionOperation(Type.DELETE, key, null);
     }
-    
+
     /**
      * Operation check exists.
      *
@@ -84,5 +71,16 @@ public final class TransactionOperation {
      */
     public static TransactionOperation opCheckExists(final String key) {
         return new TransactionOperation(Type.CHECK_EXISTS, key, null);
+    }
+
+    public enum Type {
+
+        CHECK_EXISTS,
+
+        ADD,
+
+        UPDATE,
+
+        DELETE
     }
 }

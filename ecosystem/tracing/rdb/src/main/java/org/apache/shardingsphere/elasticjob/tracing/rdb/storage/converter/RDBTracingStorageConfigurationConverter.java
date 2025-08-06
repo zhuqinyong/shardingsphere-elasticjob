@@ -18,8 +18,8 @@
 package org.apache.shardingsphere.elasticjob.tracing.rdb.storage.converter;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shardingsphere.elasticjob.spi.tracing.storage.TracingStorageConfiguration;
 import org.apache.shardingsphere.elasticjob.kernel.tracing.exception.TracingStorageUnavailableException;
+import org.apache.shardingsphere.elasticjob.spi.tracing.storage.TracingStorageConfiguration;
 import org.apache.shardingsphere.elasticjob.spi.tracing.storage.TracingStorageConfigurationConverter;
 import org.apache.shardingsphere.elasticjob.tracing.rdb.config.RDBTracingStorageConfiguration;
 import org.apache.shardingsphere.elasticjob.tracing.rdb.storage.datasource.DataSourceRegistry;
@@ -33,7 +33,7 @@ import java.sql.SQLException;
  */
 @Slf4j
 public final class RDBTracingStorageConfigurationConverter implements TracingStorageConfigurationConverter<DataSource> {
-    
+
     @Override
     public TracingStorageConfiguration<DataSource> toConfiguration(final DataSource dataSource) {
         try (Connection connection = dataSource.getConnection()) {
@@ -46,7 +46,7 @@ public final class RDBTracingStorageConfigurationConverter implements TracingSto
         DataSourceRegistry.getInstance().registerDataSource(result, dataSource);
         return result;
     }
-    
+
     @Override
     public Class<DataSource> storageType() {
         return DataSource.class;

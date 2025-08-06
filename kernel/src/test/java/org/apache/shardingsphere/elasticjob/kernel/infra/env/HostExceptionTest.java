@@ -25,7 +25,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class HostExceptionTest {
-    
+
     @Test
     void assertGetCause() {
         IOException cause = new IOException();

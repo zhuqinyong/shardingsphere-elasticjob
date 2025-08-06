@@ -21,12 +21,12 @@ import org.apache.shardingsphere.elasticjob.spi.tracing.storage.TracingStorageCo
 import org.apache.shardingsphere.elasticjob.spi.tracing.storage.TracingStorageConfigurationConverter;
 
 public final class TracingStorageFixtureConfigurationConverter implements TracingStorageConfigurationConverter<TracingStorageFixture> {
-    
+
     @Override
     public TracingStorageConfiguration<TracingStorageFixture> toConfiguration(final TracingStorageFixture storage) {
         return new TracingStorageConfigurationFixture(storage);
     }
-    
+
     @Override
     public Class<TracingStorageFixture> storageType() {
         return TracingStorageFixture.class;

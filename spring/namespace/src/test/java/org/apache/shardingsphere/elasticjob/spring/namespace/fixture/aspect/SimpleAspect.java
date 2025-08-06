@@ -18,24 +18,25 @@
 package org.apache.shardingsphere.elasticjob.spring.namespace.fixture.aspect;
 
 import org.aspectj.lang.JoinPoint;
-import org.springframework.stereotype.Component;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.stereotype.Component;
 
 @Component
 @Aspect
 public class SimpleAspect {
-    
+
     /**
      * Aspect.
      */
     @Pointcut("execution(* org.apache.shardingsphere.elasticjob.spring.fixture..*(..))")
     public void aspect() {
     }
-    
+
     /**
      * Before operator.
+     *
      * @param joinPoint joinPoint
      */
     @Before("aspect()")

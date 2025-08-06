@@ -21,7 +21,7 @@ package org.apache.shardingsphere.elasticjob.spi.executor.item.param;
  * Job runtime service.
  */
 public interface JobRuntimeService {
-    
+
     /**
      * Judge job whether to need resharding.
      *

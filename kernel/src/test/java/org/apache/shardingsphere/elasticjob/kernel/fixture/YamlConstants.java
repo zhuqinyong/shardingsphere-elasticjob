@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class YamlConstants {
-    
+
     private static final String JOB_YAML = "jobName: test_job\n"
             + "cron: 0/1 * * * * ?\n"
             + "shardingTotalCount: 3\n"
@@ -35,13 +35,13 @@ public final class YamlConstants {
             + "description: 'desc'\n"
             + "disabled: true\n"
             + "overwrite: true";
-    
+
     private static final boolean DEFAULT_FAILOVER = true;
-    
+
     private static final boolean DEFAULT_MONITOR_EXECUTION = true;
-    
+
     private static final int DEFAULT_MAX_TIME_DIFF_SECONDS = 1000;
-    
+
     /**
      * Get the config of simple job in YAML format.
      *
@@ -50,7 +50,7 @@ public final class YamlConstants {
     public static String getJobYaml() {
         return String.format(JOB_YAML, DEFAULT_FAILOVER, DEFAULT_MONITOR_EXECUTION, DEFAULT_MAX_TIME_DIFF_SECONDS);
     }
-    
+
     /**
      * Get the config of simple job in YAML format.
      *
@@ -60,7 +60,7 @@ public final class YamlConstants {
     public static String getJobYaml(final int maxTimeDiffSeconds) {
         return String.format(JOB_YAML, DEFAULT_FAILOVER, DEFAULT_MONITOR_EXECUTION, maxTimeDiffSeconds);
     }
-    
+
     /**
      * Get the config of simple job in YAML format.
      *
@@ -70,7 +70,7 @@ public final class YamlConstants {
     public static String getJobYamlWithFailover(final boolean failover) {
         return String.format(JOB_YAML, failover, DEFAULT_MONITOR_EXECUTION, DEFAULT_MAX_TIME_DIFF_SECONDS);
     }
-    
+
     /**
      * Get the config of simple job in YAML format.
      *

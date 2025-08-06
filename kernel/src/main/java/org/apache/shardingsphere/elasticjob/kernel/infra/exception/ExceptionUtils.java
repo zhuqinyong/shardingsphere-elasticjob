@@ -28,7 +28,7 @@ import java.io.StringWriter;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ExceptionUtils {
-    
+
     /**
      * Transform throwable to string.
      *

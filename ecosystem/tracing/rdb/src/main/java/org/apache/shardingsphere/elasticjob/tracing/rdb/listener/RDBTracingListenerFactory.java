@@ -28,7 +28,7 @@ import java.sql.SQLException;
  * RDB tracing listener factory.
  */
 public final class RDBTracingListenerFactory implements TracingListenerFactory<DataSource> {
-    
+
     @Override
     public TracingListener create(final DataSource storage) throws TracingConfigurationException {
         try {
@@ -37,7 +37,7 @@ public final class RDBTracingListenerFactory implements TracingListenerFactory<D
             throw new TracingConfigurationException(ex);
         }
     }
-    
+
     @Override
     public String getType() {
         return "RDB";

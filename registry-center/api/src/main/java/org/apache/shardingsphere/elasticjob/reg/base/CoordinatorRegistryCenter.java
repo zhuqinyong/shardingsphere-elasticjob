@@ -28,23 +28,23 @@ import java.util.concurrent.Executor;
  * Coordinator registry center.
  */
 public interface CoordinatorRegistryCenter extends RegistryCenter {
-    
+
     /**
      * Get value from registry center directly.
-     * 
+     *
      * @param key key
      * @return value
      */
     String getDirectly(String key);
-    
+
     /**
      * Get children keys.
-     * 
+     *
      * @param key key
      * @return children keys
      */
     List<String> getChildrenKeys(String key);
-    
+
     /**
      * Get children number.
      *
@@ -52,78 +52,78 @@ public interface CoordinatorRegistryCenter extends RegistryCenter {
      * @return children number
      */
     int getNumChildren(String key);
-    
+
     /**
      * Persist ephemeral data.
-     * 
-     * @param key key
+     *
+     * @param key   key
      * @param value value
      */
     void persistEphemeral(String key, String value);
-    
+
     /**
      * Persist sequential data.
      *
-     * @param key key
+     * @param key   key
      * @param value value
      * @return value which include 10 digital
      */
     String persistSequential(String key, String value);
-    
+
     /**
      * Persist ephemeral sequential data.
-     * 
+     *
      * @param key key
      */
     void persistEphemeralSequential(String key);
-    
+
     /**
      * Add data to cache.
-     * 
+     *
      * @param cachePath cache path
      */
     void addCacheData(String cachePath);
-    
+
     /**
      * Evict data from cache.
      *
      * @param cachePath cache path
      */
     void evictCacheData(String cachePath);
-    
+
     /**
      * Get raw cache object of registry center.
-     * 
+     *
      * @param cachePath cache path
      * @return raw cache object of registry center
      */
     Object getRawCache(String cachePath);
-    
+
     /**
      * Execute in leader.
      *
-     * @param key key
+     * @param key      key
      * @param callback callback of leader
      */
     void executeInLeader(String key, LeaderExecutionCallback callback);
-    
+
     /**
      * Watch changes of a key.
      *
-     * @param key key to be watched
+     * @param key      key to be watched
      * @param listener data listener
      * @param executor event notify executor
      */
     void watch(String key, DataChangedEventListener listener, Executor executor);
-    
+
     /**
      * Add connection state changed event listener to registry center.
      *
-     * @param key key to be watched.
+     * @param key      key to be watched.
      * @param listener connection state changed event listener
      */
     void addConnectionStateChangedEventListener(String key, ConnectionStateChangedEventListener listener);
-    
+
     /**
      * Execute operations in transaction.
      *
@@ -131,15 +131,17 @@ public interface CoordinatorRegistryCenter extends RegistryCenter {
      * @throws Exception exception
      */
     void executeInTransaction(List<TransactionOperation> transactionOperations) throws Exception;
-    
+
     /**
      * Remove all data listeners that have been bound to the current key.
+     *
      * @param key key to be watched
      */
     void removeDataListeners(String key);
-    
+
     /**
      * Remove conn state listener that have been bound to the current key.
+     *
      * @param key key to be watched
      */
     void removeConnStateListener(String key);

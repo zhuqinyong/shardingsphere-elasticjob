@@ -18,23 +18,23 @@
 package org.apache.shardingsphere.elasticjob.spring.namespace.fixture.job;
 
 import lombok.Getter;
-import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
 import org.apache.shardingsphere.elasticjob.simple.job.SimpleJob;
+import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
 
 public class FooSimpleElasticJob implements SimpleJob {
-    
+
     @Getter
     private static volatile boolean completed;
-    
-    @Override
-    public void execute(final ShardingContext shardingContext) {
-        completed = true;
-    }
-    
+
     /**
      * Set completed to false.
      */
     public static void reset() {
         completed = false;
+    }
+
+    @Override
+    public void execute(final ShardingContext shardingContext) {
+        completed = true;
     }
 }

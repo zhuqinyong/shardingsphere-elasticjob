@@ -31,26 +31,23 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class JobConfigurationAPIImplTest {
-    
+
     private JobConfigurationAPI jobConfigAPI;
-    
+
     @Mock
     private CoordinatorRegistryCenter regCenter;
-    
+
     @BeforeEach
     void setUp() {
         jobConfigAPI = new JobConfigurationAPIImpl(regCenter);
     }
-    
+
     @Test
     void assertGetJobConfigNull() {
         when(regCenter.get("/test_job/config")).thenReturn(null);
@@ -58,7 +55,7 @@ class JobConfigurationAPIImplTest {
         assertNull(actual);
         verify(regCenter).get("/test_job/config");
     }
-    
+
     @Test
     void assertGetDataflowJobConfig() {
         when(regCenter.get("/test_job/config")).thenReturn(LifecycleYamlConstants.getDataflowJobYaml());
@@ -67,7 +64,7 @@ class JobConfigurationAPIImplTest {
         assertThat(actual.getProps().getProperty(DataflowJobProperties.STREAM_PROCESS_KEY), is("true"));
         verify(regCenter).get("/test_job/config");
     }
-    
+
     @Test
     void assertGetScriptJobConfig() {
         when(regCenter.get("/test_job/config")).thenReturn(LifecycleYamlConstants.getScriptJobYaml());
@@ -76,7 +73,7 @@ class JobConfigurationAPIImplTest {
         assertThat(actual.getProps().getProperty(ScriptJobProperties.SCRIPT_KEY), is("echo"));
         verify(regCenter).get("/test_job/config");
     }
-    
+
     private void assertJobConfig(final JobConfigurationPOJO pojo) {
         assertThat(pojo.getJobName(), is("test_job"));
         assertThat(pojo.getShardingTotalCount(), is(3));
@@ -91,7 +88,7 @@ class JobConfigurationAPIImplTest {
         assertThat(pojo.getReconcileIntervalMinutes(), is(10));
         assertThat(pojo.getDescription(), is(""));
     }
-    
+
     @Test
     void assertUpdateJobConfig() {
         JobConfigurationPOJO jobConfig = new JobConfigurationPOJO();
@@ -109,7 +106,7 @@ class JobConfigurationAPIImplTest {
         jobConfigAPI.updateJobConfiguration(jobConfig);
         verify(regCenter).update("/test_job/config", LifecycleYamlConstants.getDataflowJobYaml());
     }
-    
+
     @Test
     void assertUpdateJobConfigIfJobNameIsEmpty() {
         assertThrows(IllegalArgumentException.class, () -> {
@@ -118,7 +115,7 @@ class JobConfigurationAPIImplTest {
             jobConfigAPI.updateJobConfiguration(jobConfig);
         });
     }
-    
+
     @Test
     void assertUpdateJobConfigIfCronIsEmpty() {
         assertThrows(IllegalArgumentException.class, () -> {
@@ -128,7 +125,7 @@ class JobConfigurationAPIImplTest {
             jobConfigAPI.updateJobConfiguration(jobConfig);
         });
     }
-    
+
     @Test
     void assertUpdateJobConfigIfShardingTotalCountLessThanOne() {
         assertThrows(IllegalArgumentException.class, () -> {
@@ -139,7 +136,7 @@ class JobConfigurationAPIImplTest {
             jobConfigAPI.updateJobConfiguration(jobConfig);
         });
     }
-    
+
     @Test
     void assertRemoveJobConfiguration() {
         jobConfigAPI.removeJobConfiguration("test_job");

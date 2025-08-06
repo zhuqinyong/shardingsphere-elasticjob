@@ -36,71 +36,51 @@ import java.util.Properties;
 @Getter
 @Setter
 public final class JobConfigurationPOJO {
-    
+
     private String jobName;
-    
+
     private String cron;
-    
+
     private String timeZone;
-    
+
     private int shardingTotalCount;
-    
+
     private String shardingItemParameters;
-    
+
     private String jobParameter;
-    
+
     private boolean monitorExecution;
-    
+
     private boolean failover;
-    
+
     private boolean misfire;
-    
+
     private int maxTimeDiffSeconds = -1;
-    
+
     private int reconcileIntervalMinutes;
-    
+
     private String jobShardingStrategyType;
-    
+
     private String jobExecutorThreadPoolSizeProviderType;
-    
+
     private String jobErrorHandlerType;
-    
+
     private Collection<String> jobListenerTypes = new ArrayList<>();
-    
+
     private Collection<YamlConfiguration<JobExtraConfiguration>> jobExtraConfigurations = new LinkedList<>();
-    
+
     private String description;
-    
+
     private Properties props = new Properties();
-    
+
     private boolean disabled;
-    
+
     private boolean overwrite;
-    
+
     private String label;
-    
+
     private boolean staticSharding;
-    
-    /**
-     * Convert to job configuration.
-     *
-     * @return job configuration
-     */
-    public JobConfiguration toJobConfiguration() {
-        JobConfiguration result = JobConfiguration.newBuilder(jobName, shardingTotalCount)
-                .cron(cron).timeZone(timeZone).shardingItemParameters(shardingItemParameters).jobParameter(jobParameter)
-                .monitorExecution(monitorExecution).failover(failover).misfire(misfire)
-                .maxTimeDiffSeconds(maxTimeDiffSeconds).reconcileIntervalMinutes(reconcileIntervalMinutes)
-                .jobShardingStrategyType(jobShardingStrategyType).jobExecutorThreadPoolSizeProviderType(jobExecutorThreadPoolSizeProviderType)
-                .jobErrorHandlerType(jobErrorHandlerType).jobListenerTypes(jobListenerTypes.toArray(new String[]{})).description(description)
-                .disabled(disabled).overwrite(overwrite).label(label).staticSharding(staticSharding).build();
-        jobExtraConfigurations.stream().map(YamlConfiguration::toConfiguration).forEach(result.getExtraConfigurations()::add);
-        for (Object each : props.keySet()) {
-            result.getProps().setProperty(each.toString(), props.get(each.toString()).toString());
-        }
-        return result;
-    }
-    
+
     /**
      * Convert from job configuration.
      *
@@ -133,6 +113,26 @@ public final class JobConfigurationPOJO {
         result.setOverwrite(jobConfig.isOverwrite());
         result.setLabel(jobConfig.getLabel());
         result.setStaticSharding(jobConfig.isStaticSharding());
+        return result;
+    }
+
+    /**
+     * Convert to job configuration.
+     *
+     * @return job configuration
+     */
+    public JobConfiguration toJobConfiguration() {
+        JobConfiguration result = JobConfiguration.newBuilder(jobName, shardingTotalCount)
+                .cron(cron).timeZone(timeZone).shardingItemParameters(shardingItemParameters).jobParameter(jobParameter)
+                .monitorExecution(monitorExecution).failover(failover).misfire(misfire)
+                .maxTimeDiffSeconds(maxTimeDiffSeconds).reconcileIntervalMinutes(reconcileIntervalMinutes)
+                .jobShardingStrategyType(jobShardingStrategyType).jobExecutorThreadPoolSizeProviderType(jobExecutorThreadPoolSizeProviderType)
+                .jobErrorHandlerType(jobErrorHandlerType).jobListenerTypes(jobListenerTypes.toArray(new String[]{})).description(description)
+                .disabled(disabled).overwrite(overwrite).label(label).staticSharding(staticSharding).build();
+        jobExtraConfigurations.stream().map(YamlConfiguration::toConfiguration).forEach(result.getExtraConfigurations()::add);
+        for (Object each : props.keySet()) {
+            result.getProps().setProperty(each.toString(), props.get(each.toString()).toString());
+        }
         return result;
     }
 }

@@ -36,24 +36,24 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class JobStatisticsAPIImplTest {
-    
+
     private JobStatisticsAPI jobStatisticsAPI;
-    
+
     // TODO We should not use `Mock.Strictness.LENIENT` here, but the default. This is a flaw in the unit test design.
     @Mock(strictness = Mock.Strictness.LENIENT)
     private CoordinatorRegistryCenter regCenter;
-    
+
     @BeforeEach
     void setUp() {
         jobStatisticsAPI = new JobStatisticsAPIImpl(regCenter);
     }
-    
+
     @Test
     void assertGetJobsTotalCount() {
         when(regCenter.getChildrenKeys("/")).thenReturn(Arrays.asList("test_job_1", "test_job_2"));
         assertThat(jobStatisticsAPI.getJobsTotalCount(), is(2));
     }
-    
+
     @Test
     void assertGetOKJobBriefInfo() {
         when(regCenter.get("/test_job/config")).thenReturn(LifecycleYamlConstants.getSimpleJobYaml("test_job", "desc"));
@@ -72,7 +72,7 @@ class JobStatisticsAPIImplTest {
         assertThat(jobBrief.getShardingTotalCount(), is(3));
         assertThat(jobBrief.getStatus(), is(JobBriefInfo.JobStatus.OK));
     }
-    
+
     @Test
     void assertGetOKJobBriefInfoWithPartialDisabledServer() {
         when(regCenter.get("/test_job/config")).thenReturn(LifecycleYamlConstants.getSimpleJobYaml("test_job", "desc"));
@@ -85,7 +85,7 @@ class JobStatisticsAPIImplTest {
         JobBriefInfo jobBrief = jobStatisticsAPI.getJobBriefInfo("test_job");
         assertThat(jobBrief.getStatus(), is(JobBriefInfo.JobStatus.OK));
     }
-    
+
     @Test
     void assertGetDisabledJobBriefInfo() {
         when(regCenter.get("/test_job/config")).thenReturn(LifecycleYamlConstants.getSimpleJobYaml("test_job", "desc"));
@@ -96,7 +96,7 @@ class JobStatisticsAPIImplTest {
         JobBriefInfo jobBrief = jobStatisticsAPI.getJobBriefInfo("test_job");
         assertThat(jobBrief.getStatus(), is(JobBriefInfo.JobStatus.DISABLED));
     }
-    
+
     @Test
     void assertGetShardingErrorJobBriefInfo() {
         when(regCenter.get("/test_job/config")).thenReturn(LifecycleYamlConstants.getSimpleJobYaml("test_job", "desc"));
@@ -109,20 +109,20 @@ class JobStatisticsAPIImplTest {
         JobBriefInfo jobBrief = jobStatisticsAPI.getJobBriefInfo("test_job");
         assertThat(jobBrief.getStatus(), is(JobBriefInfo.JobStatus.SHARDING_FLAG));
     }
-    
+
     @Test
     void assertGetCrashedJobBriefInfo() {
         when(regCenter.get("/test_job/config")).thenReturn(LifecycleYamlConstants.getSimpleJobYaml("test_job", "desc"));
         JobBriefInfo jobBrief = jobStatisticsAPI.getJobBriefInfo("test_job");
         assertThat(jobBrief.getStatus(), is(JobBriefInfo.JobStatus.CRASHED));
     }
-    
+
     @Test
     void assertGetAllJobsBriefInfoWithoutNamespace() {
         when(regCenter.getChildrenKeys("/")).thenReturn(Arrays.asList("test_job_1", "test_job_2"));
         assertThat(jobStatisticsAPI.getAllJobsBriefInfo().size(), is(0));
     }
-    
+
     @Test
     void assertGetAllJobsBriefInfo() {
         when(regCenter.getChildrenKeys("/")).thenReturn(Arrays.asList("test_job_1", "test_job_2"));
@@ -149,7 +149,7 @@ class JobStatisticsAPIImplTest {
             assertThat(each.getStatus(), is(JobBriefInfo.JobStatus.OK));
         }
     }
-    
+
     @Test
     void assertGetJobsBriefInfoByIp() {
         when(regCenter.getChildrenKeys("/")).thenReturn(Arrays.asList("test_job_1", "test_job_2", "test_job_3"));

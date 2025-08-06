@@ -22,13 +22,13 @@ import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.shardingsphere.elasticjob.api.ElasticJob;
 import org.apache.shardingsphere.elasticjob.api.JobConfiguration;
-import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
-import org.apache.shardingsphere.elasticjob.spi.executor.item.param.JobRuntimeService;
-import org.apache.shardingsphere.elasticjob.spi.executor.item.type.TypedJobItemExecutor;
 import org.apache.shardingsphere.elasticjob.kernel.infra.exception.JobConfigurationException;
 import org.apache.shardingsphere.elasticjob.kernel.infra.exception.JobSystemException;
 import org.apache.shardingsphere.elasticjob.kernel.infra.json.GsonFactory;
 import org.apache.shardingsphere.elasticjob.script.props.ScriptJobProperties;
+import org.apache.shardingsphere.elasticjob.spi.executor.item.param.JobRuntimeService;
+import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
+import org.apache.shardingsphere.elasticjob.spi.executor.item.type.TypedJobItemExecutor;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -37,7 +37,7 @@ import java.util.Properties;
  * Script job executor.
  */
 public final class ScriptJobExecutor implements TypedJobItemExecutor {
-    
+
     @Override
     public void process(final ElasticJob elasticJob, final JobConfiguration jobConfig, final JobRuntimeService jobRuntimeService, final ShardingContext shardingContext) {
         CommandLine commandLine = CommandLine.parse(getScriptCommandLine(jobConfig.getProps()));
@@ -48,7 +48,7 @@ public final class ScriptJobExecutor implements TypedJobItemExecutor {
             throw new JobSystemException("Execute script failure.", ex);
         }
     }
-    
+
     private String getScriptCommandLine(final Properties props) {
         String result = props.getProperty(ScriptJobProperties.SCRIPT_KEY);
         if (Strings.isNullOrEmpty(result)) {
@@ -56,7 +56,7 @@ public final class ScriptJobExecutor implements TypedJobItemExecutor {
         }
         return result;
     }
-    
+
     @Override
     public String getType() {
         return "SCRIPT";

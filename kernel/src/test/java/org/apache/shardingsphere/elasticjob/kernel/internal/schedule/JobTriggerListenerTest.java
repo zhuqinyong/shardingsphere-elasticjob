@@ -31,40 +31,38 @@ import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class JobTriggerListenerTest {
-    
+
     @Mock
     private ExecutionService executionService;
-    
+
     @Mock
     private ShardingService shardingService;
-    
+
     @Mock
     private Trigger trigger;
-    
+
     private JobTriggerListener jobTriggerListener;
-    
+
     @BeforeEach
     void setUp() {
         jobTriggerListener = new JobTriggerListener(executionService, shardingService);
     }
-    
+
     @Test
     void assertGetName() {
         assertThat(jobTriggerListener.getName(), is("JobTriggerListener"));
     }
-    
+
     @Test
     void assertTriggerMisfiredWhenPreviousFireTimeIsNull() {
         jobTriggerListener.triggerMisfired(trigger);
         verify(executionService, times(0)).setMisfire(Collections.singletonList(0));
     }
-    
+
     @Test
     void assertTriggerMisfiredWhenPreviousFireTimeIsNotNull() {
         when(shardingService.getLocalShardingItems()).thenReturn(Collections.singletonList(0));

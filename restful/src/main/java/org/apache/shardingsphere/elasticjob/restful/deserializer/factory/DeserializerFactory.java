@@ -28,14 +28,14 @@ import org.apache.shardingsphere.infra.spi.annotation.SingletonSPI;
  */
 @SingletonSPI
 public interface DeserializerFactory {
-    
+
     /**
      * Specify which type would be deserialized by the deserializer created by this factory.
      *
      * @return MIME type
      */
     String mimeType();
-    
+
     /**
      * Deserializer factory method.
      *

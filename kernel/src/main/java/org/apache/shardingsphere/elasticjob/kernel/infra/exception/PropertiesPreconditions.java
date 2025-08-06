@@ -28,22 +28,22 @@ import java.util.Properties;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PropertiesPreconditions {
-    
+
     /**
      * Check property value is required.
-     * 
+     *
      * @param props properties to be checked
-     * @param key property key to be checked
+     * @param key   property key to be checked
      */
     public static void checkRequired(final Properties props, final String key) {
         Preconditions.checkArgument(props.containsKey(key), "The property `%s` is required.", key);
     }
-    
+
     /**
      * Check property value is positive integer.
-     * 
+     *
      * @param props properties to be checked
-     * @param key property key to be checked
+     * @param key   property key to be checked
      */
     public static void checkPositiveInteger(final Properties props, final String key) {
         String propertyValue = props.getProperty(key);

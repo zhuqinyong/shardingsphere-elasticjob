@@ -32,19 +32,19 @@ import java.util.Properties;
 @RequiredArgsConstructor
 @Getter
 public final class HttpParam {
-    
+
     private final String url;
-    
+
     private final String method;
-    
+
     private final String contentType;
-    
+
     private final String data;
-    
+
     private final int connectTimeoutMilliseconds;
-    
+
     private final int readTimeoutMilliseconds;
-    
+
     public HttpParam(final Properties props) {
         url = props.getProperty(HttpJobProperties.URI_KEY);
         if (Strings.isNullOrEmpty(url)) {
@@ -59,10 +59,10 @@ public final class HttpParam {
         connectTimeoutMilliseconds = Integer.parseInt(props.getProperty(HttpJobProperties.CONNECT_TIMEOUT_KEY, "3000"));
         readTimeoutMilliseconds = Integer.parseInt(props.getProperty(HttpJobProperties.READ_TIMEOUT_KEY, "5000"));
     }
-    
+
     /**
      * Is write method.
-     * 
+     *
      * @return write method or not
      */
     public boolean isWriteMethod() {

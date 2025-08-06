@@ -21,10 +21,10 @@ package org.apache.shardingsphere.elasticjob.spi.tracing.event;
  * Job event.
  */
 public interface JobEvent {
-    
+
     /**
      * Get job name.
-     * 
+     *
      * @return job name
      */
     String getJobName();

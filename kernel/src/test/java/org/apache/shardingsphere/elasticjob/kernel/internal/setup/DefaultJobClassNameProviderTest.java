@@ -25,14 +25,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class DefaultJobClassNameProviderTest {
-    
+
     @Test
     void assertGetOrdinaryClassJobName() {
         JobClassNameProvider jobClassNameProvider = new DefaultJobClassNameProvider();
         String result = jobClassNameProvider.getJobClassName(new DetailedFooJob());
         assertThat(result, is("org.apache.shardingsphere.elasticjob.kernel.fixture.job.DetailedFooJob"));
     }
-    
+
     @Test
     void assertGetLambdaJobName() {
         JobClassNameProvider jobClassNameProvider = new DefaultJobClassNameProvider();

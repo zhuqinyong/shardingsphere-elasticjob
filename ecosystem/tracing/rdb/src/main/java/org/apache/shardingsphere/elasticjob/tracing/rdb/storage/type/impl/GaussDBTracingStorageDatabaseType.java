@@ -23,12 +23,12 @@ import org.apache.shardingsphere.elasticjob.tracing.rdb.storage.type.TracingStor
  * Tracing storage database type for Gaussdb.
  */
 public final class GaussDBTracingStorageDatabaseType implements TracingStorageDatabaseType {
-    
+
     @Override
     public String getType() {
         return "GaussDB";
     }
-    
+
     @Override
     public int getDuplicateRecordErrorCode() {
         return 0;

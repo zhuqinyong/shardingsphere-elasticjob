@@ -17,9 +17,9 @@
 
 package org.apache.shardingsphere.elasticjob.spring.namespace;
 
-import org.apache.shardingsphere.elasticjob.spring.namespace.scanner.parser.JobScannerBeanDefinitionParser;
 import org.apache.shardingsphere.elasticjob.spring.namespace.job.parser.JobBeanDefinitionParser;
 import org.apache.shardingsphere.elasticjob.spring.namespace.reg.parser.ZookeeperBeanDefinitionParser;
+import org.apache.shardingsphere.elasticjob.spring.namespace.scanner.parser.JobScannerBeanDefinitionParser;
 import org.apache.shardingsphere.elasticjob.spring.namespace.snapshot.parser.SnapshotBeanDefinitionParser;
 import org.apache.shardingsphere.elasticjob.spring.namespace.tracing.parser.TracingBeanDefinitionParser;
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
@@ -28,7 +28,7 @@ import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
  * Job handler for spring namespace.
  */
 public final class ElasticJobNamespaceHandler extends NamespaceHandlerSupport {
-    
+
     @Override
     public void init() {
         registerBeanDefinitionParser("job", new JobBeanDefinitionParser());

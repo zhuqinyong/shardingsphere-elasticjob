@@ -21,27 +21,24 @@ import org.apache.curator.utils.ThreadUtils;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.*;
 
 /**
  * Manage listener's notify executor,
  * each job has its own listener notify executor.
  */
 public final class ListenerNotifierManager {
-    
+
     private static volatile ListenerNotifierManager instance;
-    
+
     private final Map<String, ExecutorService> listenerNotifyExecutors = new ConcurrentHashMap<>();
-    
+
     private ListenerNotifierManager() {
     }
-    
+
     /**
      * Get singleton instance of ListenerNotifierManager.
+     *
      * @return singleton instance of ListenerNotifierManager.
      */
     public static ListenerNotifierManager getInstance() {
@@ -54,9 +51,10 @@ public final class ListenerNotifierManager {
         }
         return instance;
     }
-    
+
     /**
      * Register a listener notify executor for the job specified.
+     *
      * @param jobName The job's name.
      */
     public void registerJobNotifyExecutor(final String jobName) {
@@ -70,18 +68,20 @@ public final class ListenerNotifierManager {
             }
         }
     }
-    
+
     /**
      * Get the listener notify executor for the specified job.
+     *
      * @param jobName The job's name.
      * @return The job listener's notify executor.
      */
     public Executor getJobNotifyExecutor(final String jobName) {
         return listenerNotifyExecutors.get(jobName);
     }
-    
+
     /**
      * Remove and shutdown the listener notify executor from listenerNotifyExecutors.
+     *
      * @param jobName The job's name.
      */
     public void removeJobNotifyExecutor(final String jobName) {

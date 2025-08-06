@@ -22,17 +22,17 @@ import org.apache.shardingsphere.elasticjob.spi.executor.ExecutionType;
 
 @Builder
 public final class TaskNode {
-    
+
     private final String jobName;
-    
+
     private final int shardingItem;
-    
+
     private final ExecutionType type;
-    
+
     private final String slaveId;
-    
+
     private final String uuid;
-    
+
     /**
      * Get the value of task node.
      *
@@ -41,7 +41,7 @@ public final class TaskNode {
     public String getTaskNodeValue() {
         return String.join("@-@", getTaskNodePath(), null == type ? ExecutionType.READY.toString() : type.toString(), null == slaveId ? "slave-S0" : slaveId, null == uuid ? "0" : uuid);
     }
-    
+
     private String getTaskNodePath() {
         return String.join("@-@", null == jobName ? "test_job" : jobName, String.valueOf(shardingItem));
     }

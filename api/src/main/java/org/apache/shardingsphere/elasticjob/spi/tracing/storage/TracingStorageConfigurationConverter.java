@@ -26,7 +26,7 @@ import org.apache.shardingsphere.infra.spi.annotation.SingletonSPI;
  */
 @SingletonSPI
 public interface TracingStorageConfigurationConverter<T> {
-    
+
     /**
      * Convert storage to {@link TracingStorageConfiguration}.
      *
@@ -34,7 +34,7 @@ public interface TracingStorageConfigurationConverter<T> {
      * @return instance of {@link TracingStorageConfiguration}
      */
     TracingStorageConfiguration<T> toConfiguration(T storage);
-    
+
     /**
      * Storage type.
      *

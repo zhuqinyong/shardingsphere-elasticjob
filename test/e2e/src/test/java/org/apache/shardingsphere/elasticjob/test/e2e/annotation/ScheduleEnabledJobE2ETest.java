@@ -37,11 +37,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ScheduleEnabledJobE2ETest extends BaseAnnotationE2ETest {
-    
+
     ScheduleEnabledJobE2ETest() {
         super(TestType.SCHEDULE, new AnnotationSimpleJob());
     }
-    
+
     @BeforeEach
     void assertEnabledRegCenterInfo() {
         assertThat(JobRegistry.getInstance().getCurrentShardingTotalCount(getJobName()), is(3));
@@ -57,11 +57,11 @@ class ScheduleEnabledJobE2ETest extends BaseAnnotationE2ETest {
         getRegistryCenter().remove("/" + getJobName() + "/leader/election");
         assertTrue(getLeaderService().isLeaderUntilBlock());
     }
-    
+
     @Test
     void assertJobInit() {
         Awaitility.await().atMost(1L, TimeUnit.MINUTES).untilAsserted(() -> MatcherAssert.assertThat(((AnnotationSimpleJob) getElasticJob()).isCompleted(), is(true)));
         assertTrue(getRegistryCenter().isExisted("/" + getJobName() + "/sharding"));
     }
-    
+
 }

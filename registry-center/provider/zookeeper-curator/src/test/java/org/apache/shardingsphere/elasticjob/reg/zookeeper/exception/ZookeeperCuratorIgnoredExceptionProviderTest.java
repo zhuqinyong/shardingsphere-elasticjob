@@ -29,7 +29,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class ZookeeperCuratorIgnoredExceptionProviderTest {
-    
+
     @Test
     void assertIgnoredException() {
         List<Class<? extends Throwable>> expected = Arrays.asList(ConnectionLossException.class, NoNodeException.class, NodeExistsException.class);

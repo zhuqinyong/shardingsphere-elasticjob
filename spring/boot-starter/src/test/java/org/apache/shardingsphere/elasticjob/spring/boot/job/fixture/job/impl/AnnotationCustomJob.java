@@ -38,20 +38,20 @@ import org.springframework.transaction.annotation.Transactional;
                 @ElasticJobProp(key = "print.content", value = "test content")
         })
 public class AnnotationCustomJob implements CustomJob {
-    
+
     @Getter
     private static volatile boolean completed;
-    
-    @Override
-    public void execute(final ShardingContext shardingContext) {
-        log.info("AnnotationCustomJob execut");
-        completed = true;
-    }
-    
+
     /**
      * Set completed to false.
      */
     public static void reset() {
         completed = false;
+    }
+
+    @Override
+    public void execute(final ShardingContext shardingContext) {
+        log.info("AnnotationCustomJob execut");
+        completed = true;
     }
 }

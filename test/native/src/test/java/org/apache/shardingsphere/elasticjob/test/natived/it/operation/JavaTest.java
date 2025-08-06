@@ -26,12 +26,7 @@ import org.apache.shardingsphere.elasticjob.api.JobConfiguration;
 import org.apache.shardingsphere.elasticjob.bootstrap.type.ScheduleJobBootstrap;
 import org.apache.shardingsphere.elasticjob.kernel.internal.config.JobConfigurationPOJO;
 import org.apache.shardingsphere.elasticjob.kernel.tracing.config.TracingConfiguration;
-import org.apache.shardingsphere.elasticjob.lifecycle.api.JobConfigurationAPI;
-import org.apache.shardingsphere.elasticjob.lifecycle.api.JobOperateAPI;
-import org.apache.shardingsphere.elasticjob.lifecycle.api.JobStatisticsAPI;
-import org.apache.shardingsphere.elasticjob.lifecycle.api.ServerStatisticsAPI;
-import org.apache.shardingsphere.elasticjob.lifecycle.api.ShardingOperateAPI;
-import org.apache.shardingsphere.elasticjob.lifecycle.api.ShardingStatisticsAPI;
+import org.apache.shardingsphere.elasticjob.lifecycle.api.*;
 import org.apache.shardingsphere.elasticjob.lifecycle.domain.JobBriefInfo;
 import org.apache.shardingsphere.elasticjob.lifecycle.domain.ServerBriefInfo;
 import org.apache.shardingsphere.elasticjob.lifecycle.domain.ShardingInfo;
@@ -62,24 +57,20 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.Matchers.startsWith;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @EnabledInNativeImage
 class JavaTest {
-    
+
     private static TestingServer testingServer;
-    
+
     private static CoordinatorRegistryCenter firstRegCenter;
-    
+
     private static CoordinatorRegistryCenter secondRegCenter;
-    
+
     private static TracingConfiguration<DataSource> tracingConfig;
-    
+
     @BeforeEach
     void beforeEach() throws Exception {
         testingServer = new TestingServer();
@@ -101,14 +92,14 @@ class JavaTest {
         config.setPassword("");
         tracingConfig = new TracingConfiguration<>("RDB", new HikariDataSource(config));
     }
-    
+
     @AfterEach
     void afterEach() throws IOException {
         firstRegCenter.close();
         secondRegCenter.close();
         testingServer.close();
     }
-    
+
     /**
      * TODO Executing {@link JobConfigurationAPI#removeJobConfiguration(String)} will always cause the listener
      *  to throw an exception. This is not acceptable behavior.
@@ -122,7 +113,6 @@ class JavaTest {
      *  ... 12 common frames omitted
      *   </code>
      *  </pre>
-     *
      */
     @Test
     void testJobConfigurationAPI() {
@@ -154,7 +144,7 @@ class JavaTest {
         assertThat(jobConfigAPI.getJobConfiguration(jobName), nullValue());
         job.shutdown();
     }
-    
+
     /**
      * TODO The most embarrassing thing is that there seems to be no simple logic to
      *  test {@link JobOperateAPI#trigger(String)} and {@link JobOperateAPI#dump(String, String, int)}.
@@ -188,7 +178,7 @@ class JavaTest {
         assertThat(thirdJobBriefInfo.getStatus(), is(JobBriefInfo.JobStatus.CRASHED));
         job.shutdown();
     }
-    
+
     @Test
     void testShardingOperateAPI() {
         String jobName = "testShardingOperateAPI";
@@ -217,7 +207,7 @@ class JavaTest {
         assertThat(secondShardingInfos.get(0).getStatus(), is(ShardingInfo.ShardingStatus.SHARDING_FLAG));
         job.shutdown();
     }
-    
+
     @Test
     void testJobStatisticsAPI() {
         String jobName = "testJobStatisticsAPI";
@@ -246,7 +236,7 @@ class JavaTest {
         });
         job.shutdown();
     }
-    
+
     @Test
     void testServerStatisticsAPI() {
         String jobName = "testServerStatisticsAPI";
@@ -278,7 +268,7 @@ class JavaTest {
         });
         job.shutdown();
     }
-    
+
     @Test
     void testShardingStatisticsAPI() {
         String jobName = "testShardingStatisticsAPI";

@@ -29,23 +29,23 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class ShardingOperateAPIImplTest {
-    
+
     private ShardingOperateAPI shardingOperateAPI;
-    
+
     @Mock
     private CoordinatorRegistryCenter regCenter;
-    
+
     @BeforeEach
     void setUp() {
         shardingOperateAPI = new ShardingOperateAPIImpl(regCenter);
     }
-    
+
     @Test
     void assertDisableSharding() {
         shardingOperateAPI.disable("test_job", "0");
         verify(regCenter).persist("/test_job/sharding/0/disabled", "");
     }
-    
+
     @Test
     void assertEnableSharding() {
         shardingOperateAPI.enable("test_job", "0");

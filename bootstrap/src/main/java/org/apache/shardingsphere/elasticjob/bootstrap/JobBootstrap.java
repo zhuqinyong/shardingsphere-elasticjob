@@ -21,7 +21,7 @@ package org.apache.shardingsphere.elasticjob.bootstrap;
  * Job bootstrap.
  */
 public interface JobBootstrap {
-    
+
     /**
      * Shutdown job.
      */

@@ -25,18 +25,18 @@ import org.apache.shardingsphere.elasticjob.reg.listener.DataChangedEventListene
  * Listener manager.
  */
 public abstract class AbstractListenerManager {
-    
+
     private final JobNodeStorage jobNodeStorage;
-    
+
     protected AbstractListenerManager(final CoordinatorRegistryCenter regCenter, final String jobName) {
         jobNodeStorage = new JobNodeStorage(regCenter, jobName);
     }
-    
+
     /**
      * Start listener.
      */
     public abstract void start();
-    
+
     protected void addDataListener(final DataChangedEventListener listener) {
         jobNodeStorage.addDataListener(listener);
     }

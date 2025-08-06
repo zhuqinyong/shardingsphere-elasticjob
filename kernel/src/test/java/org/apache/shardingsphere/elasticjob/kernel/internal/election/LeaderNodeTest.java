@@ -23,14 +23,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LeaderNodeTest {
-    
+
     private final LeaderNode leaderNode = new LeaderNode("test_job");
-    
+
     @Test
     void assertIsLeaderInstancePath() {
         assertTrue(leaderNode.isLeaderInstancePath("/test_job/leader/election/instance"));
     }
-    
+
     @Test
     void assertIsNotLeaderInstancePath() {
         assertFalse(leaderNode.isLeaderInstancePath("/test_job/leader/election/instance1"));

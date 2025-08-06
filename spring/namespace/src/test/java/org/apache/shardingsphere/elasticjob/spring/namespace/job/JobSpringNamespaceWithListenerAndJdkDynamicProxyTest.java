@@ -21,7 +21,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 @ContextConfiguration(locations = "classpath:META-INF/job/withListenerAndJdkDynamicProxy.xml")
 class JobSpringNamespaceWithListenerAndJdkDynamicProxyTest extends AbstractJobSpringIntegrateTest {
-    
+
     JobSpringNamespaceWithListenerAndJdkDynamicProxyTest() {
         super("simpleElasticJob_namespace_listener_jdk_proxy", "dataflowElasticJob_namespace_listener_jdk_proxy");
     }

@@ -32,14 +32,14 @@ import java.util.List;
 @Slf4j
 @Transactional(rollbackFor = Exception.class)
 public class CustomTestJob implements CustomJob {
-    
+
     @Autowired
     private BarRepository barRepository;
-    
+
     public CustomTestJob() {
         log.info("CustomTestJob init");
     }
-    
+
     @Override
     public void execute(final ShardingContext shardingContext) {
         int i = shardingContext.getShardingItem();

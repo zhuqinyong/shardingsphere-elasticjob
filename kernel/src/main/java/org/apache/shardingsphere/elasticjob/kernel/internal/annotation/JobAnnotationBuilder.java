@@ -32,10 +32,10 @@ import java.util.Optional;
  * Job Builder from @ElasticJobConfiguration.
  */
 public final class JobAnnotationBuilder {
-    
+
     /**
      * Generate job configuration from @ElasticJobConfiguration.
-     * 
+     *
      * @param type The job of @ElasticJobConfiguration annotation class
      * @return job configuration
      */

@@ -19,47 +19,42 @@ package org.apache.shardingsphere.elasticjob.kernel.internal.failover;
 
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.apache.shardingsphere.elasticjob.kernel.internal.config.ConfigurationService;
 import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.JobRegistry;
 import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.JobScheduleController;
+import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.ShardingNode;
 import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.ShardingService;
 import org.apache.shardingsphere.elasticjob.kernel.internal.storage.JobNodeStorage;
 import org.apache.shardingsphere.elasticjob.reg.base.CoordinatorRegistryCenter;
 import org.apache.shardingsphere.elasticjob.reg.base.LeaderExecutionCallback;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Failover service.
  */
 @Slf4j
 public final class FailoverService {
-    
+
     private final String jobName;
-    
+
     private final JobNodeStorage jobNodeStorage;
-    
+
     private final ShardingService shardingService;
-    
+
     private final ConfigurationService configService;
-    
+
     public FailoverService(final CoordinatorRegistryCenter regCenter, final String jobName) {
         this.jobName = jobName;
         jobNodeStorage = new JobNodeStorage(regCenter, jobName);
         shardingService = new ShardingService(regCenter, jobName);
         configService = new ConfigurationService(regCenter, jobName);
     }
-    
+
     /**
      * set crashed failover flag.
-     * 
+     *
      * @param item crashed job item
      */
     public void setCrashedFailoverFlag(final int item) {
@@ -68,7 +63,7 @@ public final class FailoverService {
             jobNodeStorage.removeJobNodeIfExisted(ShardingNode.getRunningNode(item));
         }
     }
-    
+
     /**
      * set crashed failover flag directly.
      *
@@ -77,11 +72,11 @@ public final class FailoverService {
     public void setCrashedFailoverFlagDirectly(final int item) {
         jobNodeStorage.createJobNodeIfNeeded(FailoverNode.getItemsNode(item));
     }
-    
+
     private boolean isFailoverAssigned(final Integer item) {
         return jobNodeStorage.isJobNodeExisted(FailoverNode.getExecutionFailoverNode(item));
     }
-    
+
     /**
      * Failover if necessary.
      */
@@ -90,15 +85,15 @@ public final class FailoverService {
             jobNodeStorage.executeInLeader(FailoverNode.LATCH, new FailoverLeaderExecutionCallback());
         }
     }
-    
+
     private boolean needFailover() {
         return jobNodeStorage.isJobNodeExisted(FailoverNode.ITEMS_ROOT) && !jobNodeStorage.getJobNodeChildrenKeys(FailoverNode.ITEMS_ROOT).isEmpty()
                 && !JobRegistry.getInstance().isJobRunning(jobName);
     }
-    
+
     /**
      * Update sharding items status when failover execution complete.
-     * 
+     *
      * @param items sharding items of failover execution completed
      */
     public void updateFailoverComplete(final Collection<Integer> items) {
@@ -107,7 +102,7 @@ public final class FailoverService {
             jobNodeStorage.removeJobNodeIfExisted(FailoverNode.getExecutingFailoverNode(each));
         }
     }
-    
+
     /**
      * Get failover items.
      *
@@ -127,7 +122,7 @@ public final class FailoverService {
         Collections.sort(result);
         return result;
     }
-    
+
     /**
      * Get failovering items.
      *
@@ -147,10 +142,10 @@ public final class FailoverService {
         Collections.sort(result);
         return result;
     }
-    
+
     /**
      * Get failover items which execute on localhost.
-     * 
+     *
      * @return failover items which execute on localhost
      */
     public List<Integer> getLocalFailoverItems() {
@@ -159,10 +154,10 @@ public final class FailoverService {
         }
         return getFailoverItems(JobRegistry.getInstance().getJobInstance(jobName).getJobInstanceId());
     }
-    
+
     /**
      * Get failover items which crashed on localhost.
-     * 
+     *
      * @return failover items which crashed on localhost
      */
     public List<Integer> getLocalTakeOffItems() {
@@ -175,7 +170,7 @@ public final class FailoverService {
         }
         return result;
     }
-    
+
     /**
      * Get all failovering items.
      *
@@ -192,7 +187,7 @@ public final class FailoverService {
         }
         return result;
     }
-    
+
     /**
      * Clear failovering item.
      *
@@ -201,7 +196,7 @@ public final class FailoverService {
     public void clearFailoveringItem(final int item) {
         jobNodeStorage.removeJobNodeIfExisted(FailoverNode.getExecutingFailoverNode(item));
     }
-    
+
     /**
      * Remove failover info.
      */
@@ -210,9 +205,9 @@ public final class FailoverService {
             jobNodeStorage.removeJobNodeIfExisted(FailoverNode.getExecutionFailoverNode(Integer.parseInt(each)));
         }
     }
-    
+
     class FailoverLeaderExecutionCallback implements LeaderExecutionCallback {
-        
+
         @Override
         public void execute() {
             if (JobRegistry.getInstance().isShutdown(jobName) || !needFailover()) {

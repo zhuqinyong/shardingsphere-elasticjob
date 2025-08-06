@@ -17,13 +17,13 @@
 
 package org.apache.shardingsphere.elasticjob.kernel.internal.guarantee;
 
-import org.apache.shardingsphere.elasticjob.spi.listener.ElasticJobListener;
-import org.apache.shardingsphere.elasticjob.kernel.listener.AbstractDistributeOnceElasticJobListener;
 import org.apache.shardingsphere.elasticjob.kernel.internal.listener.AbstractListenerManager;
+import org.apache.shardingsphere.elasticjob.kernel.listener.AbstractDistributeOnceElasticJobListener;
 import org.apache.shardingsphere.elasticjob.reg.base.CoordinatorRegistryCenter;
 import org.apache.shardingsphere.elasticjob.reg.listener.DataChangedEvent;
 import org.apache.shardingsphere.elasticjob.reg.listener.DataChangedEvent.Type;
 import org.apache.shardingsphere.elasticjob.reg.listener.DataChangedEventListener;
+import org.apache.shardingsphere.elasticjob.spi.listener.ElasticJobListener;
 
 import java.util.Collection;
 
@@ -31,25 +31,25 @@ import java.util.Collection;
  * Guarantee listener manager.
  */
 public final class GuaranteeListenerManager extends AbstractListenerManager {
-    
+
     private final GuaranteeNode guaranteeNode;
-    
+
     private final Collection<ElasticJobListener> elasticJobListeners;
-    
+
     public GuaranteeListenerManager(final CoordinatorRegistryCenter regCenter, final String jobName, final Collection<ElasticJobListener> elasticJobListeners) {
         super(regCenter, jobName);
         this.guaranteeNode = new GuaranteeNode(jobName);
         this.elasticJobListeners = elasticJobListeners;
     }
-    
+
     @Override
     public void start() {
         addDataListener(new StartedNodeRemovedJobListener());
         addDataListener(new CompletedNodeRemovedJobListener());
     }
-    
+
     class StartedNodeRemovedJobListener implements DataChangedEventListener {
-        
+
         @Override
         public void onChange(final DataChangedEvent event) {
             if (Type.DELETED == event.getType() && guaranteeNode.isStartedRootNode(event.getKey())) {
@@ -61,9 +61,9 @@ public final class GuaranteeListenerManager extends AbstractListenerManager {
             }
         }
     }
-    
+
     class CompletedNodeRemovedJobListener implements DataChangedEventListener {
-        
+
         @Override
         public void onChange(final DataChangedEvent event) {
             if (Type.DELETED == event.getType() && guaranteeNode.isCompletedRootNode(event.getKey())) {

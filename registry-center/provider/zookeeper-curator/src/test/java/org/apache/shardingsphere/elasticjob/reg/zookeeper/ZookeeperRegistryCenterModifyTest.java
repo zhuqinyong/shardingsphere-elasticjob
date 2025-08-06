@@ -31,16 +31,14 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ZookeeperRegistryCenterModifyTest {
-    
+
     private static final EmbedTestingServer EMBED_TESTING_SERVER = new EmbedTestingServer();
-    
+
     private static ZookeeperRegistryCenter zkRegCenter;
-    
+
     @BeforeAll
     static void setUp() {
         EMBED_TESTING_SERVER.start();
@@ -50,12 +48,12 @@ class ZookeeperRegistryCenterModifyTest {
         zkRegCenter.init();
         RegistryCenterEnvironmentPreparer.persist(zkRegCenter);
     }
-    
+
     @AfterAll
     static void tearDown() {
         zkRegCenter.close();
     }
-    
+
     @Test
     void assertPersist() {
         zkRegCenter.persist("/test", "test_update");
@@ -63,14 +61,14 @@ class ZookeeperRegistryCenterModifyTest {
         assertThat(zkRegCenter.get("/test"), is("test_update"));
         assertThat(zkRegCenter.get("/persist/new"), is("new_value"));
     }
-    
+
     @Test
     void assertUpdate() {
         zkRegCenter.persist("/update", "before_update");
         zkRegCenter.update("/update", "after_update");
         assertThat(zkRegCenter.getDirectly("/update"), is("after_update"));
     }
-    
+
     @Test
     void assertPersistEphemeral() throws Exception {
         zkRegCenter.persist("/persist", "persist_value");
@@ -85,7 +83,7 @@ class ZookeeperRegistryCenterModifyTest {
         assertNull(client.checkExists().forPath("/" + ZookeeperRegistryCenterModifyTest.class.getName() + "/ephemeral"));
         zkRegCenter.init();
     }
-    
+
     @Test
     void assertPersistSequential() throws Exception {
         assertThat(zkRegCenter.persistSequential("/sequential/test_sequential", "test_value"), startsWith("/sequential/test_sequential"));
@@ -103,7 +101,7 @@ class ZookeeperRegistryCenterModifyTest {
             assertFalse(zkRegCenter.isExisted("/sequential"));
         }
     }
-    
+
     @Test
     void assertPersistEphemeralSequential() throws Exception {
         zkRegCenter.persistEphemeralSequential("/sequential/test_ephemeral_sequential");
@@ -122,7 +120,7 @@ class ZookeeperRegistryCenterModifyTest {
             zkRegCenter.init();
         }
     }
-    
+
     @Test
     void assertRemove() {
         zkRegCenter.remove("/test");

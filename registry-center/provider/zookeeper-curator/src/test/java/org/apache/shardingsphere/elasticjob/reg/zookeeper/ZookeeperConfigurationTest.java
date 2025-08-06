@@ -24,7 +24,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class ZookeeperConfigurationTest {
-    
+
     @Test
     void assertNewZookeeperConfigurationForServerListsAndNamespace() {
         int randomPort = InstanceSpec.getRandomPort();

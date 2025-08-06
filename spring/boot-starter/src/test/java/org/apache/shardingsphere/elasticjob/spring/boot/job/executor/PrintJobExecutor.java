@@ -20,18 +20,18 @@ package org.apache.shardingsphere.elasticjob.spring.boot.job.executor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shardingsphere.elasticjob.api.ElasticJob;
 import org.apache.shardingsphere.elasticjob.api.JobConfiguration;
-import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
 import org.apache.shardingsphere.elasticjob.spi.executor.item.param.JobRuntimeService;
+import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
 import org.apache.shardingsphere.elasticjob.spi.executor.item.type.TypedJobItemExecutor;
 
 @Slf4j
 public final class PrintJobExecutor implements TypedJobItemExecutor {
-    
+
     @Override
     public void process(final ElasticJob elasticJob, final JobConfiguration jobConfig, final JobRuntimeService jobRuntimeService, final ShardingContext shardingContext) {
         log.info(jobConfig.getProps().getProperty(PrintJobProperties.CONTENT_KEY));
     }
-    
+
     @Override
     public String getType() {
         return "PRINT";

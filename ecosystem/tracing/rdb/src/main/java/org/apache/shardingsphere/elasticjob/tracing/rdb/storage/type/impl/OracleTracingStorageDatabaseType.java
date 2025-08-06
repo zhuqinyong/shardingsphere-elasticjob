@@ -23,12 +23,12 @@ import org.apache.shardingsphere.elasticjob.tracing.rdb.storage.type.TracingStor
  * Tracing storage database type for Oracle.
  */
 public final class OracleTracingStorageDatabaseType implements TracingStorageDatabaseType {
-    
+
     @Override
     public String getType() {
         return "Oracle";
     }
-    
+
     @Override
     public int getDuplicateRecordErrorCode() {
         return 1;

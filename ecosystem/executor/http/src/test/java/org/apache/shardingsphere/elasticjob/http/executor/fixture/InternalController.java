@@ -33,7 +33,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 @Slf4j
 public final class InternalController implements RestfulController {
-    
+
     /**
      * Get name.
      *
@@ -43,7 +43,7 @@ public final class InternalController implements RestfulController {
     public String getName() {
         return "ejob";
     }
-    
+
     /**
      * Get sharding context.
      *
@@ -55,7 +55,7 @@ public final class InternalController implements RestfulController {
         Objects.nonNull(shardingContext);
         return shardingContext;
     }
-    
+
     /**
      * Update name.
      *
@@ -67,7 +67,7 @@ public final class InternalController implements RestfulController {
         Objects.nonNull(updateName);
         return updateName;
     }
-    
+
     /**
      * Post with 100 mills delay for request IO Exception.
      *

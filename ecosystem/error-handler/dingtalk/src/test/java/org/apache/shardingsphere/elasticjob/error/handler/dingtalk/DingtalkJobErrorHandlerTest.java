@@ -22,10 +22,10 @@ import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 import org.apache.curator.test.InstanceSpec;
 import org.apache.shardingsphere.elasticjob.error.handler.dingtalk.fixture.DingtalkInternalController;
-import org.apache.shardingsphere.elasticjob.spi.executor.error.handler.JobErrorHandler;
 import org.apache.shardingsphere.elasticjob.restful.NettyRestfulService;
 import org.apache.shardingsphere.elasticjob.restful.NettyRestfulServiceConfiguration;
 import org.apache.shardingsphere.elasticjob.restful.RestfulService;
+import org.apache.shardingsphere.elasticjob.spi.executor.error.handler.JobErrorHandler;
 import org.apache.shardingsphere.infra.spi.type.typed.TypedSPILoader;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -40,15 +40,15 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class DingtalkJobErrorHandlerTest {
-    
+
     private static final int PORT = InstanceSpec.getRandomPort();
-    
+
     private static final String HOST = "localhost";
-    
+
     private static RestfulService restfulService;
-    
+
     private static List<LoggingEvent> appenderList;
-    
+
     @SuppressWarnings({"unchecked", "rawtypes"})
     @BeforeAll
     static void init() {
@@ -61,19 +61,19 @@ class DingtalkJobErrorHandlerTest {
         ListAppender<LoggingEvent> appender = (ListAppender) log.getAppender("DingtalkJobErrorHandlerTestAppender");
         appenderList = appender.list;
     }
-    
-    @BeforeEach
-    void setUp() {
-        appenderList.clear();
-    }
-    
+
     @AfterAll
     static void close() {
         if (null != restfulService) {
             restfulService.shutdown();
         }
     }
-    
+
+    @BeforeEach
+    void setUp() {
+        appenderList.clear();
+    }
+
     @Test
     void assertHandleExceptionWithNotifySuccessful() {
         DingtalkJobErrorHandler actual = getDingtalkJobErrorHandler(createConfigurationProperties("http://localhost:" + PORT + "/send?access_token=mocked_token"));
@@ -83,7 +83,7 @@ class DingtalkJobErrorHandlerTest {
         assertThat(appenderList.get(0).getLevel(), is(Level.INFO));
         assertThat(appenderList.get(0).getFormattedMessage(), is("An exception has occurred in Job 'test_job', an dingtalk message been sent successful."));
     }
-    
+
     @Test
     void assertHandleExceptionWithWrongToken() {
         DingtalkJobErrorHandler actual = getDingtalkJobErrorHandler(createConfigurationProperties("http://localhost:" + PORT + "/send?access_token=wrong_token"));
@@ -93,7 +93,7 @@ class DingtalkJobErrorHandlerTest {
         assertThat(appenderList.get(0).getLevel(), is(Level.ERROR));
         assertThat(appenderList.get(0).getFormattedMessage(), is("An exception has occurred in Job 'test_job' but failed to send dingtalk because of: token is not exist"));
     }
-    
+
     @Test
     void assertHandleExceptionWithUrlIsNotFound() {
         DingtalkJobErrorHandler actual = getDingtalkJobErrorHandler(createConfigurationProperties("http://localhost:" + PORT + "/404"));
@@ -103,7 +103,7 @@ class DingtalkJobErrorHandlerTest {
         assertThat(appenderList.get(0).getLevel(), is(Level.ERROR));
         assertThat(appenderList.get(0).getFormattedMessage(), is("An exception has occurred in Job 'test_job' but failed to send dingtalk because of: unexpected http response status: 404"));
     }
-    
+
     @Test
     void assertHandleExceptionWithWrongUrl() {
         DingtalkJobErrorHandler actual = getDingtalkJobErrorHandler(createNoSignJobConfigurationProperties("http://wrongUrl"));
@@ -113,7 +113,7 @@ class DingtalkJobErrorHandlerTest {
         assertThat(appenderList.get(0).getLevel(), is(Level.ERROR));
         assertThat(appenderList.get(0).getFormattedMessage(), is("An exception has occurred in Job 'test_job', but failed to send dingtalk because of"));
     }
-    
+
     @Test
     void assertHandleExceptionWithNoSign() {
         DingtalkJobErrorHandler actual = getDingtalkJobErrorHandler(createNoSignJobConfigurationProperties("http://localhost:" + PORT + "/send?access_token=mocked_token"));
@@ -123,11 +123,11 @@ class DingtalkJobErrorHandlerTest {
         assertThat(appenderList.get(0).getLevel(), is(Level.INFO));
         assertThat(appenderList.get(0).getFormattedMessage(), is("An exception has occurred in Job 'test_job', an dingtalk message been sent successful."));
     }
-    
+
     private DingtalkJobErrorHandler getDingtalkJobErrorHandler(final Properties props) {
         return (DingtalkJobErrorHandler) TypedSPILoader.getService(JobErrorHandler.class, "DINGTALK", props);
     }
-    
+
     private Properties createConfigurationProperties(final String webhook) {
         Properties result = new Properties();
         result.setProperty(DingtalkPropertiesConstants.WEBHOOK, webhook);
@@ -137,7 +137,7 @@ class DingtalkJobErrorHandlerTest {
         result.setProperty(DingtalkPropertiesConstants.READ_TIMEOUT_MILLISECONDS, "6000");
         return result;
     }
-    
+
     private Properties createNoSignJobConfigurationProperties(final String webhook) {
         Properties result = new Properties();
         result.setProperty(DingtalkPropertiesConstants.WEBHOOK, webhook);

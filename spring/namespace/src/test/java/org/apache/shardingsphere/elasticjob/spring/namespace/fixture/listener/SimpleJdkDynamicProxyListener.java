@@ -24,17 +24,17 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class SimpleJdkDynamicProxyListener implements ElasticJobListener {
-    
+
     @Override
     public void beforeJobExecuted(final ShardingContexts shardingContexts) {
         assertThat(shardingContexts.getJobName(), is("simpleElasticJob_namespace_listener_jdk_proxy"));
     }
-    
+
     @Override
     public void afterJobExecuted(final ShardingContexts shardingContexts) {
         assertThat(shardingContexts.getJobName(), is("simpleElasticJob_namespace_listener_jdk_proxy"));
     }
-    
+
     @Override
     public String getType() {
         return "simpleJdkDynamicProxyListener";

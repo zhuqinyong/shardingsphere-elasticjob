@@ -24,7 +24,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class TransactionOperationTest {
-    
+
     @Test
     void assertOpAdd() {
         TransactionOperation actual = TransactionOperation.opAdd("key", "value");
@@ -32,7 +32,7 @@ class TransactionOperationTest {
         assertThat(actual.getKey(), is("key"));
         assertThat(actual.getValue(), is("value"));
     }
-    
+
     @Test
     void assertOpUpdate() {
         TransactionOperation actual = TransactionOperation.opUpdate("key", "value");
@@ -40,14 +40,14 @@ class TransactionOperationTest {
         assertThat(actual.getKey(), is("key"));
         assertThat(actual.getValue(), is("value"));
     }
-    
+
     @Test
     void assertOpDelete() {
         TransactionOperation actual = TransactionOperation.opDelete("key");
         assertThat(actual.getType(), is(Type.DELETE));
         assertThat(actual.getKey(), is("key"));
     }
-    
+
     @Test
     void assertOpCheckExists() {
         TransactionOperation actual = TransactionOperation.opCheckExists("key");

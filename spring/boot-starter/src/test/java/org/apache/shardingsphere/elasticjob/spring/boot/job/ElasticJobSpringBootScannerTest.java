@@ -40,16 +40,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ActiveProfiles("elasticjob")
 @ElasticJobScan(basePackages = "org.apache.shardingsphere.elasticjob.spring.boot.job.fixture.job.impl")
 class ElasticJobSpringBootScannerTest {
-    
+
     @Autowired
     private ApplicationContext applicationContext;
-    
+
     @BeforeAll
     static void init() {
         new EmbedTestingServer(18181).start();
         AnnotationCustomJob.reset();
     }
-    
+
     @Test
     void assertDefaultBeanNameWithTypeJob() {
         Awaitility.await().atMost(1L, TimeUnit.MINUTES).untilAsserted(() -> assertThat(AnnotationCustomJob.isCompleted(), is(true)));

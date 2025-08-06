@@ -25,11 +25,7 @@ import org.apache.shardingsphere.elasticjob.kernel.infra.util.SensitiveInfoUtils
 import org.apache.shardingsphere.elasticjob.reg.base.CoordinatorRegistryCenter;
 import org.apache.shardingsphere.elasticjob.reg.zookeeper.ZookeeperRegistryCenter;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -41,23 +37,49 @@ import java.util.Optional;
  */
 @Slf4j
 public final class SnapshotService {
-    
+
     public static final String DUMP_COMMAND = "dump@";
-    
+
     private final int port;
-    
+
     private final CoordinatorRegistryCenter regCenter;
-    
+
     private ServerSocket serverSocket;
-    
+
     private volatile boolean closed;
-    
+
     public SnapshotService(final CoordinatorRegistryCenter regCenter, final int port) {
         Preconditions.checkArgument(port >= 0 && port <= 0xFFFF, "Port value out of range: " + port);
         this.regCenter = regCenter;
         this.port = port;
     }
-    
+
+    /**
+     * Dump job.
+     *
+     * @param instanceIp job instance ip addr
+     * @param dumpPort   dump port
+     * @param jobName    job's name
+     * @return dump job's info
+     * @throws IOException i/o exception
+     */
+    public static String dumpJob(final String instanceIp, final int dumpPort, final String jobName) throws IOException {
+        try (
+                Socket socket = new Socket(instanceIp, dumpPort);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()))) {
+            writer.write(DUMP_COMMAND + jobName);
+            writer.newLine();
+            writer.flush();
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while (null != (line = reader.readLine())) {
+                sb.append(line).append("\n");
+            }
+            return sb.toString();
+        }
+    }
+
     /**
      * Start to listen.
      */
@@ -68,7 +90,7 @@ public final class SnapshotService {
             log.error("ElasticJob: Snapshot service listen failure, error is: ", ex);
         }
     }
-    
+
     private int openSocket(final int port) throws IOException {
         closed = false;
         serverSocket = new ServerSocket(port);
@@ -88,11 +110,11 @@ public final class SnapshotService {
         }, threadName).start();
         return localPort;
     }
-    
+
     private boolean isIgnoredException() {
         return serverSocket.isClosed();
     }
-    
+
     private void process(final Socket socket) throws IOException {
         try (
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -106,7 +128,7 @@ public final class SnapshotService {
             }
         }
     }
-    
+
     private void dumpDirectly(final String path, final String jobName, final List<String> result) {
         for (String each : regCenter.getChildrenKeys(path)) {
             String zkPath = path + "/" + each;
@@ -130,9 +152,10 @@ public final class SnapshotService {
             dumpDirectly(zkPath, jobName, result);
         }
     }
-    
+
     /**
      * Dump job.
+     *
      * @param jobName job's name
      * @return dump job's info
      */
@@ -142,37 +165,12 @@ public final class SnapshotService {
         dumpDirectly(path, jobName, result);
         return String.join("\n", SensitiveInfoUtils.filterSensitiveIps(result)) + "\n";
     }
-    
-    /**
-     * Dump job.
-     * @param instanceIp job instance ip addr
-     * @param dumpPort dump port
-     * @param jobName job's name
-     * @return dump job's info
-     * @throws IOException i/o exception
-     */
-    public static String dumpJob(final String instanceIp, final int dumpPort, final String jobName) throws IOException {
-        try (
-                Socket socket = new Socket(instanceIp, dumpPort);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()))) {
-            writer.write(DUMP_COMMAND + jobName);
-            writer.newLine();
-            writer.flush();
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while (null != (line = reader.readLine())) {
-                sb.append(line).append("\n");
-            }
-            return sb.toString();
-        }
-    }
-    
+
     private void outputMessage(final BufferedWriter outputWriter, final String msg) throws IOException {
         outputWriter.append(msg);
         outputWriter.flush();
     }
-    
+
     /**
      * Close listener.
      */

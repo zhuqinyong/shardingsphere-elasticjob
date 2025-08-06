@@ -31,7 +31,7 @@ import org.w3c.dom.Element;
  * Bean definition parser for ZooKeeper.
  */
 public final class ZookeeperBeanDefinitionParser extends AbstractBeanDefinitionParser {
-    
+
     @Override
     protected AbstractBeanDefinition parseInternal(final Element element, final ParserContext parserContext) {
         BeanDefinitionBuilder result = BeanDefinitionBuilder.rootBeanDefinition(ZookeeperRegistryCenter.class);
@@ -40,7 +40,7 @@ public final class ZookeeperBeanDefinitionParser extends AbstractBeanDefinitionP
         result.setDestroyMethodName("close");
         return result.getBeanDefinition();
     }
-    
+
     private AbstractBeanDefinition buildZookeeperConfigurationBeanDefinition(final Element element) {
         BeanDefinitionBuilder config = BeanDefinitionBuilder.rootBeanDefinition(ZookeeperConfiguration.class);
         config.addConstructorArgValue(element.getAttribute(ZookeeperBeanDefinitionTag.SERVER_LISTS_ATTRIBUTE));
@@ -53,7 +53,7 @@ public final class ZookeeperBeanDefinitionParser extends AbstractBeanDefinitionP
         addPropertyValueIfNotEmpty(ZookeeperBeanDefinitionTag.DIGEST_ATTRIBUTE, "digest", element, config);
         return config.getBeanDefinition();
     }
-    
+
     private void addPropertyValueIfNotEmpty(final String attributeName, final String propertyName, final Element element, final BeanDefinitionBuilder factory) {
         String attributeValue = element.getAttribute(attributeName);
         if (!Strings.isNullOrEmpty(attributeValue)) {

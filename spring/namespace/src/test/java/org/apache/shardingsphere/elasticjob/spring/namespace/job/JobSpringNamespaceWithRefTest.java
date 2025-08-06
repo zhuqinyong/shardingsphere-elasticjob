@@ -40,35 +40,35 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = "classpath:META-INF/job/withJobRef.xml")
 class JobSpringNamespaceWithRefTest {
-    
+
     private static final EmbedTestingServer EMBED_TESTING_SERVER = new EmbedTestingServer(3181);
-    
+
     private final String simpleJobName = "simpleElasticJob_job_ref";
-    
+
     @Autowired
     private CoordinatorRegistryCenter regCenter;
-    
+
     @BeforeAll
     static void init() {
         EMBED_TESTING_SERVER.start();
     }
-    
+
     @BeforeEach
     @AfterEach
     void reset() {
         RefFooSimpleElasticJob.reset();
     }
-    
+
     @AfterEach
     void tearDown() {
         JobRegistry.getInstance().shutdown(simpleJobName);
     }
-    
+
     @Test
     void assertSpringJobBean() {
         assertSimpleElasticJobBean();
     }
-    
+
     private void assertSimpleElasticJobBean() {
         Awaitility.await().atMost(1L, TimeUnit.MINUTES).untilAsserted(() -> assertThat(RefFooSimpleElasticJob.isCompleted(), is(true)));
         assertTrue(RefFooSimpleElasticJob.isCompleted());

@@ -27,7 +27,7 @@ import java.util.Properties;
  */
 @SingletonSPI
 public interface JobErrorHandlerPropertiesValidator extends TypedSPI {
-    
+
     /**
      * Validate job properties.
      *

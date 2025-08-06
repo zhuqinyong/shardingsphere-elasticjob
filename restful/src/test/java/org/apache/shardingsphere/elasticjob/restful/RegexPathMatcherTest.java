@@ -25,12 +25,10 @@ import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class RegexPathMatcherTest {
-    
+
     @Test
     void assertCaptureTemplate() {
         PathMatcher pathMatcher = new RegexPathMatcher();
@@ -41,20 +39,20 @@ class RegexPathMatcherTest {
         assertThat(variables.get("until"), is("20201231"));
         assertNull(variables.get("app"));
     }
-    
+
     @Test
     void assertCapturePatternWithoutTemplate() {
         PathMatcher pathMatcher = new RegexPathMatcher();
         Map<String, String> variables = pathMatcher.captureVariables("/app", "/app");
         assertTrue(variables.isEmpty());
     }
-    
+
     @Test
     void assertPathMatch() {
         PathMatcher pathMatcher = new RegexPathMatcher();
         assertTrue(pathMatcher.matches("/app/{jobName}", "/app/myJob"));
     }
-    
+
     @Test
     void assertValidatePathPattern() {
         PathMatcher pathMatcher = new RegexPathMatcher();

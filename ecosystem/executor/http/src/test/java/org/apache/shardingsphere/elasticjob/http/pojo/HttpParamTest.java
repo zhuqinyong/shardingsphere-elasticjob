@@ -25,24 +25,22 @@ import java.util.Properties;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class HttpParamTest {
-    
+
     @Test
     void assertNewWithEmptyUrl() {
         assertThrows(JobConfigurationException.class, () -> new HttpParam(new Properties()));
     }
-    
+
     @Test
     void assertNewWithEmptyMethod() {
         Properties props = new Properties();
         props.setProperty(HttpJobProperties.URI_KEY, "foo/url");
         assertThrows(JobConfigurationException.class, () -> new HttpParam(props));
     }
-    
+
     @Test
     void assertNew() {
         Properties props = new Properties();
@@ -54,7 +52,7 @@ class HttpParamTest {
         assertThat(actual.getConnectTimeoutMilliseconds(), is(3000));
         assertThat(actual.getReadTimeoutMilliseconds(), is(5000));
     }
-    
+
     @Test
     void assertIsWriteMethodWithGet() {
         Properties props = new Properties();
@@ -63,7 +61,7 @@ class HttpParamTest {
         HttpParam actual = new HttpParam(props);
         assertFalse(actual.isWriteMethod());
     }
-    
+
     @Test
     void assertIsWriteMethodWithPost() {
         Properties props = new Properties();
@@ -72,7 +70,7 @@ class HttpParamTest {
         HttpParam actual = new HttpParam(props);
         assertTrue(actual.isWriteMethod());
     }
-    
+
     @Test
     void assertIsWriteMethodWithPut() {
         Properties props = new Properties();
@@ -81,7 +79,7 @@ class HttpParamTest {
         HttpParam actual = new HttpParam(props);
         assertTrue(actual.isWriteMethod());
     }
-    
+
     @Test
     void assertIsWriteMethodWithDelete() {
         Properties props = new Properties();

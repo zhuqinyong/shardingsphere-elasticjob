@@ -29,7 +29,7 @@ import org.w3c.dom.Element;
  * Job scanner bean definition parser.
  */
 public final class JobScannerBeanDefinitionParser extends AbstractBeanDefinitionParser {
-    
+
     @Override
     protected AbstractBeanDefinition parseInternal(final Element element, final ParserContext parserContext) {
         BeanDefinitionBuilder factory = BeanDefinitionBuilder.rootBeanDefinition(JobScannerConfiguration.class);

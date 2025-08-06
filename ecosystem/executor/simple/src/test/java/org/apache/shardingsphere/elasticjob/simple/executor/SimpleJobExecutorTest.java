@@ -18,9 +18,9 @@
 package org.apache.shardingsphere.elasticjob.simple.executor;
 
 import org.apache.shardingsphere.elasticjob.api.JobConfiguration;
-import org.apache.shardingsphere.elasticjob.spi.executor.item.param.JobRuntimeService;
 import org.apache.shardingsphere.elasticjob.simple.job.FooSimpleJob;
 import org.apache.shardingsphere.elasticjob.simple.job.SimpleJob;
+import org.apache.shardingsphere.elasticjob.spi.executor.item.param.JobRuntimeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,29 +35,29 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class SimpleJobExecutorTest {
-    
+
     @Mock
     private FooSimpleJob fooSimpleJob;
-    
+
     @Mock
     private JobConfiguration jobConfig;
-    
+
     @Mock
     private JobRuntimeService jobRuntimeService;
-    
+
     private SimpleJobExecutor jobExecutor;
-    
+
     @BeforeEach
     void setUp() {
         jobExecutor = new SimpleJobExecutor();
     }
-    
+
     @Test
     void assertProcess() {
         jobExecutor.process(fooSimpleJob, jobConfig, jobRuntimeService, any());
         verify(fooSimpleJob, times(1)).execute(any());
     }
-    
+
     @Test
     void assertGetElasticJobClass() {
         assertThat(jobExecutor.getElasticJobClass(), is(SimpleJob.class));

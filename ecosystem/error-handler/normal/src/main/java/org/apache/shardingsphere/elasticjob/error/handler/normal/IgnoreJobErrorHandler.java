@@ -23,11 +23,11 @@ import org.apache.shardingsphere.elasticjob.spi.executor.error.handler.JobErrorH
  * Job error handler for ignore exception.
  */
 public final class IgnoreJobErrorHandler implements JobErrorHandler {
-    
+
     @Override
     public void handleException(final String jobName, final Throwable cause) {
     }
-    
+
     @Override
     public String getType() {
         return "IGNORE";

@@ -23,21 +23,21 @@ import org.apache.shardingsphere.elasticjob.reg.base.CoordinatorRegistryCenter;
  * Connection state changed event listener.
  */
 public interface ConnectionStateChangedEventListener {
-    
-    enum State {
-        
-        CONNECTED,
-        
-        RECONNECTED,
-        
-        UNAVAILABLE
-    }
-    
+
     /**
      * Invoke if connection state of registry center changed.
      *
      * @param registryCenter registry center
-     * @param newState new state
+     * @param newState       new state
      */
     void onStateChanged(CoordinatorRegistryCenter registryCenter, State newState);
+
+    enum State {
+
+        CONNECTED,
+
+        RECONNECTED,
+
+        UNAVAILABLE
+    }
 }

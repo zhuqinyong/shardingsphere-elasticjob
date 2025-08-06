@@ -30,9 +30,9 @@ import org.springframework.context.ApplicationContextAware;
 @Setter
 @Slf4j
 public class ScheduleJobBootstrapStartupRunner implements CommandLineRunner, ApplicationContextAware {
-    
+
     private ApplicationContext applicationContext;
-    
+
     @Override
     public void run(final String... args) {
         log.info("Starting ElasticJob Bootstrap.");

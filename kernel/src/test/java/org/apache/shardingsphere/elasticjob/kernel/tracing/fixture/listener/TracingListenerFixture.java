@@ -20,33 +20,33 @@ package org.apache.shardingsphere.elasticjob.kernel.tracing.fixture.listener;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.apache.shardingsphere.elasticjob.kernel.tracing.fixture.config.TracingStorageFixture;
-import org.apache.shardingsphere.elasticjob.spi.tracing.listener.TracingListener;
 import org.apache.shardingsphere.elasticjob.spi.tracing.event.JobExecutionEvent;
 import org.apache.shardingsphere.elasticjob.spi.tracing.event.JobStatusTraceEvent;
+import org.apache.shardingsphere.elasticjob.spi.tracing.listener.TracingListener;
 
 @RequiredArgsConstructor
 public final class TracingListenerFixture implements TracingListener {
-    
+
     @Getter
     private static volatile boolean executionEventCalled;
-    
+
     private final TracingStorageFixture tracingStorage;
-    
-    @Override
-    public void listen(final JobExecutionEvent jobExecutionEvent) {
-        tracingStorage.call();
-        executionEventCalled = true;
-    }
-    
-    @Override
-    public void listen(final JobStatusTraceEvent jobStatusTraceEvent) {
-        tracingStorage.call();
-    }
-    
+
     /**
      * Reset.
      */
     public static void reset() {
         executionEventCalled = false;
+    }
+
+    @Override
+    public void listen(final JobExecutionEvent jobExecutionEvent) {
+        tracingStorage.call();
+        executionEventCalled = true;
+    }
+
+    @Override
+    public void listen(final JobStatusTraceEvent jobStatusTraceEvent) {
+        tracingStorage.call();
     }
 }

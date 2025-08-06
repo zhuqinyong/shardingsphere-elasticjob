@@ -17,8 +17,8 @@
 
 package org.apache.shardingsphere.elasticjob.spring.namespace.tracing.parser;
 
-import org.apache.shardingsphere.elasticjob.spring.namespace.tracing.tag.TracingBeanDefinitionTag;
 import org.apache.shardingsphere.elasticjob.kernel.tracing.config.TracingConfiguration;
+import org.apache.shardingsphere.elasticjob.spring.namespace.tracing.tag.TracingBeanDefinitionTag;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractBeanDefinitionParser;
@@ -29,7 +29,7 @@ import org.w3c.dom.Element;
  * Tracing bean definition parser.
  */
 public final class TracingBeanDefinitionParser extends AbstractBeanDefinitionParser {
-    
+
     @Override
     protected AbstractBeanDefinition parseInternal(final Element element, final ParserContext parserContext) {
         BeanDefinitionBuilder factory = BeanDefinitionBuilder.rootBeanDefinition(TracingConfiguration.class);

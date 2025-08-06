@@ -36,7 +36,7 @@ import org.springframework.context.annotation.Import;
 @Import({ElasticJobRegistryCenterConfiguration.class, ElasticJobTracingConfiguration.class, ElasticJobSnapshotServiceConfiguration.class})
 @EnableConfigurationProperties(ElasticJobProperties.class)
 public class ElasticJobAutoConfiguration {
-    
+
     @Configuration(proxyBeanMethods = false)
     @Import({ElasticJobBootstrapConfiguration.class, ScheduleJobBootstrapStartupRunner.class})
     protected static class ElasticJobConfiguration {

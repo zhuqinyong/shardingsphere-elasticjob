@@ -56,20 +56,20 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @EnabledInNativeImage
 class SpirngBootTest {
-    
+
     private static TestingServer testingServer;
-    
+
     @Autowired
     private ObjectProvider<ZookeeperRegistryCenter> zookeeperRegistryCenterProvider;
-    
+
     private MockMvc mockMvc;
-    
+
     @DynamicPropertySource
     static void elasticjobProperties(final DynamicPropertyRegistry registry) {
         registry.add("elasticjob.regCenter.serverLists", () -> testingServer.getConnectString());
         registry.add("elasticjob.dump.port", InstanceSpec::getRandomPort);
     }
-    
+
     @BeforeAll
     static void beforeAll() throws Exception {
         testingServer = new TestingServer();
@@ -81,19 +81,19 @@ class SpirngBootTest {
             Awaitility.await().atMost(Duration.ofMillis(500 * 60)).ignoreExceptions().until(client::isConnected);
         }
     }
-    
+
     @AfterAll
     static void afterAll() throws IOException {
         testingServer.close();
     }
-    
+
     @BeforeEach
     void setup(final WebApplicationContext webApplicationContext) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .defaultResponseCharacterEncoding(StandardCharsets.UTF_8)
                 .build();
     }
-    
+
     /**
      * ElasticJob Spring Boot Starter requires that all Spring Boot Applications be shut down before shutting down Zookeeper Server.
      * That's why this unit test uses {@link DirtiesContext}.
@@ -103,8 +103,8 @@ class SpirngBootTest {
     @Test
     public void testOneOffJob() throws Exception {
         String contentAsString = mockMvc.perform(
-                MockMvcRequestBuilders.get("/execute/manualScriptJob")
-                        .characterEncoding(StandardCharsets.UTF_8))
+                        MockMvcRequestBuilders.get("/execute/manualScriptJob")
+                                .characterEncoding(StandardCharsets.UTF_8))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpectAll(
                         MockMvcResultMatchers.status().isOk(),
@@ -114,7 +114,7 @@ class SpirngBootTest {
                 .getContentAsString();
         assertThat(contentAsString, is("{\"msg\":\"OK\"}"));
     }
-    
+
     @DirtiesContext
     @Test
     void testIssue2012() {

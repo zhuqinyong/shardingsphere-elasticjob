@@ -29,17 +29,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ScheduleEnabledJobE2ETest extends EnabledJobE2ETest {
-    
+
     ScheduleEnabledJobE2ETest() {
         super(TestType.SCHEDULE, new E2EFixtureJobImpl());
     }
-    
+
     @Override
     protected JobConfiguration getJobConfiguration(final String jobName) {
         return JobConfiguration.newBuilder(jobName, 3).cron("0/1 * * * * ?").shardingItemParameters("0=A,1=B,2=C")
                 .jobListenerTypes("INTEGRATE-TEST", "INTEGRATE-DISTRIBUTE").overwrite(true).build();
     }
-    
+
     @Test
     void assertJobInit() {
         Awaitility.await().atMost(10L, TimeUnit.SECONDS).untilAsserted(() -> assertThat(((E2EFixtureJobImpl) getElasticJob()).isCompleted(), is(true)));

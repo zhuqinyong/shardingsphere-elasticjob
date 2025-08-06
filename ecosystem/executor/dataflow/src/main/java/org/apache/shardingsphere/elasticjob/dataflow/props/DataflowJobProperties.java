@@ -21,7 +21,7 @@ package org.apache.shardingsphere.elasticjob.dataflow.props;
  * Dataflow job properties.
  */
 public final class DataflowJobProperties {
-    
+
     /**
      * Whether to use stream mode to process dataflow job.
      */

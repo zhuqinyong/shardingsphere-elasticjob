@@ -26,22 +26,22 @@ import org.apache.shardingsphere.elasticjob.reg.base.CoordinatorRegistryCenter;
  * Scheduler facade.
  */
 public final class SchedulerFacade {
-    
+
     private final String jobName;
-    
+
     private final LeaderService leaderService;
-    
+
     private final ShardingService shardingService;
-    
+
     private final ExecutionService executionService;
-    
+
     public SchedulerFacade(final CoordinatorRegistryCenter regCenter, final String jobName) {
         this.jobName = jobName;
         leaderService = new LeaderService(regCenter, jobName);
         shardingService = new ShardingService(regCenter, jobName);
         executionService = new ExecutionService(regCenter, jobName);
     }
-    
+
     /**
      * Create job trigger listener.
      *
@@ -50,7 +50,7 @@ public final class SchedulerFacade {
     public JobTriggerListener newJobTriggerListener() {
         return new JobTriggerListener(executionService, shardingService);
     }
-    
+
     /**
      * Shutdown instance.
      */

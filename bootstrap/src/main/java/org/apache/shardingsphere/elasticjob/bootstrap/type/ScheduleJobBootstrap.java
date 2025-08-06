@@ -27,25 +27,25 @@ import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.JobSchedule
 import org.apache.shardingsphere.elasticjob.reg.base.CoordinatorRegistryCenter;
 
 /**
- * Schedule job bootstrap.
+ * 定时任务启动类
  */
 public final class ScheduleJobBootstrap implements JobBootstrap {
-    
+
     private final JobScheduler jobScheduler;
-    
+
     public ScheduleJobBootstrap(final CoordinatorRegistryCenter regCenter, final ElasticJob elasticJob, final JobConfiguration jobConfig) {
         jobScheduler = new JobScheduler(regCenter, elasticJob, jobConfig);
     }
-    
+
     public ScheduleJobBootstrap(final CoordinatorRegistryCenter regCenter, final String elasticJobType, final JobConfiguration jobConfig) {
         jobScheduler = new JobScheduler(regCenter, elasticJobType, jobConfig);
     }
-    
+
     public ScheduleJobBootstrap(final CoordinatorRegistryCenter regCenter, final ElasticJob elasticJob) {
         JobConfiguration jobConfig = JobAnnotationBuilder.generateJobConfiguration(elasticJob.getClass());
         jobScheduler = new JobScheduler(regCenter, elasticJob, jobConfig);
     }
-    
+
     /**
      * Schedule job.
      */
@@ -53,7 +53,7 @@ public final class ScheduleJobBootstrap implements JobBootstrap {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(jobScheduler.getJobConfig().getCron()), "Cron can not be empty.");
         jobScheduler.getJobScheduleController().scheduleJob(jobScheduler.getJobConfig().getCron(), jobScheduler.getJobConfig().getTimeZone());
     }
-    
+
     @Override
     public void shutdown() {
         jobScheduler.shutdown();

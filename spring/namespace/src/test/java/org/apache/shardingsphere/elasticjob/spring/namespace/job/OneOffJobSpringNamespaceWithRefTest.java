@@ -42,40 +42,40 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = "classpath:META-INF/job/oneOffWithJobRef.xml")
 class OneOffJobSpringNamespaceWithRefTest {
-    
+
     private static final EmbedTestingServer EMBED_TESTING_SERVER = new EmbedTestingServer(3181);
-    
+
     private final String oneOffSimpleJobName = "oneOffSimpleElasticJobRef";
-    
+
     @Autowired
     private ApplicationContext applicationContext;
-    
+
     @Autowired
     private CoordinatorRegistryCenter regCenter;
-    
+
     @BeforeAll
     static void init() {
         EMBED_TESTING_SERVER.start();
     }
-    
+
     @BeforeEach
     @AfterEach
     void reset() {
         RefFooSimpleElasticJob.reset();
     }
-    
+
     @AfterEach
     void tearDown() {
         JobRegistry.getInstance().shutdown(oneOffSimpleJobName);
     }
-    
+
     @Test
     void assertSpringJobBean() {
         OneOffJobBootstrap bootstrap = applicationContext.getBean(oneOffSimpleJobName, OneOffJobBootstrap.class);
         bootstrap.execute();
         assertOneOffSimpleElasticJobBean();
     }
-    
+
     private void assertOneOffSimpleElasticJobBean() {
         Awaitility.await().atMost(1L, TimeUnit.MINUTES).untilAsserted(() -> assertThat(RefFooSimpleElasticJob.isCompleted(), is(true)));
         assertTrue(RefFooSimpleElasticJob.isCompleted());

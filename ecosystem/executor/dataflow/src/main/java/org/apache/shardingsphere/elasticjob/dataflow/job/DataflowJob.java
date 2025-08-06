@@ -24,11 +24,11 @@ import java.util.List;
 
 /**
  * Dataflow job.
- * 
+ *
  * @param <T> type of data
  */
 public interface DataflowJob<T> extends ElasticJob {
-    
+
     /**
      * Fetch to be processed data.
      *
@@ -36,12 +36,12 @@ public interface DataflowJob<T> extends ElasticJob {
      * @return to be processed data
      */
     List<T> fetchData(ShardingContext shardingContext);
-    
+
     /**
      * Process data.
      *
      * @param shardingContext sharding context
-     * @param data to be processed data
+     * @param data            to be processed data
      */
     void processData(ShardingContext shardingContext, List<T> data);
 }

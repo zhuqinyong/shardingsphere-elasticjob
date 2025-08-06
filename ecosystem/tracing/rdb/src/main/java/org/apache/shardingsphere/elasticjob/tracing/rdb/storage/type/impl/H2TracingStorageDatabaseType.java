@@ -23,12 +23,12 @@ import org.apache.shardingsphere.elasticjob.tracing.rdb.storage.type.TracingStor
  * Tracing storage database type for H2.
  */
 public final class H2TracingStorageDatabaseType implements TracingStorageDatabaseType {
-    
+
     @Override
     public String getType() {
         return "H2";
     }
-    
+
     @Override
     public int getDuplicateRecordErrorCode() {
         return 23505;

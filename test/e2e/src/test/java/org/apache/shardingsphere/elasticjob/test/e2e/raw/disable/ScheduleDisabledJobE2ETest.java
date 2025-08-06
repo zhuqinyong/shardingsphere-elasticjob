@@ -31,17 +31,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ScheduleDisabledJobE2ETest extends DisabledJobE2ETest {
-    
+
     ScheduleDisabledJobE2ETest() {
         super(TestType.SCHEDULE);
     }
-    
+
     @Override
     protected JobConfiguration getJobConfiguration(final String jobName) {
         return JobConfiguration.newBuilder(jobName, 3).cron("0/1 * * * * ?").shardingItemParameters("0=A,1=B,2=C")
                 .jobListenerTypes("INTEGRATE-TEST", "INTEGRATE-DISTRIBUTE").disabled(true).overwrite(true).build();
     }
-    
+
     @Test
     void assertJobRunning() {
         assertDisabledRegCenterInfo();
@@ -49,11 +49,11 @@ class ScheduleDisabledJobE2ETest extends DisabledJobE2ETest {
         Awaitility.await().atMost(10L, TimeUnit.SECONDS).untilAsserted(() -> assertThat(((E2EFixtureJobImpl) getElasticJob()).isCompleted(), is(true)));
         assertEnabledRegCenterInfo();
     }
-    
+
     private void setJobEnable() {
         getRegistryCenter().persist("/" + getJobName() + "/servers/" + JobRegistry.getInstance().getJobInstance(getJobName()).getServerIp(), ServerStatus.ENABLED.name());
     }
-    
+
     private void assertEnabledRegCenterInfo() {
         assertTrue(getRegistryCenter().isExisted("/" + getJobName() + "/instances/" + JobRegistry.getInstance().getJobInstance(getJobName()).getJobInstanceId()));
         getRegistryCenter().remove("/" + getJobName() + "/leader/election");

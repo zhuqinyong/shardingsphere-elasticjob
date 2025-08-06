@@ -18,7 +18,7 @@
 package org.apache.shardingsphere.elasticjob.kernel.tracing.fixture.config;
 
 public interface TracingStorageFixture {
-    
+
     /**
      * Call.
      */

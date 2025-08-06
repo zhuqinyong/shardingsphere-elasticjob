@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class YamlTracingConfigurationConverterTest {
-    
+
     @Test
     void assertConvertTracingConfiguration() {
         TracingStorageFixture expectedStorage = () -> {

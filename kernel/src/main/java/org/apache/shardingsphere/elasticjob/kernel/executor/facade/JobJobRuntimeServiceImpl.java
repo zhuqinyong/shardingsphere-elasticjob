@@ -25,9 +25,9 @@ import org.apache.shardingsphere.elasticjob.spi.executor.item.param.JobRuntimeSe
  */
 @RequiredArgsConstructor
 public final class JobJobRuntimeServiceImpl implements JobRuntimeService {
-    
+
     private final JobFacade jobFacade;
-    
+
     @Override
     public boolean isNeedSharding() {
         return jobFacade.isNeedSharding();

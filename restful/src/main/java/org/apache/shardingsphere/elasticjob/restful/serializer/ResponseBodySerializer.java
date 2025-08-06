@@ -24,14 +24,14 @@ import org.apache.shardingsphere.infra.spi.annotation.SingletonSPI;
  */
 @SingletonSPI
 public interface ResponseBodySerializer {
-    
+
     /**
      * Specify which type would be serialized by this serializer.
      *
      * @return MIME type
      */
     String mimeType();
-    
+
     /**
      * Serialize object to bytes.
      *

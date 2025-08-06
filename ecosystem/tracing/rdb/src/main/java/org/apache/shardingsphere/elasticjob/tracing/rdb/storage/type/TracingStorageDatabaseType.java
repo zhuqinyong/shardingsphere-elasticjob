@@ -25,23 +25,23 @@ import org.apache.shardingsphere.infra.spi.type.typed.TypedSPI;
  */
 @SingletonSPI
 public interface TracingStorageDatabaseType extends TypedSPI {
-    
+
     /**
      * Get database product name.
-     * 
+     *
      * @return database product name
      */
     default String getDatabaseProductName() {
         return getType();
     }
-    
+
     /**
      * Get duplicate record error code.
-     * 
+     *
      * @return duplicate record error code
      */
     int getDuplicateRecordErrorCode();
-    
+
     @Override
     String getType();
 }

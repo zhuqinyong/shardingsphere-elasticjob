@@ -18,17 +18,24 @@
 package org.apache.shardingsphere.elasticjob.spring.namespace.fixture.job;
 
 import lombok.Getter;
-import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
 import org.apache.shardingsphere.elasticjob.dataflow.job.DataflowJob;
+import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
 
 import java.util.Collections;
 import java.util.List;
 
 public class DataflowElasticJob implements DataflowJob<String> {
-    
+
     @Getter
     private static volatile boolean completed;
-    
+
+    /**
+     * Set completed to false.
+     */
+    public static void reset() {
+        completed = false;
+    }
+
     @Override
     public List<String> fetchData(final ShardingContext shardingContext) {
         if (completed) {
@@ -36,16 +43,9 @@ public class DataflowElasticJob implements DataflowJob<String> {
         }
         return Collections.singletonList("data");
     }
-    
+
     @Override
     public void processData(final ShardingContext shardingContext, final List<String> data) {
         completed = true;
-    }
-    
-    /**
-     * Set completed to false.
-     */
-    public static void reset() {
-        completed = false;
     }
 }

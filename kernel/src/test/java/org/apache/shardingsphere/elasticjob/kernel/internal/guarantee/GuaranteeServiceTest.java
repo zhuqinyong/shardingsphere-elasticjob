@@ -18,10 +18,10 @@
 package org.apache.shardingsphere.elasticjob.kernel.internal.guarantee;
 
 import org.apache.shardingsphere.elasticjob.api.JobConfiguration;
-import org.apache.shardingsphere.elasticjob.spi.listener.param.ShardingContexts;
-import org.apache.shardingsphere.elasticjob.kernel.listener.AbstractDistributeOnceElasticJobListener;
 import org.apache.shardingsphere.elasticjob.kernel.internal.config.ConfigurationService;
 import org.apache.shardingsphere.elasticjob.kernel.internal.storage.JobNodeStorage;
+import org.apache.shardingsphere.elasticjob.kernel.listener.AbstractDistributeOnceElasticJobListener;
+import org.apache.shardingsphere.elasticjob.spi.listener.param.ShardingContexts;
 import org.apache.shardingsphere.elasticjob.test.util.ReflectionUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,58 +33,52 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class GuaranteeServiceTest {
-    
+
+    private final GuaranteeService guaranteeService = new GuaranteeService(null, "test_job");
     @Mock
     private JobNodeStorage jobNodeStorage;
-    
     @Mock
     private ConfigurationService configService;
-    
     @Mock
     private AbstractDistributeOnceElasticJobListener listener;
-    
     @Mock
     private ShardingContexts shardingContexts;
-    
-    private final GuaranteeService guaranteeService = new GuaranteeService(null, "test_job");
-    
+
     @BeforeEach
     void setUp() {
         ReflectionUtils.setFieldValue(guaranteeService, "jobNodeStorage", jobNodeStorage);
         ReflectionUtils.setFieldValue(guaranteeService, "configService", configService);
     }
-    
+
     @Test
     void assertRegisterStart() {
         guaranteeService.registerStart(Arrays.asList(0, 1));
         verify(jobNodeStorage).createJobNodeIfNeeded("guarantee/started/0");
         verify(jobNodeStorage).createJobNodeIfNeeded("guarantee/started/1");
     }
-    
+
     @Test
     void assertIsNotRegisterStartSuccess() {
         assertFalse(guaranteeService.isRegisterStartSuccess(Arrays.asList(0, 1)));
     }
-    
+
     @Test
     void assertIsRegisterStartSuccess() {
         when(jobNodeStorage.isJobNodeExisted("guarantee/started/0")).thenReturn(true);
         when(jobNodeStorage.isJobNodeExisted("guarantee/started/1")).thenReturn(true);
         assertTrue(guaranteeService.isRegisterStartSuccess(Arrays.asList(0, 1)));
     }
-    
+
     @Test
     void assertIsNotAllStartedWhenRootNodeIsNotExisted() {
         when(jobNodeStorage.isJobNodeExisted("guarantee/started")).thenReturn(false);
         assertFalse(guaranteeService.isAllStarted());
     }
-    
+
     @Test
     void assertIsNotAllStarted() {
         when(configService.load(false)).thenReturn(
@@ -93,7 +87,7 @@ class GuaranteeServiceTest {
         when(jobNodeStorage.getJobNodeChildrenKeys("guarantee/started")).thenReturn(Arrays.asList("0", "1"));
         assertFalse(guaranteeService.isAllStarted());
     }
-    
+
     @Test
     void assertIsAllStarted() {
         when(jobNodeStorage.isJobNodeExisted("guarantee/started")).thenReturn(true);
@@ -101,44 +95,44 @@ class GuaranteeServiceTest {
         when(jobNodeStorage.getJobNodeChildrenKeys("guarantee/started")).thenReturn(Arrays.asList("0", "1", "2"));
         assertTrue(guaranteeService.isAllStarted());
     }
-    
+
     @Test
     void assertClearAllStartedInfo() {
         guaranteeService.clearAllStartedInfo();
         verify(jobNodeStorage).removeJobNodeIfExisted("guarantee/started");
     }
-    
+
     @Test
     void assertRegisterComplete() {
         guaranteeService.registerComplete(Arrays.asList(0, 1));
         verify(jobNodeStorage).createJobNodeIfNeeded("guarantee/completed/0");
         verify(jobNodeStorage).createJobNodeIfNeeded("guarantee/completed/1");
     }
-    
+
     @Test
     void assertIsNotRegisterCompleteSuccess() {
         assertFalse(guaranteeService.isRegisterCompleteSuccess(Arrays.asList(0, 1)));
     }
-    
+
     @Test
     void assertIsRegisterCompleteSuccess() {
         when(jobNodeStorage.isJobNodeExisted("guarantee/completed/0")).thenReturn(true);
         when(jobNodeStorage.isJobNodeExisted("guarantee/completed/1")).thenReturn(true);
         assertTrue(guaranteeService.isRegisterCompleteSuccess(Arrays.asList(0, 1)));
     }
-    
+
     @Test
     void assertIsNotAllCompletedWhenRootNodeIsNotExisted() {
         when(jobNodeStorage.isJobNodeExisted("guarantee/completed")).thenReturn(false);
         assertFalse(guaranteeService.isAllCompleted());
     }
-    
+
     @Test
     void assertIsNotAllCompleted() {
         when(jobNodeStorage.isJobNodeExisted("guarantee/completed")).thenReturn(false);
         assertFalse(guaranteeService.isAllCompleted());
     }
-    
+
     @Test
     void assertIsAllCompleted() {
         when(jobNodeStorage.isJobNodeExisted("guarantee/completed")).thenReturn(true);
@@ -146,13 +140,13 @@ class GuaranteeServiceTest {
         when(jobNodeStorage.getJobNodeChildrenKeys("guarantee/completed")).thenReturn(Arrays.asList("0", "1", "2"));
         assertTrue(guaranteeService.isAllCompleted());
     }
-    
+
     @Test
     void assertClearAllCompletedInfo() {
         guaranteeService.clearAllCompletedInfo();
         verify(jobNodeStorage).removeJobNodeIfExisted("guarantee/completed");
     }
-    
+
     @Test
     void assertExecuteInLeaderForLastCompleted() {
         when(jobNodeStorage.isJobNodeExisted("guarantee/completed")).thenReturn(true);
@@ -161,14 +155,14 @@ class GuaranteeServiceTest {
         guaranteeService.new LeaderExecutionCallbackForLastCompleted(listener, shardingContexts).execute();
         verify(listener).doAfterJobExecutedAtLastCompleted(shardingContexts);
     }
-    
+
     @Test
     void assertExecuteInLeaderForNotLastCompleted() {
         when(jobNodeStorage.isJobNodeExisted("guarantee/completed")).thenReturn(false);
         guaranteeService.new LeaderExecutionCallbackForLastCompleted(listener, shardingContexts).execute();
         verify(listener, never()).doAfterJobExecutedAtLastCompleted(shardingContexts);
     }
-    
+
     @Test
     void assertExecuteInLeaderForLastStarted() {
         when(jobNodeStorage.isJobNodeExisted("guarantee/started")).thenReturn(true);
@@ -177,7 +171,7 @@ class GuaranteeServiceTest {
         guaranteeService.new LeaderExecutionCallbackForLastStarted(listener, shardingContexts).execute();
         verify(listener).doBeforeJobExecutedAtLastStarted(shardingContexts);
     }
-    
+
     @Test
     void assertExecuteInLeaderForNotLastStarted() {
         when(jobNodeStorage.isJobNodeExisted("guarantee/started")).thenReturn(false);

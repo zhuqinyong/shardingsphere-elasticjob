@@ -28,16 +28,14 @@ import java.util.Collections;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ZookeeperRegistryCenterQueryWithoutCacheTest {
-    
+
     private static final EmbedTestingServer EMBED_TESTING_SERVER = new EmbedTestingServer();
-    
+
     private static ZookeeperRegistryCenter zkRegCenter;
-    
+
     @BeforeAll
     static void setUp() {
         EMBED_TESTING_SERVER.start();
@@ -48,18 +46,18 @@ class ZookeeperRegistryCenterQueryWithoutCacheTest {
         RegistryCenterEnvironmentPreparer.persist(zkRegCenter);
         zkRegCenter.addCacheData("/other");
     }
-    
+
     @AfterAll
     static void tearDown() {
         zkRegCenter.close();
     }
-    
+
     @Test
     void assertGetFromServer() {
         assertThat(zkRegCenter.get("/test"), is("test"));
         assertThat(zkRegCenter.get("/test/deep/nested"), is("deepNested"));
     }
-    
+
     @Test
     void assertGetChildrenKeys() {
         assertThat(zkRegCenter.getChildrenKeys("/test"), is(Arrays.asList("deep", "child")));
@@ -67,7 +65,7 @@ class ZookeeperRegistryCenterQueryWithoutCacheTest {
         assertThat(zkRegCenter.getChildrenKeys("/test/child"), is(Collections.<String>emptyList()));
         assertThat(zkRegCenter.getChildrenKeys("/test/notExisted"), is(Collections.<String>emptyList()));
     }
-    
+
     @Test
     void assertGetNumChildren() {
         assertThat(zkRegCenter.getNumChildren("/test"), is(2));
@@ -75,14 +73,14 @@ class ZookeeperRegistryCenterQueryWithoutCacheTest {
         assertThat(zkRegCenter.getNumChildren("/test/child"), is(0));
         assertThat(zkRegCenter.getNumChildren("/test/notExisted"), is(0));
     }
-    
+
     @Test
     void assertIsExisted() {
         assertTrue(zkRegCenter.isExisted("/test"));
         assertTrue(zkRegCenter.isExisted("/test/deep/nested"));
         assertFalse(zkRegCenter.isExisted("/notExisted"));
     }
-    
+
     @Test
     void assertGetRegistryCenterTime() {
         long regCenterTime = zkRegCenter.getRegistryCenterTime("/_systemTime/current");
@@ -90,7 +88,7 @@ class ZookeeperRegistryCenterQueryWithoutCacheTest {
         long updatedRegCenterTime = zkRegCenter.getRegistryCenterTime("/_systemTime/current");
         assertTrue(regCenterTime < updatedRegCenterTime);
     }
-    
+
     @Test
     void assertGetWithoutNode() {
         assertNull(zkRegCenter.get("/notExisted"));

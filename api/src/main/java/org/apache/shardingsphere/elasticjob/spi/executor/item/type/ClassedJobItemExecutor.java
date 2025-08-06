@@ -23,15 +23,15 @@ import org.apache.shardingsphere.infra.spi.annotation.SingletonSPI;
 
 /**
  * Classed job item executor.
- * 
+ *
  * @param <T> type of ElasticJob
  */
 @SingletonSPI
 public interface ClassedJobItemExecutor<T extends ElasticJob> extends JobItemExecutor<T> {
-    
+
     /**
      * Get elastic job class.
-     * 
+     *
      * @return elastic job class
      */
     Class<T> getElasticJobClass();

@@ -18,12 +18,12 @@
 package org.apache.shardingsphere.elasticjob.kernel.listener.fixture;
 
 public interface ElasticJobListenerCaller {
-    
+
     /**
      * Execute before.
      */
     void before();
-    
+
     /**
      * Execute after.
      */

@@ -34,10 +34,10 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class ExecutorServiceReloaderTest {
-    
+
     @Mock
     private ExecutorService mockExecutorService;
-    
+
     @Test
     void assertInitialize() {
         JobConfiguration jobConfig = JobConfiguration.newBuilder("job", 1).jobExecutorThreadPoolSizeProviderType("SINGLE_THREAD").build();
@@ -49,7 +49,7 @@ class ExecutorServiceReloaderTest {
             actual.shutdown();
         }
     }
-    
+
     @Test
     void assertReload() {
         ExecutorServiceReloader executorServiceReloader = new ExecutorServiceReloader(JobConfiguration.newBuilder("job", 1).jobExecutorThreadPoolSizeProviderType("SINGLE_THREAD").build());
@@ -63,7 +63,7 @@ class ExecutorServiceReloaderTest {
         assertFalse(actual.isTerminated());
         actual.shutdown();
     }
-    
+
     @Test
     void assertUnnecessaryToReload() {
         JobConfiguration jobConfig = JobConfiguration.newBuilder("job", 1).jobExecutorThreadPoolSizeProviderType("CPU").build();
@@ -75,7 +75,7 @@ class ExecutorServiceReloaderTest {
             actual.shutdown();
         }
     }
-    
+
     @Test
     void assertShutdown() {
         ExecutorServiceReloader executorServiceReloader = new ExecutorServiceReloader(JobConfiguration.newBuilder("job", 1).jobExecutorThreadPoolSizeProviderType("SINGLE_THREAD").build());

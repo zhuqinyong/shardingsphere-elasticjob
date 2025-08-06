@@ -17,12 +17,12 @@
 
 package org.apache.shardingsphere.elasticjob.kernel.internal.election;
 
-import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.apache.shardingsphere.elasticjob.kernel.internal.listener.AbstractListenerManager;
 import org.apache.shardingsphere.elasticjob.kernel.internal.schedule.JobRegistry;
 import org.apache.shardingsphere.elasticjob.kernel.internal.server.ServerNode;
 import org.apache.shardingsphere.elasticjob.kernel.internal.server.ServerService;
 import org.apache.shardingsphere.elasticjob.kernel.internal.server.ServerStatus;
+import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.apache.shardingsphere.elasticjob.reg.base.CoordinatorRegistryCenter;
 import org.apache.shardingsphere.elasticjob.reg.listener.DataChangedEvent;
 import org.apache.shardingsphere.elasticjob.reg.listener.DataChangedEvent.Type;
@@ -34,17 +34,17 @@ import java.util.Objects;
  * Election listener manager.
  */
 public final class ElectionListenerManager extends AbstractListenerManager {
-    
+
     private final String jobName;
-    
+
     private final LeaderNode leaderNode;
-    
+
     private final ServerNode serverNode;
-    
+
     private final LeaderService leaderService;
-    
+
     private final ServerService serverService;
-    
+
     public ElectionListenerManager(final CoordinatorRegistryCenter regCenter, final String jobName) {
         super(regCenter, jobName);
         this.jobName = jobName;
@@ -53,49 +53,49 @@ public final class ElectionListenerManager extends AbstractListenerManager {
         leaderService = new LeaderService(regCenter, jobName);
         serverService = new ServerService(regCenter, jobName);
     }
-    
+
     @Override
     public void start() {
         addDataListener(new LeaderElectionJobListener());
         addDataListener(new LeaderAbdicationJobListener());
     }
-    
+
     class LeaderElectionJobListener implements DataChangedEventListener {
-        
+
         @Override
         public void onChange(final DataChangedEvent event) {
             if (!JobRegistry.getInstance().isShutdown(jobName) && (isActiveElection(event.getKey(), event.getValue()) || isPassiveElection(event.getKey(), event.getType()))) {
                 leaderService.electLeader();
             }
         }
-        
+
         private boolean isActiveElection(final String path, final String data) {
             return !leaderService.hasLeader() && isLocalServerEnabled(path, data);
         }
-        
+
         private boolean isPassiveElection(final String path, final Type eventType) {
             JobInstance jobInstance = JobRegistry.getInstance().getJobInstance(jobName);
             return !Objects.isNull(jobInstance) && isLeaderCrashed(path, eventType) && serverService.isAvailableServer(jobInstance.getServerIp());
         }
-        
+
         private boolean isLeaderCrashed(final String path, final Type eventType) {
             return leaderNode.isLeaderInstancePath(path) && Type.DELETED == eventType;
         }
-        
+
         private boolean isLocalServerEnabled(final String path, final String data) {
             return serverNode.isLocalServerPath(path) && !ServerStatus.DISABLED.name().equals(data);
         }
     }
-    
+
     class LeaderAbdicationJobListener implements DataChangedEventListener {
-        
+
         @Override
         public void onChange(final DataChangedEvent event) {
             if (leaderService.isLeader() && isLocalServerDisabled(event.getKey(), event.getValue())) {
                 leaderService.removeLeader();
             }
         }
-        
+
         private boolean isLocalServerDisabled(final String path, final String data) {
             return serverNode.isLocalServerPath(path) && ServerStatus.DISABLED.name().equals(data);
         }

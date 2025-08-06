@@ -23,35 +23,35 @@ import org.apache.shardingsphere.elasticjob.kernel.internal.storage.JobNodePath;
  * Guarantee node.
  */
 public final class GuaranteeNode {
-    
+
     private static final String ROOT = "guarantee";
-    
+
     static final String STARTED_ROOT = ROOT + "/started";
-    
+
     static final String COMPLETED_ROOT = ROOT + "/completed";
-    
+
     static final String STARTED_LATCH_ROOT = ROOT + "/started-latch";
-    
+
     static final String COMPLETED_LATCH_ROOT = ROOT + "/completed-latch";
-    
+
     private final JobNodePath jobNodePath;
-    
+
     GuaranteeNode(final String jobName) {
         jobNodePath = new JobNodePath(jobName);
     }
-    
+
     static String getStartedNode(final int shardingItem) {
         return String.join("/", STARTED_ROOT, String.valueOf(shardingItem));
     }
-    
+
     static String getCompletedNode(final int shardingItem) {
         return String.join("/", COMPLETED_ROOT, String.valueOf(shardingItem));
     }
-    
+
     boolean isStartedRootNode(final String path) {
         return jobNodePath.getFullPath(STARTED_ROOT).equals(path);
     }
-    
+
     boolean isCompletedRootNode(final String path) {
         return jobNodePath.getFullPath(COMPLETED_ROOT).equals(path);
     }

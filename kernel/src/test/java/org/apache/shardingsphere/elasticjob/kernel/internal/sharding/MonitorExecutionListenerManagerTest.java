@@ -19,9 +19,9 @@ package org.apache.shardingsphere.elasticjob.kernel.internal.sharding;
 
 import org.apache.shardingsphere.elasticjob.kernel.fixture.YamlConstants;
 import org.apache.shardingsphere.elasticjob.kernel.internal.storage.JobNodeStorage;
-import org.apache.shardingsphere.elasticjob.test.util.ReflectionUtils;
 import org.apache.shardingsphere.elasticjob.reg.listener.DataChangedEvent;
 import org.apache.shardingsphere.elasticjob.reg.listener.DataChangedEvent.Type;
+import org.apache.shardingsphere.elasticjob.test.util.ReflectionUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,39 +33,37 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class MonitorExecutionListenerManagerTest {
-    
+
+    private final MonitorExecutionListenerManager monitorExecutionListenerManager = new MonitorExecutionListenerManager(null, "test_job");
     @Mock
     private JobNodeStorage jobNodeStorage;
-    
     @Mock
     private ExecutionService executionService;
-    
-    private final MonitorExecutionListenerManager monitorExecutionListenerManager = new MonitorExecutionListenerManager(null, "test_job");
-    
+
     @BeforeEach
     void setUp() {
         ReflectionUtils.setSuperclassFieldValue(monitorExecutionListenerManager, "jobNodeStorage", jobNodeStorage);
         ReflectionUtils.setFieldValue(monitorExecutionListenerManager, "executionService", executionService);
     }
-    
+
     @Test
     void assertMonitorExecutionSettingsChangedJobListenerWhenIsNotFailoverPath() {
         monitorExecutionListenerManager.new MonitorExecutionSettingsChangedJobListener().onChange(new DataChangedEvent(DataChangedEvent.Type.ADDED, "/test_job/other", YamlConstants.getJobYaml()));
         verify(executionService, times(0)).clearAllRunningInfo();
     }
-    
+
     @Test
     void assertMonitorExecutionSettingsChangedJobListenerWhenIsFailoverPathButNotUpdate() {
         monitorExecutionListenerManager.new MonitorExecutionSettingsChangedJobListener().onChange(new DataChangedEvent(Type.ADDED, "/test_job/config", ""));
         verify(executionService, times(0)).clearAllRunningInfo();
     }
-    
+
     @Test
     void assertMonitorExecutionSettingsChangedJobListenerWhenIsFailoverPathAndUpdateButEnableFailover() {
         monitorExecutionListenerManager.new MonitorExecutionSettingsChangedJobListener().onChange(new DataChangedEvent(Type.UPDATED, "/test_job/config", YamlConstants.getJobYaml()));
         verify(executionService, times(0)).clearAllRunningInfo();
     }
-    
+
     @Test
     void assertMonitorExecutionSettingsChangedJobListenerWhenIsFailoverPathAndUpdateButDisableFailover() {
         DataChangedEvent event = new DataChangedEvent(Type.UPDATED, "/test_job/config", YamlConstants.getJobYamlWithMonitorExecution(false));

@@ -18,18 +18,18 @@
 package org.apache.shardingsphere.elasticjob.kernel.fixture.executor;
 
 import org.apache.shardingsphere.elasticjob.api.JobConfiguration;
-import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
-import org.apache.shardingsphere.elasticjob.spi.executor.item.param.JobRuntimeService;
-import org.apache.shardingsphere.elasticjob.spi.executor.item.type.ClassedJobItemExecutor;
 import org.apache.shardingsphere.elasticjob.kernel.fixture.job.FooJob;
+import org.apache.shardingsphere.elasticjob.spi.executor.item.param.JobRuntimeService;
+import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
+import org.apache.shardingsphere.elasticjob.spi.executor.item.type.ClassedJobItemExecutor;
 
 public final class ClassedFooJobExecutor implements ClassedJobItemExecutor<FooJob> {
-    
+
     @Override
     public void process(final FooJob elasticJob, final JobConfiguration jobConfig, final JobRuntimeService jobRuntimeService, final ShardingContext shardingContext) {
         elasticJob.foo(shardingContext);
     }
-    
+
     @Override
     public Class<FooJob> getElasticJobClass() {
         return FooJob.class;

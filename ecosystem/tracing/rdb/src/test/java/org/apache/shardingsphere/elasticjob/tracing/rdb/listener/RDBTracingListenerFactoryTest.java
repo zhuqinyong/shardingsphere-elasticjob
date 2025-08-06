@@ -31,7 +31,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class RDBTracingListenerFactoryTest {
-    
+
     @Test
     void assertCreateTracingListenerSuccess() throws TracingConfigurationException {
         HikariDataSource dataSource = new HikariDataSource();
@@ -41,7 +41,7 @@ class RDBTracingListenerFactoryTest {
         dataSource.setPassword("");
         assertThat(new RDBTracingListenerFactory().create(dataSource), instanceOf(RDBTracingListener.class));
     }
-    
+
     @Test
     void assertCreateTracingListenerFailure() throws SQLException {
         DataSource dataSource = mock(DataSource.class);

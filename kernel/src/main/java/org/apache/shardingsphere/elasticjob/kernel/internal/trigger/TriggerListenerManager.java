@@ -28,27 +28,27 @@ import org.apache.shardingsphere.elasticjob.reg.listener.DataChangedEventListene
  * Job trigger listener manager.
  */
 public final class TriggerListenerManager extends AbstractListenerManager {
-    
+
     private final String jobName;
-    
+
     private final TriggerNode triggerNode;
-    
+
     private final TriggerService triggerService;
-    
+
     public TriggerListenerManager(final CoordinatorRegistryCenter regCenter, final String jobName) {
         super(regCenter, jobName);
         this.jobName = jobName;
         triggerNode = new TriggerNode(jobName);
         triggerService = new TriggerService(regCenter, jobName);
     }
-    
+
     @Override
     public void start() {
         addDataListener(new JobTriggerStatusJobListener());
     }
-    
+
     class JobTriggerStatusJobListener implements DataChangedEventListener {
-        
+
         @Override
         public void onChange(final DataChangedEvent event) {
             if (!triggerNode.isLocalTriggerPath(event.getKey()) || Type.ADDED != event.getType()) {

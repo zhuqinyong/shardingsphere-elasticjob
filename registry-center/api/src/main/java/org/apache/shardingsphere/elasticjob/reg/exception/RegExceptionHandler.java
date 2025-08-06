@@ -28,10 +28,10 @@ import org.apache.shardingsphere.infra.spi.ShardingSphereServiceLoader;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
 public final class RegExceptionHandler {
-    
+
     /**
      * Handle exception.
-     * 
+     *
      * @param cause exception to be handled
      */
     public static void handleException(final Exception cause) {
@@ -46,7 +46,7 @@ public final class RegExceptionHandler {
             throw new RegException(cause);
         }
     }
-    
+
     private static boolean isIgnoredException(final Throwable cause) {
         return ShardingSphereServiceLoader.getServiceInstances(IgnoredExceptionProvider.class).stream().flatMap(each -> each.getIgnoredExceptions().stream()).anyMatch(each -> each.isInstance(cause));
     }

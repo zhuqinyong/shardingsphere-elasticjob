@@ -37,20 +37,18 @@ import java.util.concurrent.TimeUnit;
 @AllArgsConstructor
 @Slf4j
 public final class EmbedTestingServer {
-    
-    private static volatile TestingServer testingServer;
-    
+
     private static final Object INIT_LOCK = new Object();
-    
+    private static volatile TestingServer testingServer;
     private final int port;
-    
+
     /**
      * Create the server using a random port.
      */
     public EmbedTestingServer() {
         port = InstanceSpec.getRandomPort();
     }
-    
+
     /**
      * Start embed zookeeper server.
      */
@@ -69,7 +67,7 @@ public final class EmbedTestingServer {
             waitTestingServerReady();
         }
     }
-    
+
     private void start0() {
         try {
             testingServer = new TestingServer(port);
@@ -91,7 +89,7 @@ public final class EmbedTestingServer {
             }));
         }
     }
-    
+
     private void waitTestingServerReady() {
         int maxRetries = 60;
         try (CuratorFramework client = buildCuratorClient()) {
@@ -117,7 +115,7 @@ public final class EmbedTestingServer {
             }
         }
     }
-    
+
     private CuratorFramework buildCuratorClient() {
         CuratorFrameworkFactory.Builder builder = CuratorFrameworkFactory.builder();
         int retryIntervalMilliseconds = 500;
@@ -129,11 +127,11 @@ public final class EmbedTestingServer {
         builder.connectionTimeoutMs(500);
         return builder.build();
     }
-    
+
     private boolean isIgnoredException(final Throwable cause) {
         return cause instanceof KeeperException.ConnectionLossException || cause instanceof KeeperException.NoNodeException || cause instanceof KeeperException.NodeExistsException;
     }
-    
+
     /**
      * Get the connection string.
      *

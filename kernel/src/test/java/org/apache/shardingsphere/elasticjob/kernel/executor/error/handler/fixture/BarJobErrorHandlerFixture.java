@@ -20,11 +20,11 @@ package org.apache.shardingsphere.elasticjob.kernel.executor.error.handler.fixtu
 import org.apache.shardingsphere.elasticjob.spi.executor.error.handler.JobErrorHandler;
 
 public final class BarJobErrorHandlerFixture implements JobErrorHandler {
-    
+
     @Override
     public void handleException(final String jobName, final Throwable cause) {
     }
-    
+
     @Override
     public String getType() {
         return "BAR";

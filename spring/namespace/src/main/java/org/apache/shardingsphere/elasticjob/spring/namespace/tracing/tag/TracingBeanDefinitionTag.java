@@ -25,6 +25,6 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TracingBeanDefinitionTag {
-    
+
     public static final String DATA_SOURCE_REF_ATTRIBUTE = "data-source-ref";
 }

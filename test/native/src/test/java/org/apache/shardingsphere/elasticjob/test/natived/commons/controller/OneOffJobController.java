@@ -28,12 +28,12 @@ import java.util.Objects;
 
 @RestController
 public class OneOffJobController {
-    
+
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     @Qualifier("manualScriptJobBean")
     private ObjectProvider<OneOffJobBootstrap> manualScriptJobProvider;
-    
+
     /**
      * Execute manual script job.
      *

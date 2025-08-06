@@ -23,10 +23,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public final class FooYamlConfiguration {
-    
+
     private String foo;
-    
+
     private String bar;
-    
+
     private FooYamlConfiguration nest;
 }

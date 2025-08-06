@@ -17,38 +17,36 @@
 
 package org.apache.shardingsphere.elasticjob.kernel.internal.schedule;
 
-import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.apache.shardingsphere.elasticjob.kernel.internal.election.LeaderService;
+import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.JobInstance;
 import org.apache.shardingsphere.elasticjob.kernel.internal.sharding.ShardingService;
-import org.apache.shardingsphere.elasticjob.test.util.ReflectionUtils;
 import org.apache.shardingsphere.elasticjob.reg.base.CoordinatorRegistryCenter;
+import org.apache.shardingsphere.elasticjob.test.util.ReflectionUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class SchedulerFacadeTest {
-    
+
     @Mock
     private CoordinatorRegistryCenter regCenter;
-    
+
     @Mock
     private JobScheduleController jobScheduleController;
-    
+
     @Mock
     private LeaderService leaderService;
-    
+
     @Mock
     private ShardingService shardingService;
-    
+
     private SchedulerFacade schedulerFacade;
-    
+
     @BeforeEach
     void setUp() {
         JobRegistry.getInstance().addJobInstance("test_job", new JobInstance("127.0.0.1@-@0"));
@@ -56,7 +54,7 @@ class SchedulerFacadeTest {
         ReflectionUtils.setFieldValue(schedulerFacade, "leaderService", leaderService);
         ReflectionUtils.setFieldValue(schedulerFacade, "shardingService", shardingService);
     }
-    
+
     @Test
     void assertShutdownInstanceIfNotLeaderAndReconcileServiceIsNotRunning() {
         JobRegistry.getInstance().registerRegistryCenter("test_job", regCenter);
@@ -65,7 +63,7 @@ class SchedulerFacadeTest {
         verify(leaderService, times(0)).removeLeader();
         verify(jobScheduleController).shutdown();
     }
-    
+
     @Test
     void assertShutdownInstanceIfLeaderAndReconcileServiceIsRunning() {
         when(leaderService.isLeader()).thenReturn(true);

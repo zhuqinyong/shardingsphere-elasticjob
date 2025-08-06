@@ -29,12 +29,12 @@ import java.text.MessageFormat;
  */
 @SingletonSPI
 public final class DefaultTextPlainRequestBodyDeserializer implements RequestBodyDeserializer {
-    
+
     @Override
     public String mimeType() {
         return HttpHeaderValues.TEXT_PLAIN.toString();
     }
-    
+
     @Override
     public <T> T deserialize(final Class<T> targetType, final byte[] requestBodyBytes) {
         if (byte[].class.equals(targetType)) {

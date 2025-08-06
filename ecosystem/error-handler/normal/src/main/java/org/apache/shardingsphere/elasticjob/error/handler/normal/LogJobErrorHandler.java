@@ -25,17 +25,17 @@ import org.apache.shardingsphere.elasticjob.spi.executor.error.handler.JobErrorH
  */
 @Slf4j
 public final class LogJobErrorHandler implements JobErrorHandler {
-    
+
     @Override
     public void handleException(final String jobName, final Throwable cause) {
         log.error(String.format("Job '%s' exception occur in job processing", jobName), cause);
     }
-    
+
     @Override
     public String getType() {
         return "LOG";
     }
-    
+
     @Override
     public boolean isDefault() {
         return true;

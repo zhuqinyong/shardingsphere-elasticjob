@@ -19,12 +19,7 @@ package org.apache.shardingsphere.elasticjob.spring.core.scanner;
 
 import org.springframework.context.annotation.Import;
 
-import java.lang.annotation.Documented;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.*;
 
 /**
  * Use this annotation to register Elastic job.
@@ -34,14 +29,14 @@ import java.lang.annotation.RetentionPolicy;
 @Import(ElasticJobScanRegistrar.class)
 @Target(ElementType.TYPE)
 public @interface ElasticJobScan {
-    
+
     /**
      * Alias for the {@link #basePackages()} attribute.
      *
      * @return Base packages name
      */
     String[] value() default "";
-    
+
     /**
      * Base packages to scan for Elastic job.
      *

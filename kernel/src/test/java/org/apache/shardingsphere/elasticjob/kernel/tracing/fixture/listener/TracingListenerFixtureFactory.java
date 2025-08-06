@@ -18,16 +18,16 @@
 package org.apache.shardingsphere.elasticjob.kernel.tracing.fixture.listener;
 
 import org.apache.shardingsphere.elasticjob.kernel.tracing.fixture.config.TracingStorageFixture;
-import org.apache.shardingsphere.elasticjob.spi.tracing.listener.TracingListenerFactory;
 import org.apache.shardingsphere.elasticjob.spi.tracing.listener.TracingListener;
+import org.apache.shardingsphere.elasticjob.spi.tracing.listener.TracingListenerFactory;
 
 public final class TracingListenerFixtureFactory implements TracingListenerFactory<TracingStorageFixture> {
-    
+
     @Override
     public TracingListener create(final TracingStorageFixture storage) {
         return new TracingListenerFixture(storage);
     }
-    
+
     @Override
     public String getType() {
         return "TEST";

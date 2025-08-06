@@ -24,6 +24,6 @@ import org.apache.shardingsphere.elasticjob.spi.tracing.storage.TracingStorageCo
 @RequiredArgsConstructor
 @Getter
 public final class TracingStorageConfigurationFixture implements TracingStorageConfiguration<TracingStorageFixture> {
-    
+
     private final TracingStorageFixture storage;
 }

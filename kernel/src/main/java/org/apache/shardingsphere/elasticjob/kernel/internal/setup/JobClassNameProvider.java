@@ -25,7 +25,7 @@ import org.apache.shardingsphere.infra.spi.annotation.SingletonSPI;
  */
 @SingletonSPI
 public interface JobClassNameProvider {
-    
+
     /**
      * Get job class name.
      *

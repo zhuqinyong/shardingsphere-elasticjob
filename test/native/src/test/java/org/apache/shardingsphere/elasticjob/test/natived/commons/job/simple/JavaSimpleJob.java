@@ -17,8 +17,8 @@
 
 package org.apache.shardingsphere.elasticjob.test.natived.commons.job.simple;
 
-import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
 import org.apache.shardingsphere.elasticjob.simple.job.SimpleJob;
+import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingContext;
 import org.apache.shardingsphere.elasticjob.test.natived.commons.entity.Foo;
 import org.apache.shardingsphere.elasticjob.test.natived.commons.repository.FooRepository;
 import org.apache.shardingsphere.elasticjob.test.natived.commons.repository.FooRepositoryFactory;
@@ -28,9 +28,9 @@ import java.util.Date;
 import java.util.List;
 
 public class JavaSimpleJob implements SimpleJob {
-    
+
     private final FooRepository fooRepository = FooRepositoryFactory.getFOO_REPOSITORY();
-    
+
     @Override
     public void execute(final ShardingContext shardingContext) {
         System.out.printf(

@@ -23,21 +23,21 @@ import org.apache.shardingsphere.infra.spi.type.typed.TypedSPI;
 
 /**
  * Tracing listener factory.
- * 
+ *
  * @param <T> type of tracing storage
  */
 @SingletonSPI
 public interface TracingListenerFactory<T> extends TypedSPI {
-    
+
     /**
      * Create tracing listener.
-     * 
+     *
      * @param storage storage
      * @return tracing listener
      * @throws TracingConfigurationException tracing configuration exception
      */
     TracingListener create(T storage) throws TracingConfigurationException;
-    
+
     @Override
     String getType();
 }

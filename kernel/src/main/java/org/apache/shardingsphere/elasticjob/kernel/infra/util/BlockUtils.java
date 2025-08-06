@@ -25,9 +25,9 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class BlockUtils {
-    
+
     private static final long SLEEP_INTERVAL_MILLIS = 100L;
-    
+
     /**
      * Waiting short time.
      */

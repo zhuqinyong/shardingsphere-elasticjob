@@ -18,7 +18,7 @@
 package org.apache.shardingsphere.elasticjob.spring.namespace.fixture.service;
 
 public interface FooService {
-    
+
     /**
      * Execute foo.
      *

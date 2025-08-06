@@ -17,13 +17,7 @@
 
 package org.apache.shardingsphere.elasticjob.kernel.executor.facade;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shardingsphere.elasticjob.api.JobConfiguration;
 import org.apache.shardingsphere.elasticjob.kernel.internal.config.ConfigurationService;
@@ -41,36 +35,37 @@ import org.apache.shardingsphere.elasticjob.reg.base.CoordinatorRegistryCenter;
 import org.apache.shardingsphere.elasticjob.spi.listener.ElasticJobListener;
 import org.apache.shardingsphere.elasticjob.spi.listener.param.ShardingContexts;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Single Sharding Job facade.
  */
 @Slf4j
 public final class SingleShardingJobFacade extends AbstractJobFacade {
-    
+
     private final ConfigurationService configService;
-    
+
     private final ShardingService shardingService;
-    
+
     private final ExecutionContextService executionContextService;
-    
+
     private final ExecutionService executionService;
-    
+
     private final FailoverService failoverService;
-    
+
     private final Collection<ElasticJobListener> elasticJobListeners;
-    
+
     private final JobTracingEventBus jobTracingEventBus;
-    
+
     private final JobNodeStorage jobNodeStorage;
-    
+
     private final InstanceService instanceService;
-    
+
     public SingleShardingJobFacade(final CoordinatorRegistryCenter regCenter, final String jobName, final Collection<ElasticJobListener> elasticJobListeners,
                                    final TracingConfiguration<?> tracingConfig) {
         super(regCenter, jobName, elasticJobListeners, tracingConfig);
-        
+
         configService = new ConfigurationService(regCenter, jobName);
         shardingService = new ShardingService(regCenter, jobName);
         executionContextService = new ExecutionContextService(regCenter, jobName);
@@ -81,11 +76,11 @@ public final class SingleShardingJobFacade extends AbstractJobFacade {
         jobNodeStorage = new JobNodeStorage(regCenter, jobName);
         instanceService = new InstanceService(regCenter, jobName);
     }
-    
+
     @Override
     public void registerJobCompleted(final ShardingContexts shardingContexts) {
         super.registerJobCompleted(shardingContexts);
-        
+
         JobConfiguration jobConfig = configService.load(true);
         JobInstance jobInst = JobRegistry.getInstance().getJobInstance(jobConfig.getJobName());
         if (null == jobInst) {
@@ -105,13 +100,13 @@ public final class SingleShardingJobFacade extends AbstractJobFacade {
             nextIndex = nextIndex >= availJobInst.size() ? 0 : nextIndex;
             jobNodeStorage.fillEphemeralJobNode("next-job-instance-ip", availJobInst.get(nextIndex).getServerIp());
         }
-        
+
         if (log.isDebugEnabled()) {
             log.debug("job name: {}, next index: {}, sharding total count: {}",
                     jobConfig.getJobName(), nextIndex, jobConfig.getShardingTotalCount());
         }
     }
-    
+
     /**
      * Get sharding contexts.
      *
@@ -127,7 +122,7 @@ public final class SingleShardingJobFacade extends AbstractJobFacade {
                 return executionContextService.getJobShardingContext(failoverShardingItems);
             }
         }
-        
+
         List<Integer> shardingItems;
         String nextJobInstIP = null;
         if (isNeedSharding()) {
@@ -147,12 +142,12 @@ public final class SingleShardingJobFacade extends AbstractJobFacade {
             log.debug("job name: {}, sharding items: {}, nextJobInstIP: {}, sharding total count: {}, isFailover: {}",
                     jobConfig.getJobName(), shardingItems, nextJobInstIP, jobConfig.getShardingTotalCount(), isFailover);
         }
-        
+
         if (isFailover) {
             shardingItems.removeAll(failoverService.getLocalTakeOffItems());
         }
         shardingItems.removeAll(executionService.getDisabledItems(shardingItems));
         return executionContextService.getJobShardingContext(shardingItems);
     }
-    
+
 }

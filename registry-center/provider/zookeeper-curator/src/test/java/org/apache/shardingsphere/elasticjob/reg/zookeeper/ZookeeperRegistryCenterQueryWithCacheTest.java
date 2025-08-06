@@ -28,11 +28,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 class ZookeeperRegistryCenterQueryWithCacheTest {
-    
+
     private static final EmbedTestingServer EMBED_TESTING_SERVER = new EmbedTestingServer();
-    
+
     private static ZookeeperRegistryCenter zkRegCenter;
-    
+
     @BeforeAll
     static void setUp() {
         EMBED_TESTING_SERVER.start();
@@ -43,17 +43,17 @@ class ZookeeperRegistryCenterQueryWithCacheTest {
         RegistryCenterEnvironmentPreparer.persist(zkRegCenter);
         zkRegCenter.addCacheData("/test");
     }
-    
+
     @AfterAll
     static void tearDown() {
         zkRegCenter.close();
     }
-    
+
     @Test
     void assertGetWithoutValue() {
         assertNull(zkRegCenter.get("/test/null"));
     }
-    
+
     @Test
     void assertGetFromCache() {
         assertThat(zkRegCenter.get("/test"), is("test"));

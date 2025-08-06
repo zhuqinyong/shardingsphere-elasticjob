@@ -27,12 +27,12 @@ import org.quartz.JobExecutionContext;
  */
 @Setter
 public final class LiteJob implements Job {
-    
+
     private ElasticJobExecutor jobExecutor;
-    
+
     @Override
     public void execute(final JobExecutionContext context) {
         jobExecutor.execute();
     }
-    
+
 }

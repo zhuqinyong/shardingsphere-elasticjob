@@ -28,7 +28,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class WechatJobErrorHandlerPropertiesValidatorTest {
-    
+
     @Test
     void assertValidateWithNormal() {
         Properties properties = new Properties();
@@ -37,12 +37,12 @@ class WechatJobErrorHandlerPropertiesValidatorTest {
         properties.setProperty(WechatPropertiesConstants.CONNECT_TIMEOUT_MILLISECONDS, "2000");
         TypedSPILoader.getService(JobErrorHandlerPropertiesValidator.class, "WECHAT").validate(properties);
     }
-    
+
     @Test
     void assertValidateWithPropsIsNull() {
         assertThrows(NullPointerException.class, () -> TypedSPILoader.getService(JobErrorHandlerPropertiesValidator.class, "WECHAT").validate(null));
     }
-    
+
     @Test
     void assertValidateWithWebhookIsNull() {
         try {

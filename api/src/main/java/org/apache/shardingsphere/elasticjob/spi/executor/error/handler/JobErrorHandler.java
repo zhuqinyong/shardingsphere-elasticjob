@@ -25,18 +25,18 @@ import java.io.Closeable;
  * Job error handler.
  */
 public interface JobErrorHandler extends TypedSPI, Closeable {
-    
+
     /**
      * Handle exception.
-     * 
+     *
      * @param jobName job name
-     * @param cause failure cause
+     * @param cause   failure cause
      */
     void handleException(String jobName, Throwable cause);
-    
+
     @Override
     String getType();
-    
+
     @Override
     default void close() {
     }

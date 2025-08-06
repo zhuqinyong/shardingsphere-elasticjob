@@ -21,7 +21,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 @ContextConfiguration(locations = "classpath:META-INF/job/withListenerAndCglib.xml")
 class JobSpringNamespaceWithListenerAndCglibTest extends AbstractJobSpringIntegrateTest {
-    
+
     JobSpringNamespaceWithListenerAndCglibTest() {
         super("simpleElasticJob_namespace_listener_cglib", "dataflowElasticJob_namespace_listener_cglib");
     }

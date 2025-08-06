@@ -24,7 +24,7 @@ import org.apache.shardingsphere.elasticjob.spi.executor.item.param.ShardingCont
  * Simple job.
  */
 public interface SimpleJob extends ElasticJob {
-    
+
     /**
      * Execute job.
      *

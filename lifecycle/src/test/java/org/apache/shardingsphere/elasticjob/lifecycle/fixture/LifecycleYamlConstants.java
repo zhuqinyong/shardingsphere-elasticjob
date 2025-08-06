@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class LifecycleYamlConstants {
-    
+
     private static final String SIMPLE_JOB_YAML = "jobName: %s\n"
             + "cron: 0/1 * * * * ?\n"
             + "shardingTotalCount: 3\n"
@@ -35,7 +35,7 @@ public final class LifecycleYamlConstants {
             + "description: %s\n"
             + "disabled: false\n"
             + "overwrite: false\n";
-    
+
     private static final String DATAFLOW_JOB_YAML = "cron: 0/1 * * * * ?\n"
             + "description: ''\n"
             + "disabled: false\n"
@@ -51,7 +51,7 @@ public final class LifecycleYamlConstants {
             + "reconcileIntervalMinutes: 10\n"
             + "shardingTotalCount: 3\n"
             + "staticSharding: false\n";
-    
+
     private static final String SCRIPT_JOB_YAML = "jobName: test_job\n"
             + "cron: 0/1 * * * * ?\n"
             + "shardingTotalCount: 3\n"
@@ -66,18 +66,18 @@ public final class LifecycleYamlConstants {
             + "  script.command.line: echo\n"
             + "disabled: false\n"
             + "overwrite: false\n";
-    
+
     /**
      * Get the config of simple job in YAML format.
      *
      * @param jobName name of the job
-     * @param desc description of the job
+     * @param desc    description of the job
      * @return the string of job config
      */
     public static String getSimpleJobYaml(final String jobName, final String desc) {
         return String.format(SIMPLE_JOB_YAML, jobName, desc);
     }
-    
+
     /**
      * Get the config of dataflow job in YAML format.
      *
@@ -86,7 +86,7 @@ public final class LifecycleYamlConstants {
     public static String getDataflowJobYaml() {
         return DATAFLOW_JOB_YAML;
     }
-    
+
     /**
      * Get the config of script job in YAML format.
      *

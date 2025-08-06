@@ -40,21 +40,21 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class JobTracingEventBusTest {
-    
+
     @Mock
     private TracingStorageFixture tracingStorage;
-    
+
     @Mock
     private EventBus eventBus;
-    
+
     private JobTracingEventBus jobTracingEventBus;
-    
+
     @Test
     void assertRegisterWithoutTracingStorageConfiguration() {
         jobTracingEventBus = new JobTracingEventBus(new TracingConfiguration<>("TEST", null));
         assertFalse((Boolean) ReflectionUtils.getFieldValue(jobTracingEventBus, "isRegistered"));
     }
-    
+
     @Test
     void assertPost() {
         jobTracingEventBus = new JobTracingEventBus(new TracingConfiguration<>("TEST", tracingStorage));
@@ -63,7 +63,7 @@ class JobTracingEventBusTest {
         Awaitility.await().pollDelay(100L, TimeUnit.MILLISECONDS).until(TracingListenerFixture::isExecutionEventCalled);
         verify(tracingStorage).call();
     }
-    
+
     @Test
     void assertPostWithoutListener() {
         jobTracingEventBus = new JobTracingEventBus();

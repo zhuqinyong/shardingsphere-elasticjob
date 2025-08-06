@@ -26,13 +26,13 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class SensitiveInfoUtilsTest {
-    
+
     @Test
     void assertFilterContentWithoutIp() {
         List<String> actual = Arrays.asList("/simpleElasticDemoJob/servers", "/simpleElasticDemoJob/leader");
         assertThat(SensitiveInfoUtils.filterSensitiveIps(actual), is(actual));
     }
-    
+
     @Test
     void assertFilterContentWithSensitiveIp() {
         List<String> actual = Arrays.asList("/simpleElasticDemoJob/servers/127.0.0.1", "/simpleElasticDemoJob/servers/192.168.0.1/hostName | 192.168.0.1",

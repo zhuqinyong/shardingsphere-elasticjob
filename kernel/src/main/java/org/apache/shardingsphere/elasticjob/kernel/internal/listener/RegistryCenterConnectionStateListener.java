@@ -30,17 +30,17 @@ import org.apache.shardingsphere.elasticjob.reg.listener.ConnectionStateChangedE
  * Registry center connection state listener.
  */
 public final class RegistryCenterConnectionStateListener implements ConnectionStateChangedEventListener {
-    
+
     private final String jobName;
-    
+
     private final ServerService serverService;
-    
+
     private final InstanceService instanceService;
-    
+
     private final ShardingService shardingService;
-    
+
     private final ExecutionService executionService;
-    
+
     public RegistryCenterConnectionStateListener(final CoordinatorRegistryCenter regCenter, final String jobName) {
         this.jobName = jobName;
         serverService = new ServerService(regCenter, jobName);
@@ -48,7 +48,7 @@ public final class RegistryCenterConnectionStateListener implements ConnectionSt
         shardingService = new ShardingService(regCenter, jobName);
         executionService = new ExecutionService(regCenter, jobName);
     }
-    
+
     @Override
     public void onStateChanged(final CoordinatorRegistryCenter registryCenter, final State newState) {
         if (JobRegistry.getInstance().isShutdown(jobName)) {

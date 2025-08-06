@@ -19,23 +19,23 @@ package org.apache.shardingsphere.elasticjob.reg.base;
 
 /**
  * Election candidate.
- * 
+ *
  * <p>
- *     Guarantee {@link #startLeadership()} and {@link #stopLeadership()} method run in same thread.
+ * Guarantee {@link #startLeadership()} and {@link #stopLeadership()} method run in same thread.
  * </p>
  */
 public interface ElectionCandidate {
-    
+
     /**
      * Start leadership.
-     * 
+     *
      * @throws Exception exception
      */
     void startLeadership() throws Exception;
-    
+
     /**
      * Stop leadership.
-     * 
+     *
      * <p>Should not throw any exception for the implementation class.</p>
      */
     void stopLeadership();

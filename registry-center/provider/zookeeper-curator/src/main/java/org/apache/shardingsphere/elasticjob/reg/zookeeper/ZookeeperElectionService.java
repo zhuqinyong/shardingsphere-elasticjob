@@ -31,14 +31,14 @@ import java.util.concurrent.CountDownLatch;
  */
 @Slf4j
 public final class ZookeeperElectionService {
-    
+
     private final CountDownLatch leaderLatch = new CountDownLatch(1);
-    
+
     private final LeaderSelector leaderSelector;
-    
+
     public ZookeeperElectionService(final String identity, final CuratorFramework client, final String electionPath, final ElectionCandidate electionCandidate) {
         leaderSelector = new LeaderSelector(client, electionPath, new LeaderSelectorListenerAdapter() {
-            
+
             @Override
             public void takeLeadership(final CuratorFramework client) throws Exception {
                 log.info("Elastic job: {} has leadership", identity);
@@ -56,7 +56,7 @@ public final class ZookeeperElectionService {
         leaderSelector.autoRequeue();
         leaderSelector.setId(identity);
     }
-    
+
     /**
      * Start election.
      */
@@ -64,7 +64,7 @@ public final class ZookeeperElectionService {
         log.debug("Elastic job: {} start to elect leadership", leaderSelector.getId());
         leaderSelector.start();
     }
-    
+
     /**
      * Stop election.
      */

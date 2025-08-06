@@ -23,7 +23,7 @@ import java.io.IOException;
  * Job operate API.
  */
 public interface JobOperateAPI {
-    
+
     /**
      * Trigger job to run at once.
      *
@@ -32,47 +32,47 @@ public interface JobOperateAPI {
      * @param jobName job name
      */
     void trigger(String jobName);
-    
+
     /**
      * Disable job.
-     * 
+     *
      * <p>Will cause resharding.</p>
      *
-     * @param jobName job name
+     * @param jobName  job name
      * @param serverIp server IP address
      */
     void disable(String jobName, String serverIp);
-    
+
     /**
      * Enable job.
-     * 
-     * @param jobName job name
+     *
+     * @param jobName  job name
      * @param serverIp server IP address
      */
     void enable(String jobName, String serverIp);
-    
+
     /**
      * Shutdown Job.
      *
-     * @param jobName job name
+     * @param jobName  job name
      * @param serverIp server IP address
      */
     void shutdown(String jobName, String serverIp);
-    
+
     /**
      * Remove job.
-     * 
-     * @param jobName job name
+     *
+     * @param jobName  job name
      * @param serverIp server IP address
      */
     void remove(String jobName, String serverIp);
-    
+
     /**
      * Dump job.
      *
-     * @param jobName job name
+     * @param jobName    job name
      * @param instanceIp instance IP address
-     * @param dumpPort dump port
+     * @param dumpPort   dump port
      * @return dump job result
      * @throws IOException i/o exception
      */

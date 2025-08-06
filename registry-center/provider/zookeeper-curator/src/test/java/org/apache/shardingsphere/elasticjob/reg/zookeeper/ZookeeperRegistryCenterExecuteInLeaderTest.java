@@ -32,11 +32,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 class ZookeeperRegistryCenterExecuteInLeaderTest {
-    
+
     private static final EmbedTestingServer EMBED_TESTING_SERVER = new EmbedTestingServer();
-    
+
     private static ZookeeperRegistryCenter zkRegCenter;
-    
+
     @BeforeAll
     static void setUp() {
         EMBED_TESTING_SERVER.start();
@@ -45,12 +45,12 @@ class ZookeeperRegistryCenterExecuteInLeaderTest {
         zookeeperConfiguration.setConnectionTimeoutMilliseconds(30000);
         zkRegCenter.init();
     }
-    
+
     @AfterAll
     static void tearDown() {
         zkRegCenter.close();
     }
-    
+
     @Test
     @Timeout(value = 10000L, unit = TimeUnit.MILLISECONDS)
     void assertExecuteInLeader() throws InterruptedException {
@@ -64,16 +64,16 @@ class ZookeeperRegistryCenterExecuteInLeaderTest {
         executorService.shutdown();
         countDownLatch.await();
     }
-    
+
     @RequiredArgsConstructor
     private static class SerialOnlyExecutionCallback implements LeaderExecutionCallback {
-        
+
         private final AtomicBoolean executing = new AtomicBoolean(false);
-        
+
         private final CountDownLatch countDownLatch;
-        
+
         private final Thread waitingThread;
-        
+
         @Override
         public void execute() {
             if (executing.get() || !executing.compareAndSet(false, true)) {
@@ -89,7 +89,7 @@ class ZookeeperRegistryCenterExecuteInLeaderTest {
                 handleConcurrentExecution();
             }
         }
-        
+
         private void handleConcurrentExecution() {
             waitingThread.interrupt();
             throw new IllegalStateException("Callback is executing concurrently");

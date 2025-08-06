@@ -29,12 +29,12 @@ import java.util.Optional;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TracingStorageConverterFactory {
-    
+
     /**
      * Find {@link TracingStorageConfigurationConverter} for specific storage type.
      *
      * @param storageType storage type
-     * @param <T> storage type
+     * @param <T>         storage type
      * @return instance of {@link TracingStorageConfigurationConverter}
      */
     @SuppressWarnings("unchecked")

@@ -21,67 +21,68 @@ package org.apache.shardingsphere.elasticjob.reg.base;
  * Registry center.
  */
 public interface RegistryCenter {
-    
+
     /**
      * Initialize registry center.
      */
     void init();
-    
+
     /**
      * Close registry center.
      */
     void close();
-    
+
     /**
      * Get value.
-     * 
+     *
      * @param key key
      * @return value
      */
     String get(String key);
-    
+
     /**
      * Judge node is exist or not.
-     * 
+     *
      * @param key key
      * @return node is exist or not
      */
     boolean isExisted(String key);
-    
+
     /**
      * Persist data.
-     * 
-     * @param key key
+     *
+     * @param key   key
      * @param value value
      */
     void persist(String key, String value);
-    
+
     /**
      * Update data.
-     * 
-     * @param key key
+     *
+     * @param key   key
      * @param value value
      */
     void update(String key, String value);
-    
+
     /**
      * Remove data.
-     * 
+     *
      * @param key key
      */
     void remove(String key);
-    
+
     /**
      * Get current time from registry center.
-     * 
+     *
      * @param key key
      * @return current time from registry center
      */
     long getRegistryCenterTime(String key);
-    
+
     /**
      * Get raw client for registry center client.
-     ** 
+     * *
+     *
      * @return registry center raw client
      */
     Object getRawClient();

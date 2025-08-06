@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Properties;
 
 class IgnoreJobErrorHandlerTest {
-    
+
     @Test
     void assertHandleException() {
         TypedSPILoader.getService(JobErrorHandler.class, "IGNORE", new Properties()).handleException("test_job", new RuntimeException("test"));

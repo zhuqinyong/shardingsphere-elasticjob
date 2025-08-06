@@ -24,19 +24,19 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 class JobSystemExceptionTest {
-    
+
     @Test
     void assertGetMessage() {
         assertThat(new JobSystemException("message is: '%s'", "test").getMessage(), is("message is: 'test'"));
     }
-    
+
     @Test
     void assertGetMessageCause() {
         JobSystemException jobSystemException = new JobSystemException("message is: ", new RuntimeException());
         assertThat(jobSystemException.getMessage(), is("message is: "));
         assertThat(jobSystemException.getCause(), instanceOf(RuntimeException.class));
     }
-    
+
     @Test
     void assertGetCause() {
         assertThat(new JobSystemException(new RuntimeException()).getCause(), instanceOf(RuntimeException.class));
